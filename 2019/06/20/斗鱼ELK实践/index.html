@@ -27,20 +27,18 @@
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="大家好，我是黄歆，目前担任斗鱼数据平台部基础架构组Leader，主要负责斗鱼数据平台部基础环境建设（Hadoop、ELK、容器集群等）及基础服务开发（发布系统、监控告警、任务调度等）。首先自我介绍一下，我2010年毕业后进入传统行业从事JavaWeb方向近4年时间，随后转入互联网行业进入一号店。2015年3月份加入斗鱼，开始从事基础环境、基础服务相关工作。 今天跟大家分享的主题是《基于ELK的亿级">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic4.zhimg.com/50/v2-3ff6c866382f78cfdacde23c0a73a8e6_hd.jpg">
-<meta property="og:image" content="https://pic4.zhimg.com/80/v2-3ff6c866382f78cfdacde23c0a73a8e6_hd.jpg">
-<meta property="og:image" content="https://pic3.zhimg.com/50/v2-34374e575b65e35c458828cf7006bef2_hd.jpg">
-<meta property="og:image" content="https://pic3.zhimg.com/80/v2-34374e575b65e35c458828cf7006bef2_hd.jpg">
-<meta property="og:image" content="https://pic3.zhimg.com/50/v2-4e7882b5b2bd79bea946700504129050_hd.jpg">
-<meta property="og:image" content="https://pic3.zhimg.com/50/v2-380abe6e7807767e1c707f978b66068c_hd.jpg">
-<meta property="og:image" content="https://pic2.zhimg.com/50/v2-1bdf1e1d3a08f324f2129d0293c58b18_hd.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160816.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160845.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160858.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160903.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160916.png">
 <meta property="article:published_time" content="2019-06-20T03:02:05.000Z">
-<meta property="article:modified_time" content="2020-08-05T12:06:55.998Z">
+<meta property="article:modified_time" content="2021-01-15T08:09:25.918Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="ELK">
 <meta property="article:tag" content="ElasticSearch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic4.zhimg.com/50/v2-3ff6c866382f78cfdacde23c0a73a8e6_hd.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160816.png">
 
 <link rel="canonical" href="http://vancsj.github.io/2019/06/20/%E6%96%97%E9%B1%BCELK%E5%AE%9E%E8%B7%B5/">
 
@@ -191,7 +189,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-05 20:06:55" itemprop="dateModified" datetime="2020-08-05T20:06:55+08:00">2020-08-05</time>
+                <time title="修改时间：2021-01-15 16:09:25" itemprop="dateModified" datetime="2021-01-15T16:09:25+08:00">2021-01-15</time>
               </span>
 
           
@@ -219,8 +217,7 @@
 <p>除了上面出现的状况我们还需要考虑：日志量太大如何归档、文本搜索太慢怎么办、如何多维度查询，ELK就是帮我们来解决这些问题的。</p>
 <p>1. ELK是什么，为什么要使用ELK</p>
 <p>ELK 是elastic公司提供的一套完整的日志收集、展示解决方案，是三个产品的首字母缩写，分别是ElasticSearch、Logstash 和 Kibana。</p>
-<p><img src="https://pic4.zhimg.com/50/v2-3ff6c866382f78cfdacde23c0a73a8e6_hd.jpg"></p>
-<p><img src="https://pic4.zhimg.com/80/v2-3ff6c866382f78cfdacde23c0a73a8e6_hd.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160816.png"></p>
 <p>ElasticSearch简称ES，它是一个实时的分布式搜索和分析引擎，它可以用于全文搜索，结构化搜索以及分析。它是一个建立在全文搜索引擎 Apache Lucene 基础上的搜索引擎，使用 Java 语言编写。</p>
 <p>Logstash是一个具有实时传输能力的数据收集引擎，用来进行数据收集（如：读取文本文件）、解析，并将数据发送给ES。</p>
 <p>Kibana为 Elasticsearch 提供了分析和可视化的 Web 平台。它可以在 Elasticsearch 的索引中查找，交互数据，并生成各种维度表格、图形。</p>
@@ -228,12 +225,11 @@
 <p>最初我们引入ELK的原因是实现一个小需求，实时统计服务器500错误数量，在使用过程中发现ELK的功能确实非常强大，随后接入其它业务部门应用日志，解决日志查询慢的痛点，加速错误定位。于2016年底接入全站所有服务器日志，并完成了ES 5.0的升级。</p>
 <p>随着对ELK技术栈的不断深入，我们将监控报警系统的数据存储层由HBase替换成ES。监控报警系统的数据存储层主要数据类型是时间序列数据，如某一时刻的应用CPU使用率。通常在做数据展示时我们会将数据先以某一时间粒度（如：5分钟）进行后端聚合汇总再交给前端进行渲染，并且这个时间粒度会随着用户选择的时间区间而变化，针对此类需求我们依靠ES提供的强大数据聚合特性极大减少了开发成本。</p>
 <p>最初我们并没有使用ELK全套技术栈，我们使用了Flume（一个Java编写的日志采集、聚合和传输系统类似上述的Logstash）作为日志收集Agent。Flume使用 tail -f 的方式实时收集日志文件中追加的文本内容。通过Flume配置文件中定义的正则表达式对日志文本进行字段分割，随后写入ElasticSearch，整体架构如下图：</p>
-<p><img src="https://pic3.zhimg.com/50/v2-34374e575b65e35c458828cf7006bef2_hd.jpg"></p>
-<p><img src="https://pic3.zhimg.com/80/v2-34374e575b65e35c458828cf7006bef2_hd.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160845.jpeg"></p>
 <p>在使用过程中发现Flume偶尔会OOM，原因是使用了Flume的Memory Channel。使用此方式时，Flume会将 tail -f 读取到的数据写入内存，随后输出到ES。但是一旦数据输出速度小于数据读取速度时内存中积压的数据就会越来越多，从而产生OOM。</p>
 <p>于是我们将Flume中的Memory Channel替换成File Channel，该方式在数据读取之后，将数据写入Flume中的本地文件存储再读取（个人觉得不是很优雅）。</p>
 <p>使用过程中还发现在日志收集过程中Flume抢占了大量CPU资源用于日志解析（通过正则），导致服务器中其他应用资源不足。于是我们搭建了一个Flume日志聚合层，将日志解析工作放在聚合层中完成，Agent只做数据收集、推送。随后架构变成下面这个样子。</p>
-<p><img src="https://pic3.zhimg.com/50/v2-4e7882b5b2bd79bea946700504129050_hd.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160858.jpeg"></p>
 <p>聚合层中的Flume实例为无状态节点，如果性能不足可以增加聚合层中的Flume实例数量，但是要在Agent端配置文件中添加新Flume聚合层实例的IP端口信息，并重新启动。</p>
 <p>稳定一段时间后，问题又来了。tail -f 方式收集日志在Flume Agent重启时会丢失重启时间段的数据。尝试使用Flume提供的 Spooling Directory Source 也并不能完美的解决问题（需要修改所有日志文件存储方式，每分钟去切割文件，如果跟其他业务团队这样说，估计会被打死）。并且我们当时正在准备进行ES的1.x to 2.x版本的升级，但是Flume并不支持数据写入ES 2.x版本，于是我们果断放弃了Flume投入Logstash的怀抱。</p>
 <p>Logstash相对于Flume提供了更加丰富的日志处理器，并且支持最新ES版本（毕竟是亲儿子）。Logstash在进行文本数据收集时并没有使用 tail -f 这种简单粗暴的方式，而是在本地文件中记录了日志文件被读取到的位置，完美解决了上面说的升级重启时丢失数据的问题。</p>
@@ -245,7 +241,7 @@
 <p>针对第二个日志解析资源占用偏高的问题。Logstash的核心代码是用ruby语言开发，虽然是运行在jruby上，但是由于中间涉及到数据结构的转化，性能是跟用原生的java语言运行在jvm上肯定是有所差距的，于是我们在部分场景使用Hangout替换了Logstash。</p>
 <p>最后针对日志存不规范的情况，一个日志文件中日志有多种结构，可能正则表达式（或者GROK）不是很好写，即便是写出来之后性能也达不到要求。针对这种日志不规范的这种情况我们自己写了一些基于规则判断的解析器代替正则表达式去完成解析工作，性能获得极大提升，日志解析时的CPU占用率降低了一个数量级。</p>
 <p>说到这里，一个能应对高并发的ELK架构终于成型了，上图。</p>
-<p><img src="https://pic3.zhimg.com/50/v2-380abe6e7807767e1c707f978b66068c_hd.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160903.jpeg"></p>
 <p>从上图中可以看到，这里部署了多套ES集群（A、B、C）。这样做是为了避免所有业务放在一个大集群中相互影响。如此一来每个业务（或者某些业务）都有独立的集群，更加方便运维。</p>
 <p>Kibana与多个ES集群之间通过Tribe Node进行交互，Tribe Node作为集群联邦节点负责将请求路由到正确的后端ES集群上，做到后端ES集群拓扑变化时对使用方透明。</p>
 <p>目前整个斗鱼负责日志这一块的ELK集群总共包含50+物理服务器、700T数据、日增数据量为15T。</p>
@@ -263,7 +259,7 @@
 <p>关于ES相关的优化其实还有很多，网上一搜一大把这里就不一一列举。调优的过程中最基础的还是对物理服务器以及集群做持续监控，通过ES提供的CAT API我们可以很方便的获取集群中的各项指标，如查询负载、查询延迟、索引队列长度、请求拒绝次数等等，我们可以将这些指标数据通过脚本定时读取然后回写到ES中，在KIBANA上建立这些数据的可视化图形，这样一个简单的监控系统就出来了。</p>
 <p>服务器级别的监控能最快落地的方式就是搭一个Zabbix，主要了解CPU、内存、IO等硬件资源使用情况，方便定位问题，找出性能瓶颈。</p>
 <p>在来说一下ES的安全问题。在2017年年初的时候暴露在互联网上的ElasticSearch集群在全球范围遭到大量劫持，黑客在ES中留下了一条与赎金要求相关的索引定义，具体如下所示：</p>
-<p><img src="https://pic2.zhimg.com/50/v2-1bdf1e1d3a08f324f2129d0293c58b18_hd.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160916.png"></p>
 <p>文本内容写道，如果希望恢复数据需要向黑客的账户中支付比特币，如何避免这种悲剧发生呢？</p>
 <p>1、最关键的一点就是<strong>不要将ES暴露在互联网中</strong>，这一点应该是针对所有服务器应用。除非直接与用户交互，所有应用都不应该暴露在互联网中，Web应用应该通过Nginx反向代理并且仅暴露需要交互接口，防止黑客调用那些私有接口以及使用Web容器漏洞。</p>
 <p>如果服务器配置了外网IP，可以在外网交换机上封锁不需要的端口。如果不方便这么做，则开启服务器上的iptables（记得高并发情况下增大iptables跟踪表大小，这里就不展开了），只允许部分端口的入站请求。还可以将所有服务设置成只监听本地局域网请求（ES中可以设置network.bind_host=192.168.x.x）。</p>
@@ -325,8 +321,8 @@
       <i class="fa fa-chevron-left"></i> TopK问题
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/08/05/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" rel="next" title="MQ消息最终一致性事务">
-      MQ消息最终一致性事务 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/08/27/%E4%BA%91%E5%8E%9F%E7%94%9F%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E7%89%B9%E5%BE%81/" rel="next" title="云原生的定义和特征">
+      云原生的定义和特征 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -435,7 +431,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
