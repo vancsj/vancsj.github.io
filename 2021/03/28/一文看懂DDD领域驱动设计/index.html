@@ -20,14 +20,14 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="来源: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;347603268  前言什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分">
+  <meta name="description" content="来源: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;347603268 前言什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分单">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一文看懂DDD领域驱动设计">
 <meta property="og:url" content="http://vancsj.github.io/2021/03/28/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82DDD%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="来源: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;347603268  前言什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分">
+<meta property="og:description" content="来源: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;347603268 前言什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分单">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144442.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328145713.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144520.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144528.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144538.jpg">
@@ -45,13 +45,13 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144712.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144721.jpg">
 <meta property="article:published_time" content="2021-03-28T03:43:25.000Z">
-<meta property="article:modified_time" content="2021-03-28T06:56:50.918Z">
+<meta property="article:modified_time" content="2021-03-28T06:57:19.356Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="架构">
 <meta property="article:tag" content="DDD">
 <meta property="article:tag" content="领域驱动设计">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144442.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328145713.jpg">
 
 <link rel="canonical" href="http://vancsj.github.io/2021/03/28/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82DDD%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/">
 
@@ -196,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-03-28 11:43:25 / 修改时间：14:56:50" itemprop="dateCreated datePublished" datetime="2021-03-28T11:43:25+08:00">2021-03-28</time>
+              <time title="创建时间：2021-03-28 11:43:25 / 修改时间：14:57:19" itemprop="dateCreated datePublished" datetime="2021-03-28T11:43:25+08:00">2021-03-28</time>
             </span>
 
           
@@ -211,12 +211,12 @@
 
       
         <p>来源: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347603268">https://zhuanlan.zhihu.com/p/347603268</a></p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144442.jpg" alt="一文看懂DDD 领域驱动设计"></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分单独求解，而最终将解汇总得到复杂问题解。</p>
 <p>怎么拆，拆成怎么样合适，依据什么拆，这些在领域驱动设计中有了一套答案，虽然领域驱动设计不是银弹，但可以说的上是一套极好的系统方法论或称为架构设计的方法论。</p>
 <p>领域驱动设计常以战略设计与战术设计来将整个领域展现的淋漓尽致，其作用范围既面向业务也面向技术。从战略角度(个人更喜欢称其为上帝视角)去规划系统、划分领域。而从战术角度则从技术层面来指导我们该如何去设计。</p>
 <span id="more"></span>
 
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328145713.jpg" alt="一文看懂DDD 领域驱动设计"></p>
 <h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a><strong>战略设计</strong></h2><p>战略设计主要从高层俯视(上帝视角)我们的软件系统，就如同玩即时战略游戏般，可以一览地图全貌，以此来决定我们是要进攻还是防守哪个方向，同样，在软件中我们也可以以此来划分领域，确定权重方向。</p>
 <p><strong>1.统一语言</strong></p>
 <p>提炼领域知识，怎么个提炼法，千万条罗马路，各有各的看家本领。像事件风暴方法，用例分析方法，用户故事，甚至是开大会，各种讨论会等，最终目的都是提炼出领域知识，而提炼过程中，达成描述上的一致性，包括系统目标、系统范围及系统所具有的功能。</p>
