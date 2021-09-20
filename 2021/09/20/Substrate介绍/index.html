@@ -29,6 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210920115341.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210920115426.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210920165658.png">
 <meta property="article:published_time" content="2021-09-20T01:59:46.000Z">
 <meta property="article:modified_time" content="2021-09-20T01:59:46.000Z">
 <meta property="article:author" content="vancsj">
@@ -217,6 +218,25 @@
 </ol>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920115341.png" alt="Technical Freedom vs Development Ease"></p>
 <h1 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h1><p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920115426.png" alt="Substrate Client Architecture"></p>
+<h1 id="Key-Concepts"><a href="#Key-Concepts" class="headerlink" title="Key Concepts"></a>Key Concepts</h1><p>In Substrate-based chains, the runtime is referred to as the “state transition function”.</p>
+<h3 id="Core-Primitives"><a href="#Core-Primitives" class="headerlink" title="Core Primitives"></a>Core Primitives</h3><ol>
+<li>Hash</li>
+<li>DigestItem</li>
+<li>Digest</li>
+<li>Extrinsic. Data out of chain, that could be recognized by the chain.</li>
+<li>Header. Similar to BTC blockchain header.</li>
+<li>Block</li>
+<li>BlockNumber. Similar to BTC height. 32bit.</li>
+</ol>
+<h3 id="FRAME-Primitives"><a href="#FRAME-Primitives" class="headerlink" title="FRAME Primitives"></a>FRAME Primitives</h3><ol>
+<li>Call. </li>
+<li>Origin. Where the call came from</li>
+<li>Index. </li>
+<li>Hashing. The hashing system used, e.g. Blake2</li>
+<li>AccountId. User account identifier.</li>
+<li>Event</li>
+<li>Version<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920165658.png" alt="Runtime Composition"></li>
+</ol>
 
     </div>
 
@@ -304,7 +324,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">2.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture"><span class="nav-number">3.</span> <span class="nav-text">Architecture</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">2.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture"><span class="nav-number">3.</span> <span class="nav-text">Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Key-Concepts"><span class="nav-number">4.</span> <span class="nav-text">Key Concepts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Core-Primitives"><span class="nav-number">4.0.1.</span> <span class="nav-text">Core Primitives</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FRAME-Primitives"><span class="nav-number">4.0.2.</span> <span class="nav-text">FRAME Primitives</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

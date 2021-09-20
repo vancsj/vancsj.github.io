@@ -261,6 +261,25 @@
 </ol>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920115341.png" alt="Technical Freedom vs Development Ease"></p>
 <h1 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h1><p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920115426.png" alt="Substrate Client Architecture"></p>
+<h1 id="Key-Concepts"><a href="#Key-Concepts" class="headerlink" title="Key Concepts"></a>Key Concepts</h1><p>In Substrate-based chains, the runtime is referred to as the “state transition function”.</p>
+<h3 id="Core-Primitives"><a href="#Core-Primitives" class="headerlink" title="Core Primitives"></a>Core Primitives</h3><ol>
+<li>Hash</li>
+<li>DigestItem</li>
+<li>Digest</li>
+<li>Extrinsic. Data out of chain, that could be recognized by the chain.</li>
+<li>Header. Similar to BTC blockchain header.</li>
+<li>Block</li>
+<li>BlockNumber. Similar to BTC height. 32bit.</li>
+</ol>
+<h3 id="FRAME-Primitives"><a href="#FRAME-Primitives" class="headerlink" title="FRAME Primitives"></a>FRAME Primitives</h3><ol>
+<li>Call. </li>
+<li>Origin. Where the call came from</li>
+<li>Index. </li>
+<li>Hashing. The hashing system used, e.g. Blake2</li>
+<li>AccountId. User account identifier.</li>
+<li>Event</li>
+<li>Version<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210920165658.png" alt="Runtime Composition"></li>
+</ol>
 
       
     </div>
