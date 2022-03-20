@@ -187,11 +187,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h1><h4 id="Parser"><a href="#Parser" class="headerlink" title="Parser:"></a>Parser:</h4><p>PMD uses JavaCC and JJTree to generate source code parser.<br>When parsing java source file with the generated parser, it produces a token tree with ASTCompilationUnit as root node.<br>See <a target="_blank" rel="noopener" href="https://javacc.github.io/javacc/documentation/jjtree.html">https://javacc.github.io/javacc/documentation/jjtree.html</a>. </p>
-<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p>The AST(Abstract Syntax Tree) node.</p>
-<h4 id="Rule"><a href="#Rule" class="headerlink" title="Rule"></a>Rule</h4><p>A PMD rule defines a visitor which traverses the AST in preorder.</p>
-<h4 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h4><p>A scope is a region within variables and other declarations are visible.<br>Scopes can be nested and form a tree.<br>There are SourceFileScope, ClassScope, LocalScope and MethodScope.<br>ScopeAndDeclarationFinder class traverses the AST and generates the scope tree.</p>
-
+          <h1 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h1><h4 id="Parser"><a href="#Parser" class="headerlink" title="Parser:"></a>Parser:</h4><p>PMD uses JavaCC and JJTree to generate source code parser.<br>When parsing java source file with the generated parser, it produces an AST tree with ASTCompilationUnit as root node.<br>See <a target="_blank" rel="noopener" href="https://javacc.github.io/javacc/documentation/jjtree.html">https://javacc.github.io/javacc/documentation/jjtree.html</a>. </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/20/pmd-6-analysis/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
