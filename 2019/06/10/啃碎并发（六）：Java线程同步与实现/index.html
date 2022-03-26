@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="来源 0 前言为何要使用Java线程同步？ Java允许多线程并发控制，当多个线程同时操作一个可共享的资源变量时，将会导致数据不准确，相互之间产生冲突，因此加入同步锁以避免在该线程没有完成操作之前，被其他线程的调用，从而保证了该变量的唯一性和准确性。 但其并发编程的根本，就是使线程间进行正确的通信。其中两个比较重要的关键点，如下：    线程通信：重点关注线程同步的几种方式；  正确通信：重点关注">
@@ -422,66 +422,6 @@ all thread over
 </script>
 
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-ReentrantLock%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">1 ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-synchronized"><span class="nav-number">3.</span> <span class="nav-text">2 synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Condition%E6%9D%A1%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.</span> <span class="nav-text">3 Condition条件对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-wait-amp-notify-notifyAll%E6%96%B9%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">4 wait&amp;notify&#x2F;notifyAll方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-ThreadLocal"><span class="nav-number">6.</span> <span class="nav-text">5 ThreadLocal</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-volatile%E4%BF%AE%E9%A5%B0%E5%8F%98%E9%87%8F"><span class="nav-number">7.</span> <span class="nav-text">6 volatile修饰变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Semaphore%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">8.</span> <span class="nav-text">7 Semaphore信号量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E5%B9%B6%E5%8F%91%E5%8C%85%E4%B8%8B%E7%9A%84%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="nav-number">9.</span> <span class="nav-text">8 并发包下的工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-CountDownLatch"><span class="nav-number">9.1.</span> <span class="nav-text">8.1 CountDownLatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-CyclicBarrier"><span class="nav-number">9.2.</span> <span class="nav-text">8.2 CyclicBarrier</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-number">10.</span> <span class="nav-text">9 使用原子变量实现线程同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-AbstractQueuedSynchronizer"><span class="nav-number">11.</span> <span class="nav-text">10 AbstractQueuedSynchronizer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-%E4%BD%BF%E7%94%A8%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-number">12.</span> <span class="nav-text">11 使用阻塞队列实现线程同步</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">vancsj</p>
-  <div class="site-description" itemprop="description">已所欲，己所从；己所之，己所终</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">38</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">分类</span>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">77</span>
-        <span class="site-state-item-name">标签</span>
-      </div>
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
       </div>
     </main>
 
