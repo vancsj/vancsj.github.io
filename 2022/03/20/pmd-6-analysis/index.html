@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="TermsParser:PMD uses JavaCC and JJTree to generate source code parser.When parsing java source file with the generated parser, it produces an AST tree with ASTCompilationUnit as root node.See https:&#x2F;&#x2F;">
@@ -209,7 +209,7 @@
 <h4 id="Rule"><a href="#Rule" class="headerlink" title="Rule"></a>Rule</h4><p>A PMD rule defines a visitor which traverses the AST in preorder and scan for violations.</p>
 <h4 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h4><p>A scope is a region within variables and other declarations are visible.<br>Scopes can be nested and form a tree.<br>There are SourceFileScope, ClassScope, LocalScope and MethodScope.<br>ScopeAndDeclarationFinder class traverses the AST and generates the scope tree.</p>
 <h4 id="Symbol-Table"><a href="#Symbol-Table" class="headerlink" title="Symbol Table"></a>Symbol Table</h4><p>Before the rulesets travers the AST, ScopeAndDeclarationFinder traverse the AST first, it sets the scope of every node it visits.</p>
-
+<h4 id="Symbol-resolution"><a href="#Symbol-resolution" class="headerlink" title="Symbol resolution"></a>Symbol resolution</h4>
     </div>
 
     
@@ -290,7 +290,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Terms"><span class="nav-number">1.</span> <span class="nav-text">Terms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Parser"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">Parser:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">Node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Rule"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">Rule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scope"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">Scope</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Symbol-Table"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">Symbol Table</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Terms"><span class="nav-number">1.</span> <span class="nav-text">Terms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Parser"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">Parser:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">Node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Rule"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">Rule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scope"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">Scope</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Symbol-Table"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">Symbol Table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Symbol-resolution"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">Symbol resolution</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -346,8 +346,6 @@
   </span>
   <span class="author" itemprop="copyrightHolder">vancsj</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
-  </div>
 
         
 <div class="busuanzi-count">
