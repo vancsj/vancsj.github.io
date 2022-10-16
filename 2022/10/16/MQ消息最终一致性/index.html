@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Source MQ消息最终一致性事务本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。 对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。 但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：Rocke">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MQ消息最终一致性事务">
+<meta property="og:url" content="http://vancsj.github.io/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="Source MQ消息最终一致性事务本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。 对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。 但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：Rocke">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104737">
+<meta property="article:published_time" content="2022-10-16T15:12:40.959Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.959Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="MQ">
+<meta property="article:tag" content="事务">
+<meta property="article:tag" content="高并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104737">
+
+<link rel="canonical" href="http://vancsj.github.io/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MQ消息最终一致性事务 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MQ消息最终一致性事务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-16 23:12:40" itemprop="dateCreated datePublished" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式事务</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
+<h1 id="MQ消息最终一致性事务"><a href="#MQ消息最终一致性事务" class="headerlink" title="MQ消息最终一致性事务"></a>MQ消息最终一致性事务</h1><p>本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。</p>
+<p>对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。</p>
+<p>但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：RocketMQ、RabbitMQ、Kafka、ActiveMQ等），被动方服务从MQ中消费该消息并进行业务处理，从而形成业务上的闭环。</p>
+<p>这种场景下，我们还是希望异步的多个业务操作同时成功，同时失败，基于TCC的同步型事务解决方案就不可行了，这时就需要祭出可靠消息最终一致性方案。</p>
+<span id="more"></span>
+
+<h2 id="实现可靠消息服务"><a href="#实现可靠消息服务" class="headerlink" title="实现可靠消息服务"></a>实现可靠消息服务</h2><p>首先按照惯例我们先看一下该方案的简略的结构图，如下</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328104737" alt="img"></p>
+<h3 id="核心流程1：上游投递消息"><a href="#核心流程1：上游投递消息" class="headerlink" title="核心流程1：上游投递消息"></a><strong>核心流程1：上游投递消息</strong></h3><p>基于上图，我们分析一下如果要实现一个可靠消息一致性的服务，需要实现哪些功能，要走哪些流程。</p>
+<p>调用开始，业务主动方（之后称为主动方）预先发送一条消息到消息服务（图中中间的部分）中，消息中包含后续的业务操作所必须的业务参数，消息服务接收到该消息后存储消息到消息存储中，并设置消息状态为 **”待确认”**。</p>
+<p>如果消息存储失败则直接返回消息持久化失败，本次业务操作结束。</p>
+<p>当主动方接收到消息存储结果后，开始执行本地的业务操作，根据本地事务提交的结果，调用消息服务的接口。这里分为两种状态：</p>
+<ol>
+<li><p>如果本地事务执行成功，就调用消息服务确认消息状态，更新为 <strong>待发送</strong>。</p>
+</li>
+<li><p>如果本地事务执行失败，就调用消息服务删除消息（一般是逻辑删除，更新消息状态为 <strong>已回滚</strong>）</p>
+</li>
+</ol>
+<blockquote>
+<p>当状态为第1种，消息服务就将该消息发送到MQ中，并更新消息状态为 **”已发送”**。</p>
+</blockquote>
+<p><strong>注意</strong>：对于消息状态的更新和投递消息到MQ中间件的操作应在同一个方法中，并开启本地事务。为什么要这么做呢？</p>
+<p>因为我们的目的是：保证消息发送和本地事务同时成功同时失败。</p>
+<p>这里还是有两种情况：</p>
+<ol>
+<li><p>如果更新消息状态失败，则应当抛出异常回滚事务，不投递消息到MQ中。</p>
+</li>
+<li><p>如果投递MQ失败，（需要捕获异常），需要主动抛出异常触发本地事务回滚。</p>
+</li>
+<li><p>1.2要同时成功同时失败</p>
+</li>
+</ol>
+<blockquote>
+<p>当状态是第2种，即本地事务执行失败</p>
+</blockquote>
+<p>业务主动方需要调用可靠消息事务的删除消息操作，消息服务从消息持久化存储中删除该消息（设置消息状态为<strong>已回滚</strong>）</p>
+<h3 id="核心流程2：被动方应用接收消息"><a href="#核心流程2：被动方应用接收消息" class="headerlink" title="核心流程2：被动方应用接收消息"></a><strong>核心流程2：被动方应用接收消息</strong></h3><p>被动方服务订阅主题后只需要等待MQ投递消息即可。</p>
+<p>当消息投递，被动方服务消费该消息并执行本地业务操作，当本地业务执行成功，被动方服务调用消息服务，返回本地业务执行成功。</p>
+<p>可靠消息服务根据业务唯一参数（订单号结合消息id）设置消息状态为 <strong>“已完成”</strong></p>
+<p>整个过程中，作为被动方服务需要尽最大努力将业务向最终状态推进，最终成功或者失败并通知消息服务置消息状态为完成的终态。</p>
+<h3 id="1-如何保证消息不丢失–即保证消息可靠投递"><a href="#1-如何保证消息不丢失–即保证消息可靠投递" class="headerlink" title="1.如何保证消息不丢失–即保证消息可靠投递"></a><strong>1.如何保证消息不丢失–即保证消息可靠投递</strong></h3><p>这里分为多种情况进行讨论。</p>
+<p>开始阶段，主动方应用提交 <strong>待确认</strong> 消息时出错，此时主动方会直接感知到提交失败，业务直接返回失败，不处理后续的流程</p>
+<p>主动方应用执行完成本地事务之后，通知可靠消息服务确认或者删除消息阶段，出了问题：例如通知可靠消息服务失败、本地业务执行异常、可靠消息接收到提交请求后投递消息到MQ中失败等问题，如何解决？</p>
+<blockquote>
+<p>这类情况即出现业务卡在中间态，其实没关系，因为此时消息持久化状态会一直处于 <strong>“待确认”</strong> 状态。</p>
+</blockquote>
+<p>对于这种情况，我们只需要在可靠消息服务后台开启一个定时任务，定时扫描 <strong>“待确认”</strong> 状态的中间状态消息，当消息处于 **”待确认”**状态，表明主动方应用已经开始执行本地业务操作，但业务状态未知，因此我们需要对主动方本地业务执行进行回查操作。</p>
+<p>这个阶段我们要在主动方应用中暴露一个回调查询接口，可靠消息服务会调用该接口，根据消息中的业务参数回查本地事务执行状态。如果主动方业务返回执行成功，则表明当前消息可以投递，此时可靠消息服务更新消息状态为 **”待发送”**，同时投递消息到MQ，并更新消息状态为 <strong>已发送</strong>。</p>
+<p>如果，可靠消息服务（通过回查接口）询问主动方业务执行结果，返回执行失败，那么可靠消息服务需要删除该消息（逻辑删除，设置消息状态为<strong>已回滚</strong>）。</p>
+<p>通过上述的流程，我们可以保证可靠消息服务一定会努力尝试完成消息到MQ的投递过程，即主动方业务执行与消息发送一定同时成功，同时失败。</p>
+<h3 id="2-如何保证消息不丢失–业务被动方对消息100-接收成功"><a href="#2-如何保证消息不丢失–业务被动方对消息100-接收成功" class="headerlink" title="2.如何保证消息不丢失–业务被动方对消息100%接收成功"></a><strong>2.如何保证消息不丢失–业务被动方对消息100%接收成功</strong></h3><p>如果消息投递成功，但业务被动方消费消息出现问题，如：消费失败、未收到消息投递（传说中的丢消息）等，该如何处理呢？</p>
+<p>因为”未收到消息投递”的情况在消息服务高可用的情况下机会不会出现，而消费失败是业务级别的异常，因此我们同样可以采用在可靠消息服务后台起定时任务的方式，检查消息状态。</p>
+<p>对长时间处于 <strong>“已发送”</strong> 未变更状态为 <strong>“已完成”</strong> 的消息进行重新投递操作，这个扫描的时间我们要根据业务执行时间自行调整，比如：1min。</p>
+<p>对这类型消息重新投递到MQ之后，MQ会推送消息给消费方重新进行业务的处理操作。这个过程要在业务层实现消费的 <strong>幂等性</strong>，保证同一条消息在多次投递之后，只会进行一次完整的业务逻辑处理。关于幂等性，可以参考这篇文章 <a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzAxODcyNjEzNQ==&mid=2247486580&idx=1&sn=7b97af5b67ae020ef285be3b76c630a3&chksm=9bd0a1ecaca728facb97015874ee4f4b34303545870eed544ad29caa6dde9b2acb17ce8baa5d&scene=21#wechat_redirect">**幂等的实现方案</a>**, 后续我也会针对业务层的幂等性写一篇文章出来。</p>
+<blockquote>
+<p>整个流程中，从消息的发送，到消息的消费阶段都能保证消息与本地事务执行状态一致，即使上下游会有短暂的状态不一致，在经过一个处理的时间窗口之后，在全局上，数据能够实现最终一致性。</p>
+</blockquote>
+<h2 id="阶段小结"><a href="#阶段小结" class="headerlink" title="阶段小结"></a>阶段小结</h2><p>在上文，我从原理及业务上，分析了如何基于已有的消息中间件实现可靠消息服务，并实现基于可靠消息的最终一致性。</p>
+<p>整个流程中，我们能保证：</p>
+<ol>
+<li><p>业务主动方本地事务提交失败，业务被动方不会收到消息的投递。</p>
+</li>
+<li><p>只要业务主动方本地事务执行成功，那么消息服务一定会投递消息给下游的业务被动方，并最终保证业务被动方一定能成功消费该消息（消费成功或失败，即最终一定会有一个最终态）。</p>
+</li>
+</ol>
+<p>这个机制就是基于消息中间件的异步流程中的最终一致性保证方案。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MQ/" rel="tag"># MQ</a>
+              <a href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag"># 事务</a>
+              <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag"># 高并发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/18/eth-pos%E6%9C%BA%E5%88%B6/" rel="prev" title="eth pos机制">
+      <i class="fa fa-chevron-left"></i> eth pos机制
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/16/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/" rel="next" title="Web服务分层设计模型">
+      Web服务分层设计模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

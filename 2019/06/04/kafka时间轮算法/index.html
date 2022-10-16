@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="来源 零、时间轮定义 简单说说时间轮吧，它是一个高效的延时队列，或者说定时器。实际上现在网上对于时间轮算法的解释很多，定义也很全，这里引用一下 朱小厮博客 里出现的定义： 参考下图，Kafka中的时间轮（TimingWheel）是一个存储定时任务的环形队列，底层采用数组实现，数组中的每个元素可以存放一个定时任务列表（TimerTaskList）。TimerTaskList是一个环形的双向链表，链表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka时间轮算法">
+<meta property="og:url" content="http://vancsj.github.io/2019/06/04/kafka%E6%97%B6%E9%97%B4%E8%BD%AE%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="来源 零、时间轮定义 简单说说时间轮吧，它是一个高效的延时队列，或者说定时器。实际上现在网上对于时间轮算法的解释很多，定义也很全，这里引用一下 朱小厮博客 里出现的定义： 参考下图，Kafka中的时间轮（TimingWheel）是一个存储定时任务的环形队列，底层采用数组实现，数组中的每个元素可以存放一个定时任务列表（TimerTaskList）。TimerTaskList是一个环形的双向链表，链表">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105049.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-598da83136656870ab5a4b19fd380b36_hd.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105058.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-57e7f8dc152cc1e92c2ff8acbf950349_hd.jpg">
+<meta property="article:published_time" content="2019-06-04T07:13:24.000Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.968Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="时间轮">
+<meta property="article:tag" content="延迟队列">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105049.jpg">
+
+<link rel="canonical" href="http://vancsj.github.io/2019/06/04/kafka%E6%97%B6%E9%97%B4%E8%BD%AE%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>kafka时间轮算法 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/06/04/kafka%E6%97%B6%E9%97%B4%E8%BD%AE%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka时间轮算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-04 15:13:24" itemprop="dateCreated datePublished" datetime="2019-06-04T15:13:24+08:00">2019-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/47763558">来源</a></p>
+<p><strong>零、时间轮定义</strong></p>
+<p>简单说说时间轮吧，它是一个高效的延时队列，或者说定时器。实际上现在网上对于时间轮算法的解释很多，定义也很全，这里引用一下 <strong><em>朱小厮博客</em></strong> 里出现的定义：</p>
+<p>参考下图，Kafka中的时间轮（TimingWheel）是一个存储定时任务的环形队列，底层采用数组实现，数组中的每个元素可以存放一个定时任务列表（TimerTaskList）。TimerTaskList是一个环形的双向链表，链表中的每一项表示的都是定时任务项（TimerTaskEntry），其中封装了真正的定时任务TimerTask。</p>
+<span id="more"></span>
+
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105049.jpg"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-598da83136656870ab5a4b19fd380b36_hd.jpg"></p>
+<p>如果你理解了上面的定义，那么就不必往下看了。但如果你第一次看到和我一样懵比，并且有不少疑问，那么这篇博文将带你进一步了解时间轮，甚至理解时间轮算法。</p>
+<p>如果有兴趣，可以去看看其他的定时器 <strong><em>你真的了解延时队列吗</em></strong> 。博主认为，时间轮定时器最大的优点：</p>
+<ol>
+<li> 是任务的添加与移除，都是O(1)级的复杂度；</li>
+<li> 不会占用大量的资源；</li>
+<li> 只需要有一个线程去推进时间轮就可以工作了。</li>
+</ol>
+<p><strong>我们将对时间轮做层层推进的解析：</strong></p>
+<p><strong>一、为什么使用环形队列</strong></p>
+<p>假设我们现在有一个很大的数组，专门用于存放延时任务。它的精度达到了毫秒级！那么我们的延迟任务实际上需要将定时的那个时间简单转换为毫秒即可，然后将定时任务存入其中：</p>
+<p>比如说当前的时间是2018/10/24 19:43:45，那么就将任务存入Task[1540381425000]，value则是定时任务的内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Task[很长] tasks;</span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Task&gt; <span class="title">getTaskList</span><span class="params">(<span class="keyword">long</span> timestamp)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> task.get(timestamp)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 假装这里真的能一毫秒一个循环</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">		getTaskList(System.currentTimeMillis()).后台执行()</span><br><span class="line">		Thread.sleep(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假如这个数组长度达到了亿亿级，我们确实可以这么干。 那如果将精度缩减到秒级呢？我们也需要一个百亿级长度的数组。</p>
+<p>先不说内存够不够，显然你的定时器要这么大的内存显然很浪费。</p>
+<p><strong>当然如果我们自己写一个map，并保证它不存在hash冲突问题，那也是完全可行的。（我不确定我的想法是否正确，如果错误，请指出）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 一个精度为秒级的延时任务管理类 */</span></span><br><span class="line"><span class="keyword">private</span> Map&lt;Long, Task&gt; taskMap;</span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Task&gt; <span class="title">getTaskList</span><span class="params">(<span class="keyword">long</span> timestamp)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> taskMap.get(timestamp - timestamp % <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 新增一个任务</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTask</span><span class="params">(<span class="keyword">long</span> timestamp, Task task)</span> </span>&#123;</span><br><span class="line">	List&lt;Task&gt; taskList = getTaskList(timestamp - timestamp % <span class="number">1000</span>);</span><br><span class="line">		<span class="keyword">if</span> (taskList == <span class="keyword">null</span>)&#123;</span><br><span class="line">			taskList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		&#125;</span><br><span class="line">	taskList.add(task);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 假装这里真的能一秒一个循环</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">		getTaskList(System.currentTimeMillis()).后台执行()</span><br><span class="line">		Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其实时间轮就是一个不存在hash冲突的数据结构</strong></p>
+<p>抛开其他疑问，我们看看手腕上的手表（如果没有去找个钟表，或者想象一个），是不是无论当前是什么时间，总能用我们的表盘去表示它（忽略精度）</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105058.jpg"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-57e7f8dc152cc1e92c2ff8acbf950349_hd.jpg"></p>
+<p>就拿秒表来说，它总是落在 0 - 59 秒，每走一圈，又会重新开始。</p>
+<p>用伪代码模拟一下我们这个秒表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> Bucket[<span class="number">60</span>] buckets;<span class="comment">// 表示60秒</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTask</span><span class="params">(<span class="keyword">long</span> timestamp, Task task)</span> </span>&#123;</span><br><span class="line">	Bucket bucket = buckets[timestamp / <span class="number">1000</span> % <span class="number">60</span>];</span><br><span class="line">	bucket.add(task);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Bucket <span class="title">getBucket</span><span class="params">(<span class="keyword">long</span> timestamp)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> buckets[timestamp / <span class="number">1000</span> % <span class="number">60</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 假装这里真的能一秒一个循环</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">		getBucket(System.currentTimeMillis()).后台执行()</span><br><span class="line">		Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这样，我们的时间总能落在0 - 59任意一个bucket上，就如同我们的秒钟总是落在0 - 59刻度上一样，这便是 <strong>时间轮的环形队列</strong> 。</p>
+<p><strong>二、表示的时间有限</strong></p>
+<p>但是细心的小伙伴也会发现这么一个问题：如果只能表示60秒内的定时任务应该怎么存储与取出，那是不是太有局限性了？ <strong>如果想要加入一小时后的延迟任务，该怎么办？</strong></p>
+<p>其实还是可以看一看钟表，对于只有三个指针的表（一般的表）来说，最大能表示12个小时，超过了12小时这个范围，时间就会产生歧义。如果我们加多几个指针呢？比如说我们有秒针，分针，时针，上下午针，天针，月针，年针…… 那不就能表示很长很长的一段时间了？而且，它并不需要占用很大的内存。</p>
+<p>比如说秒针我们可以用一个长度为60的数组来表示，分针也同样可以用一个长度为60的数组来表示，时针可以用一个长度为24的数组来表示。那么表示一天内的所有时间，只需要三个数组即可。</p>
+<p>动手来做吧，我们将这个数据结构称作时间轮，tickMs表示一个刻度，比如说上面说的一秒。wheelSize表示一圈有多少个刻度，即上面说的60。interval表示一圈能表示多少时间，即 tickMs * wheelSize = 60秒。</p>
+<p>overflowWheel表示上一层的时间轮，比如说，对于秒钟来说，overflowWheel就表示分钟，以此类推。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeWheel</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** 一个时间槽的时间 */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> tickMs;</span><br><span class="line">    <span class="comment">/** 时间轮大小 */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> wheelSize;</span><br><span class="line">    <span class="comment">/** 时间跨度 */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> interval;</span><br><span class="line">    <span class="comment">/** 槽 */</span></span><br><span class="line">    <span class="keyword">private</span> Bucket[] buckets;</span><br><span class="line">    <span class="comment">/** 时间轮指针 */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> currentTimestamp;</span><br><span class="line">    <span class="comment">/** 上层时间轮 */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> TimeWheel overflowWheel;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TimeWheel</span><span class="params">(<span class="keyword">long</span> tickMs, <span class="keyword">int</span> wheelSize, <span class="keyword">long</span> currentTimestamp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.currentTimestamp = currentTimestamp;</span><br><span class="line">        <span class="keyword">this</span>.tickMs = tickMs;</span><br><span class="line">        <span class="keyword">this</span>.wheelSize = wheelSize;</span><br><span class="line">        <span class="keyword">this</span>.interval = tickMs * wheelSize;</span><br><span class="line">        <span class="keyword">this</span>.buckets = <span class="keyword">new</span> Bucket[wheelSize];</span><br><span class="line">        <span class="keyword">this</span>.currentTimestamp = currentTimestamp - (currentTimestamp % tickMs);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; wheelSize; i++) &#123;</span><br><span class="line">            buckets[i] = <span class="keyword">new</span> Bucket();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>将任务添加到时间轮中十分简单，对于每个时间轮来说，比如说秒级时间轮，和分级时间轮，都有它自己的过期槽。也就是delayMs &lt; tickMs的时候。</p>
+<p><strong>添加延时任务的时候一共就这几种情况：</strong></p>
+<p>####一、时间到期</p>
+<ul>
+<li>  1）比如说有一个任务要在 16:29:07 执行，从秒级时间轮中来看，当我们的当前时间走到16:29:06的时候，则表示这个任务已经过期了。因为它的delayMs = 1000ms，小于了我们的秒级时间轮的tickMs(1000ms)。</li>
+</ul>
+<ol>
+<li> 比如说有一个任务要在 16:41:25 执行，从分级时间轮中来看，当我们的当前时间走到 16:41的时候（ 分级时间轮没有秒针！它的最小精度是分钟（一定要理解这一点） ），则表示这个任务已经到期，因为它的delayMs = 25000ms，小于了我们的分级时间轮的tickMs（60000ms）。</li>
+</ol>
+<p><strong>二、时间未到期，且delayMs小于interval。</strong></p>
+<p>对于秒级时间轮来说，就是延迟时间小于60s，那么肯定能找到一个秒钟槽扔进去。</p>
+<p><strong>三、时间未到期，且delayMs大于interval。</strong></p>
+<p>对于妙级时间轮来说，就是延迟时间大于等于60s，这时候就需要借助上层时间轮的力量了，很简单的代码实现，就是拿到上层时间轮，然后类似递归一样，把它扔进去。</p>
+<p>比如说一个有一个延时为一年后的定时任务，就会在这个递归中不断创建更上层的时间轮，直到找到满足delayMs小于interval的那个时间轮。</p>
+<p>这里为了不把代码写的那么复杂，我们每一层时间轮的刻度都一样，也就是秒级时间轮表示60秒，上面则表示60分钟，再上面则表示60小时，再上层则表示60个60小时，再上层则表示60个60个60小时 = 216000小时。</p>
+<p>也就是如果将最底层时间轮的tickMs（精度）设置为1000ms。wheelSize设置为60。 那么只需要5层时间轮，可表示的时间跨度已经长达24年（216000小时） 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 添加任务到某个时间轮</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">addTask</span><span class="params">(TimedTask timedTask)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> expireTimestamp = timedTask.getExpireTimestamp();</span><br><span class="line">        <span class="keyword">long</span> delayMs = expireTimestamp - currentTimestamp;</span><br><span class="line">        <span class="keyword">if</span> (delayMs &lt; tickMs) &#123;<span class="comment">// 到期了</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 扔进当前时间轮的某个槽中，只有时间【大于某个槽】，才会放进去</span></span><br><span class="line">            <span class="keyword">if</span> (delayMs &lt; interval) &#123;</span><br><span class="line">                <span class="keyword">int</span> bucketIndex = (<span class="keyword">int</span>) (((delayMs + currentTimestamp) / tickMs) % wheelSize);</span><br><span class="line">                Bucket bucket = buckets[bucketIndex];</span><br><span class="line">                bucket.addTask(timedTask);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 当maybeInThisBucket大于等于wheelSize时，需要将它扔到上一层的时间轮</span></span><br><span class="line">                TimeWheel timeWheel = getOverflowWheel();</span><br><span class="line">                timeWheel.addTask(timedTask);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取或创建一个上层时间轮</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> TimeWheel <span class="title">getOverflowWheel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (overflowWheel == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (overflowWheel == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    overflowWheel = <span class="keyword">new</span> TimeWheel(interval, wheelSize, currentTimestamp, delayQueue);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> overflowWheel;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当然我们的时间轮还需要一个指针的推进机制，总不能让时间永远停留在当前吧？推进的时候，同时类似递归，去推进一下上一层的时间轮。</p>
+<p><strong>注意：要强调一点的是，我们这个时间轮更像是电子表，它不存在时间的中间状态，也就是精度这个概念一定要理解好。比如说，对于秒级时间轮来说，它的精度只能保证到1秒，小于1秒的，都会当成是已到期</strong></p>
+<p><strong>对于分级时间轮来说，它的精度只能保证到1分，小于1分的，都会当成是已到期</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 尝试推进一下指针</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">advanceClock</span><span class="params">(<span class="keyword">long</span> timestamp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (timestamp &gt;= currentTimestamp + tickMs) &#123;</span><br><span class="line">            currentTimestamp = timestamp - (timestamp % tickMs);</span><br><span class="line">            <span class="keyword">if</span> (overflowWheel != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.getOverflowWheel()</span><br><span class="line">                    .advanceClock(timestamp);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p><strong>三、对于高层时间轮来说，精度越来越不准，会不会有影响？</strong></p>
+<p>上面说到，分级时间轮，精度只有分钟级，总不能延迟1秒的定时任务和延迟59秒的定时任务同时执行吧？</p>
+<p>有这个疑问的同学很好！实际上很好解决，只需再入时间轮即可。比如说，对于分钟级时间轮来说，delayMs为1秒和delayMs为59秒的都已经过期，我们将其取出，再扔进底层的时间轮不就可以了？</p>
+<p>1秒的会被扔到秒级时间轮的下一个执行槽中，而59秒的会被扔到秒级时间轮的后59个时间槽中。</p>
+<p>细心的同学会发现，我们的添加任务方法，返回的是一个bool</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">addTask</span><span class="params">(TimedTask timedTask)</span></span></span><br></pre></td></tr></table></figure>
+
+
+<p>再倒回去好好看看，添加到最底层时间轮失败的（我们只能直接操作最底层的时间轮，不能直接操作上层的时间轮），是不是会直接返回flase？ <strong>对于再入失败的任务，我们直接执行即可。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将任务添加到时间轮</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addOrSubmitTask</span><span class="params">(TimedTask timedTask)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!timeWheel.addTask(timedTask)) &#123;</span><br><span class="line">            taskExecutor.submit(timedTask.getTask());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>四、如何知道一个任务已经过期？</strong></p>
+<p>记得我们将任务存储在槽中嘛？比如说秒级时间轮中，有60个槽，那么一共有60个槽。如果时间轮共有两层，也仅仅只有120个槽。我们只需将槽扔进一个delayedQueue之中即可。</p>
+<p>我们轮询地从delayedQueue取出已经过期的槽即可。（前面的所有代码，为了简单说明，并没有引入这个DelayQueue的概念，所以不用去上面翻了，并没有。博主觉得… <strong>已经看到这里了，应该很明白这个DelayQueue的意义了。</strong> ）</p>
+<p>其实简单来说，实际上定时任务单单使用DelayQueue来实现，也是可以的，但是一旦任务的数量多了起来，达到了百万级，千万级，针对这个delayQueue的增删，将非常的慢。</p>
+<p>一、面向槽的delayQueue</p>
+<p>而对于时间轮来说，它只需要往delayQueue里面扔各种槽即可，比如我们的定时任务长短不一，最长的跨度到了24年，这个delayQueue也仅仅只有300个元素。</p>
+<p>二、处理过期的槽</p>
+<p>而这个槽到期后，也就是被我们从delayQueue中poll出来后，我们只需要将槽中的所有任务循环一次，重新加到新的槽中（添加失败则直接执行）即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 推进一下时间轮的指针，并且将delayQueue中的任务取出来再重新扔进去</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">advanceClock</span><span class="params">(<span class="keyword">long</span> timeout)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Bucket bucket = delayQueue.poll(timeout, TimeUnit.MILLISECONDS);</span><br><span class="line">            <span class="keyword">if</span> (bucket != <span class="keyword">null</span>) &#123;</span><br><span class="line">                timeWheel.advanceClock(bucket.getExpire());</span><br><span class="line">                bucket.flush(<span class="keyword">this</span>::addTask);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%97%B6%E9%97%B4%E8%BD%AE/" rel="tag"># 时间轮</a>
+              <a href="/tags/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97/" rel="tag"># 延迟队列</a>
+              <a href="/tags/kafka/" rel="tag"># kafka</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/04/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%A6%81%E7%82%B9%E6%A6%82%E6%8B%AC/" rel="prev" title="线程池要点概括">
+      <i class="fa fa-chevron-left"></i> 线程池要点概括
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/04/InnoDB%E7%9A%84mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" rel="next" title="InnoDB的mvcc实现原理">
+      InnoDB的mvcc实现原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

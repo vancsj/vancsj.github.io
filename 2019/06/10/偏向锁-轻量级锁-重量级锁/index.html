@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为了换取性能，JVM在内置锁上做了非常多的优化，膨胀式的锁分配策略就是其一。理解偏向锁、轻量级锁、重量级锁的要解决的基本问题，几种锁的分配和膨胀过程，有助于编写并优化基于锁的并发程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="偏向锁-轻量级锁-重量级锁">
+<meta property="og:url" content="http://vancsj.github.io/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="为了换取性能，JVM在内置锁上做了非常多的优化，膨胀式的锁分配策略就是其一。理解偏向锁、轻量级锁、重量级锁的要解决的基本问题，几种锁的分配和膨胀过程，有助于编写并优化基于锁的并发程序。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105746">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105813">
+<meta property="article:published_time" content="2019-06-10T08:11:25.000Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.972Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="锁">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105746">
+
+<link rel="canonical" href="http://vancsj.github.io/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>偏向锁-轻量级锁-重量级锁 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          偏向锁-轻量级锁-重量级锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-10 16:11:25" itemprop="dateCreated datePublished" datetime="2019-06-10T16:11:25+08:00">2019-06-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为了换取性能，JVM在内置锁上做了非常多的优化，膨胀式的锁分配策略就是其一。理解偏向锁、轻量级锁、重量级锁的要解决的基本问题，几种锁的分配和膨胀过程，有助于编写并优化基于锁的并发程序。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>内置锁的分配和膨胀过程较为复杂，限于时间和精力，文中该部分内容是根据网上的多方资料整合而来；仅为方便查阅，后面继续分析JVM源码的时候也有个参考。如果对各级锁已经有了基本了解，读者大可跳过此文。</p>
+</blockquote>
+<h1 id="隐藏在内置锁下的基本问题"><a href="#隐藏在内置锁下的基本问题" class="headerlink" title="隐藏在内置锁下的基本问题"></a>隐藏在内置锁下的基本问题</h1><p>内置锁是JVM提供的最便捷的线程同步工具，在代码块或方法声明上添加synchronized关键字即可使用内置锁。使用内置锁能够简化并发模型；随着JVM的升级，几乎不需要修改代码，就可以直接享受JVM在内置锁上的优化成果。从简单的重量级锁，到逐渐膨胀的锁分配策略，使用了多种优化手段解决隐藏在内置锁下的基本问题。</p>
+<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p>内置锁在Java中被抽象为监视器锁（monitor）。在JDK 1.6之前，监视器锁可以认为直接对应底层操作系统中的互斥量（mutex）。这种同步方式的成本非常高，包括系统调用引起的内核态与用户态切换、线程阻塞造成的线程切换等。因此，后来称这种锁为“重量级锁”。</p>
+<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>首先，内核态与用户态的切换上不容易优化。但<strong>通过自旋锁，可以减少线程阻塞造成的线程切换</strong>（包括挂起线程和恢复线程）。</p>
+<p>如果锁的粒度小，那么<strong>锁的持有时间比较短</strong>（尽管具体的持有时间无法得知，但可以认为，通常有一部分锁能满足上述性质）。那么，对于竞争这些锁的而言，因为锁阻塞造成线程切换的时间与锁持有的时间相当，减少线程阻塞造成的线程切换，能得到较大的性能提升。具体如下：</p>
+<ul>
+<li>  当前线程竞争锁失败时，打算阻塞自己</li>
+<li>  不直接阻塞自己，而是自旋（空等待，比如一个空的有限for循环）一会</li>
+<li>  在自旋的同时重新竞争锁</li>
+<li>  如果自旋结束前获得了锁，那么锁获取成功；否则，自旋结束后阻塞自己</li>
+</ul>
+<p>_如果在自旋的时间内，锁就被旧owner释放了，那么当前线程就不需要阻塞自己_（也不需要在未来锁释放时恢复），减少了一次线程切换。</p>
+<p>“锁的持有时间比较短”这一条件可以放宽。实际上，只要锁竞争的时间比较短（比如线程1快释放锁的时候，线程2才会来竞争锁），就能够提高自旋获得锁的概率。这通常发生在<strong>锁持有时间长，但竞争不激烈</strong>的场景中。</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>  单核处理器上，不存在实际的并行，当前线程不阻塞自己的话，旧owner就不能执行，锁永远不会释放，此时不管自旋多久都是浪费；进而，如果线程多而处理器少，自旋也会造成不少无谓的浪费。</li>
+<li>  自旋锁要占用CPU，如果是计算密集型任务，这一优化通常得不偿失，减少锁的使用是更好的选择。</li>
+<li>  如果锁竞争的时间比较长，那么自旋通常不能获得锁，白白浪费了自旋占用的CPU时间。这通常发生在_锁持有时间长，且竞争激烈_的场景中，此时应主动禁用自旋锁。</li>
+</ul>
+<blockquote>
+<p>使用-XX:-UseSpinning参数关闭自旋锁优化；-XX:PreBlockSpin参数修改默认的自旋次数。</p>
+</blockquote>
+<h3 id="自适应自旋锁"><a href="#自适应自旋锁" class="headerlink" title="自适应自旋锁"></a>自适应自旋锁</h3><p>自适应意味着自旋的时间不再固定了，而是由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定：</p>
+<ul>
+<li>  如果在同一个锁对象上，自旋等待刚刚成功获得过锁，并且持有锁的线程正在运行中，那么虚拟机就会认为这次自旋也很有可能再次成功，进而它将允许自旋等待持续相对更长的时间，比如100个循环。</li>
+<li>  相反的，如果对于某个锁，自旋很少成功获得过，那在以后要获取这个锁时将可能减少自旋时间甚至省略自旋过程，以避免浪费处理器资源。</li>
+</ul>
+<p><strong>自适应自旋解决的是“锁竞争时间不确定”的问题</strong>。JVM很难感知到确切的锁竞争时间，而交给用户分析就违反了JVM的设计初衷。_自适应自旋假定不同线程持有同一个锁对象的时间基本相当，竞争程度趋于稳定，因此，可以根据上一次自旋的时间与结果调整下一次自旋的时间_。</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>然而，自适应自旋也没能彻底解决该问题，_如果默认的自旋次数设置不合理（过高或过低），那么自适应的过程将很难收敛到合适的值_。</p>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>自旋锁的目标是降低线程切换的成本。如果锁竞争激烈，我们不得不依赖于重量级锁，让竞争失败的线程阻塞；如果完全没有实际的锁竞争，那么申请重量级锁都是浪费的。<strong>轻量级锁的目标是，减少无实际竞争情况下，使用重量级锁产生的性能消耗</strong>，包括系统调用引起的内核态与用户态切换、线程阻塞造成的线程切换等。</p>
+<p>顾名思义，轻量级锁是相对于重量级锁而言的。使用轻量级锁时，不需要申请互斥量，仅仅_将Mark Word中的部分字节CAS更新指向线程栈中的Lock Record，如果更新成功，则轻量级锁获取成功_，记录锁状态为轻量级锁；_否则，说明已经有线程获得了轻量级锁，目前发生了锁竞争（不适合继续使用轻量级锁），接下来膨胀为重量级锁_。</p>
+<blockquote>
+<p>Mark Word是对象头的一部分；每个线程都拥有自己的线程栈（虚拟机栈），记录线程和函数调用的基本信息。二者属于JVM的基础内容，此处不做介绍。</p>
+</blockquote>
+<p>当然，由于轻量级锁天然瞄准不存在锁竞争的场景，如果存在锁竞争但不激烈，仍然可以用自旋锁优化，_自旋失败后再膨胀为重量级锁_。</p>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><p>同自旋锁相似：</p>
+<ul>
+<li>  如果_锁竞争激烈_，那么轻量级将很快膨胀为重量级锁，那么维持轻量级锁的过程就成了浪费。</li>
+</ul>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>在没有实际竞争的情况下，还能够针对部分场景继续优化。如果不仅仅没有实际竞争，自始至终，使用锁的线程都只有一个，那么，维护轻量级锁都是浪费的。<strong>偏向锁的目标是，减少无竞争且只有一个线程使用锁的情况下，使用轻量级锁产生的性能消耗</strong>。轻量级锁每次申请、释放锁都至少需要一次CAS，但偏向锁只有初始化时需要一次CAS。</p>
+<p>“偏向”的意思是，_偏向锁假定将来只有第一个申请锁的线程会使用锁_（不会有任何线程再来申请锁），因此，_只需要在Mark Word中CAS记录owner（本质上也是更新，但初始值为空），如果记录成功，则偏向锁获取成功_，记录锁状态为偏向锁，_以后当前线程等于owner就可以零成本的直接获得锁；否则，说明有其他线程竞争，膨胀为轻量级锁_。</p>
+<p>偏向锁无法使用自旋锁优化，因为一旦有其他线程申请锁，就破坏了偏向锁的假定。</p>
+<h3 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h3><p>同样的，如果明显存在其他线程申请锁，那么偏向锁将很快膨胀为轻量级锁。</p>
+<blockquote>
+<p>不过这个副作用已经小的多。</p>
+<p>如果需要，使用参数-XX:-UseBiasedLocking禁止偏向锁优化（默认打开）。</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><blockquote>
+<p>偏向锁、轻量级锁、重量级锁分配和膨胀的详细过程见后。会涉及一些Mark Word与CAS的知识。</p>
+</blockquote>
+<p>偏向锁、轻量级锁、重量级锁适用于不同的并发场景：</p>
+<ul>
+<li>  偏向锁：无实际竞争，且将来只有第一个申请锁的线程会使用锁。</li>
+<li>  轻量级锁：无实际竞争，多个线程交替使用锁；允许短时间的锁竞争。</li>
+<li>  重量级锁：有实际竞争，且锁竞争时间长。</li>
+</ul>
+<p>另外，如果锁竞争时间短，可以使用自旋锁进一步优化轻量级锁、重量级锁的性能，减少线程切换。</p>
+<p>如果锁竞争程度逐渐提高（缓慢），那么从偏向锁逐步膨胀到重量锁，能够提高系统的整体性能。</p>
+<h1 id="锁分配和膨胀过程"><a href="#锁分配和膨胀过程" class="headerlink" title="锁分配和膨胀过程"></a>锁分配和膨胀过程</h1><blockquote>
+<p>重申，这部分主要是根据网上的多方资料整理。核心是这位<a href="https://link.juejin.im/?target=https://blog.dreamtobe.cn/">巨巨</a>整理的流程图，相当详细，基本符合逻辑。</p>
+</blockquote>
+<p>前面讲述了内置锁在使用过程中的一些基本问题和解决方案，实现原理一笔带过。详细的锁分配和膨胀过程如下：</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105746" alt="image.png"></p>
+<blockquote>
+<p>图中有一处疑问：</p>
+<p>按照图中流程，_如果发现锁已经膨胀为重量级锁，就直接使用互斥量mutex阻塞当前线程_。</p>
+<p>然而，自旋锁的一大好处就是减少线程切换的开销。在这里没有必要直接阻塞当前线程，大可以像轻量级锁一样，自旋一会，失败了再阻塞。</p>
+</blockquote>
+<p>特别说明两点：</p>
+<ul>
+<li>  CAS记录owner时，_<code>expected == null</code>_，<code>newValue == ownerThreadId</code>，因此，<strong>只有第一个申请偏向锁的线程能够返回成功，后续线程都必然失败</strong>（部分线程检测到可偏向，同时尝试CAS记录owner）。</li>
+<li>  <strong>内置锁只能沿着偏向锁、轻量级锁、重量级锁的顺序逐渐膨胀</strong>，不能“收缩”。这基于JVM的另一个假定，“_一旦破坏了上一级锁的假定，就认为该假定以后也必不成立_”。</li>
+</ul>
+<p>另外，当重量级锁被解除后，需要唤醒一个被阻塞的线程，这部分逻辑与ReentrantLock基本相同，详见<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/2017/12/05/%25E6%25BA%2590%25E7%25A0%2581%257C%25E5%25B9%25B6%25E5%258F%2591%25E4%25B8%2580%25E6%259E%259D%25E8%258A%25B1%25E4%25B9%258BReentrantLock%25E4%25B8%258EAQS%25EF%25BC%25881%25EF%25BC%2589%25EF%25BC%259Alock%25E3%2580%2581unlock/">源码|并发一枝花之ReentrantLock与AQS（1）：lock、unlock</a>。</p>
+<h2 id="简化版"><a href="#简化版" class="headerlink" title="简化版"></a>简化版</h2><p>上图记载的很详细，也有Mark Word的图解。看懂上图后，再来看《深入理解Java虚拟机：JVM高级特性与最佳实践（第2版）》中的简化版流程图就能看懂了：</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105813" alt="image.png"></p>
+<blockquote>
+<p>挖坑：</p>
+<p>简化版中指出了<code>重偏向</code>过程。这一过程对于性能优化和膨胀过程都非常重要；但如果考虑重偏向的话，可能上述特别说明的内容就不成立了。要整理的笔记太多啦时间不够啊，猴子选择暂时放弃这个问题，，，恩，挖个坑，以后再追源码填坑。</p>
+<p>重偏向和epoch的作用参考：</p>
+<ul>
+<li>  <a href="https://link.juejin.im/?target=https://www.zhihu.com/question/56582060/answer/155398235">BiasedLocking模式下markOop中位域epoch的根本作用是什么？</a></li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<p>参考:</p>
+<ul>
+<li>  <a href="https://link.juejin.im/?target=https://blog.dreamtobe.cn/2015/11/13/java_synchronized/">Java Synchronised机制</a></li>
+<li>  <a href="https://link.juejin.im/?target=https://www.zhihu.com/question/57774162/answer/154298044">Java偏向锁是如何撤销的？</a></li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<p>本文链接：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/2018/01/02/%25E6%25B5%2585%25E8%25B0%2588%25E5%2581%258F%25E5%2590%2591%25E9%2594%2581%25E3%2580%2581%25E8%25BD%25BB%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581%25E3%2580%2581%25E9%2587%258D%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581/">浅谈偏向锁、轻量级锁、重量级锁</a><br>作者：<a href="https://link.juejin.im/?target=mailto:monkeysayhi7@gmail.com">猴子007</a><br>出处：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/">monkeysayhi.github.io</a><br>本文基于<a href="https://link.juejin.im/?target=http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布，欢迎转载，演绎或用于商业目的，但是必须保留本文的署名及链接。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E9%94%81/" rel="tag"># 锁</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/10/Java%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%BB%E7%BB%93/" rel="prev" title="Java线程安全总结">
+      <i class="fa fa-chevron-left"></i> Java线程安全总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/10/AQS%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" rel="next" title="AQS的基本原理">
+      AQS的基本原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言我们知道，java的wait&#x2F;notify的通知机制可以用来实现线程间通信。wait表示线程的等待，调用该方法会导致线程阻塞，直至另一线程调用notify或notifyAll方法才可另其继续执行。经典的生产者、消费者模式即是使用wait&#x2F;notify机制得以完成。在这篇文章中，我们将深入解析这一机制，了解其背后的原理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java的wait-notify机制">
+<meta property="og:url" content="http://vancsj.github.io/2019/06/04/Java%E7%9A%84wait-notify%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="前言我们知道，java的wait&#x2F;notify的通知机制可以用来实现线程间通信。wait表示线程的等待，调用该方法会导致线程阻塞，直至另一线程调用notify或notifyAll方法才可另其继续执行。经典的生产者、消费者模式即是使用wait&#x2F;notify机制得以完成。在这篇文章中，我们将深入解析这一机制，了解其背后的原理。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104503">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104514">
+<meta property="article:published_time" content="2019-06-04T12:29:22.000Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.958Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104503">
+
+<link rel="canonical" href="http://vancsj.github.io/2019/06/04/Java%E7%9A%84wait-notify%E6%9C%BA%E5%88%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java的wait-notify机制 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/06/04/Java%E7%9A%84wait-notify%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java的wait-notify机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-04 20:29:22" itemprop="dateCreated datePublished" datetime="2019-06-04T20:29:22+08:00">2019-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a href="#" title="前言"></a>前言</h2><p>我们知道，java的wait/notify的通知机制可以用来实现线程间通信。wait表示线程的等待，调用该方法会导致线程阻塞，直至另一线程调用notify或notifyAll方法才可另其继续执行。经典的生产者、消费者模式即是使用wait/notify机制得以完成。在这篇文章中，我们将深入解析这一机制，了解其背后的原理。</p>
+<span id="more"></span>
+
+<h2 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a><a href="#" title="线程的状态"></a>线程的状态</h2><p>在了解wait/notify机制前，先熟悉一下java线程的几个生命周期。分别为初始（NEW）、运行(RUNNABLE)、阻塞(BLOCKED)、等待(WAITING)、超时等待(TIMED_WAITING)、终止(TERMINATED)等状态（位于java.lang.Thread.State枚举类中）。</p>
+<p>以下是对这几个状态的简要说明，详细说明见该类注释。</p>
+<table>
+<thead>
+<tr>
+<th>状态名称</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NEW</td>
+<td align="left">初始状态，线程被构建，但未调用start()方法</td>
+</tr>
+<tr>
+<td>RUNNABLE</td>
+<td align="left">运行状态，调用start()方法后。在java线程中，将操作系统线程的就绪和运行统称运行状态</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td align="left">阻塞状态，线程等待进入synchronized代码块或方法中，等待获取锁</td>
+</tr>
+<tr>
+<td>WAITING</td>
+<td align="left">等待状态，线程可调用wait、join等操作使自己陷入等待状态，并等待其他线程做出特定操作（如notify或中断）</td>
+</tr>
+<tr>
+<td>TIMED_WAITING</td>
+<td align="left">超时等待，线程调用sleep(timeout)、wait(timeout)等操作进入超时等待状态，超时后自行返回</td>
+</tr>
+<tr>
+<td>TERMINATED</td>
+<td align="left">终止状态，线程运行结束</td>
+</tr>
+</tbody></table>
+<p><a href="https://link.juejin.im/?target=http://img.wthfeng.com/img/posts/java/thread/java-thread-status.png"><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328104503"></a></p>
+<p>对于以上线程间的状态及转化关系，我们需要知道</p>
+<ol>
+<li> WAITING(等待状态)和TIMED_WAITING(超时等待)都会令线程进入等待状态，不同的是TIMED_WAITING会在超时后自行返回，而WAITING则需要等待至条件改变。</li>
+<li> 进入阻塞状态的唯一前提是在等待获取同步锁。java注释说的很明白，只有两种情况可以使线程进入阻塞状态：一是等待进入synchronized块或方法，另一个是在调用wait()方法后重新进入synchronized块或方法。下文会有详细解释。</li>
+<li> Lock类对于锁的实现不会令线程进入阻塞状态，<strong>Lock底层调用LockSupport.park()方法，使线程进入的是等待状态</strong>。</li>
+</ol>
+<h2 id="wait-notify用例"><a href="#wait-notify用例" class="headerlink" title="wait/notify用例"></a><a href="#" title="wait/notify用例"></a>wait/notify用例</h2><p>让我们先通过一个示例解析</p>
+<p>wait()方法可以使线程进入等待状态，而notify()可以使等待的状态唤醒。这样的同步机制十分适合生产者、消费者模式：消费者消费某个资源，而生产者生产该资源。当该资源缺失时，消费者调用wait()方法进行自我阻塞，等待生产者的生产；生产者生产完毕后调用notify/notifyAll()唤醒消费者进行消费。</p>
+<p>以下是代码示例，其中flag标志表示资源的有无。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();  <span class="comment">//对象锁</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread consume = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Consume(), <span class="string">&quot;Consume&quot;</span>);</span><br><span class="line">        Thread produce = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Produce(), <span class="string">&quot;Produce&quot;</span>);</span><br><span class="line">        consume.start();</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        produce.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            produce.join();</span><br><span class="line">            consume.join();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生产者线程</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Produce</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;进入生产者线程&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;生产&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    TimeUnit.MILLISECONDS.sleep(<span class="number">2000</span>);  <span class="comment">//模拟生产过程</span></span><br><span class="line">                    flag = <span class="keyword">true</span>;</span><br><span class="line">                    obj.notify();  <span class="comment">//通知消费者</span></span><br><span class="line">                    TimeUnit.MILLISECONDS.sleep(<span class="number">1000</span>);  <span class="comment">//模拟其他耗时操作</span></span><br><span class="line">                    System.out.println(<span class="string">&quot;退出生产者线程&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//消费者线程</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Consume</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;进入消费者线程&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;wait flag 1:&quot;</span> + flag);</span><br><span class="line">                <span class="keyword">while</span> (!flag) &#123;  <span class="comment">//判断条件是否满足，若不满足则等待</span></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;还没生产，进入等待&quot;</span>);</span><br><span class="line">                        obj.wait();</span><br><span class="line">                        System.out.println(<span class="string">&quot;结束等待&quot;</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(<span class="string">&quot;wait flag 2:&quot;</span> + flag);</span><br><span class="line">                System.out.println(<span class="string">&quot;消费&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;退出消费者线程&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>输出结果为：</p>
+<blockquote>
+<p>进入消费者线程  </p>
+<p>wait flag 1:false  </p>
+<p>还没生产，进入等待  </p>
+<p>进入生产者线程  </p>
+<p>生产  </p>
+<p>退出生产者线程  </p>
+<p>结束等待  </p>
+<p>wait flag 2:true  </p>
+<p>消费  </p>
+<p>退出消费者线程  </p>
+</blockquote>
+<p>理解了输出结果的顺序，也就明白了wait/notify的基本用法。有以下几点需要知道：</p>
+<ol>
+<li> 在示例中没有体现但很重要的是，<strong>wait/notify方法的调用必须处在该对象的锁（Monitor）中，也即，在调用这些方法时首先需要获得该对象的锁。</strong>否则会抛出IllegalMonitorStateException异常。</li>
+<li> 从输出结果来看，在生产者调用notify()后，消费者并没有立即被唤醒，而是等到生产者退出同步块后才唤醒执行。（这点其实也好理解，synchronized同步方法（块）同一时刻只允许一个线程在里面，生产者不退出，消费者也进不去）</li>
+<li> 注意，消费者被唤醒后是从wait()方法（被阻塞的地方）后面执行，而不是重新从同步块开始。</li>
+</ol>
+<h2 id="深入了解"><a href="#深入了解" class="headerlink" title="深入了解"></a><a href="#" title="深入了解"></a>深入了解</h2><p>这一节我们探讨wait/notify与线程状态之间的关系。深入了解线程的生命周期。</p>
+<p>由前面线程的状态转化图可知，当调用wait()方法后，线程会进入WAITING(等待状态)，后续被notify()后，并没有立即被执行，而是进入等待获取锁的阻塞队列。</p>
+<p><a href="https://link.juejin.im/?target=http://img.wthfeng.com/img/posts/java/thread/java-wait-notify.png"><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328104514"></a></p>
+<p>对于每个对象来说，都有自己的等待队列和阻塞队列。以前面的生产者、消费者为例，我们拿obj对象作为对象锁，配合图示。内部流程如下</p>
+<ol>
+<li> 当线程A（消费者）调用wait()方法后，线程A让出锁，自己进入等待状态，同时加入锁对象的等待队列。</li>
+<li> 线程B（生产者）获取锁后，调用notify方法通知锁对象的等待队列，使得线程A从等待队列进入阻塞队列。</li>
+<li> 线程A进入阻塞队列后，直至线程B释放锁后，线程A竞争得到锁继续从wait()方法后执行。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><a href="#" title="参考资料"></a>参考资料</h2><ol>
+<li> 《java并发编程的艺术》</li>
+<li> <a href="https://link.juejin.im/?target=http://blog.csdn.net/ns_code/article/details/17225469">【Java并发编程】之十：使用wait/notify/notifyAll实现线程间通信的几点重要说明</a></li>
+<li> <a href="https://link.juejin.im/?target=http://www.cnblogs.com/paddix/p/5381958.html">Java 并发编程：线程间的协作(wait/notify/sleep/yield/join)</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag"># 多线程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/04/InnoDB%E7%9A%84mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" rel="prev" title="InnoDB的mvcc实现原理">
+      <i class="fa fa-chevron-left"></i> InnoDB的mvcc实现原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/05/Java%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" rel="next" title="Java线程上下文切换">
+      Java线程上下文切换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Source 幂等的概念幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。 复制代码 在编程中，一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，”getUsername()和setTrue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="幂等的实现方案">
+<meta property="og:url" content="http://vancsj.github.io/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="Source 幂等的概念幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。 复制代码 在编程中，一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，”getUsername()和setTrue">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-30T03:55:54.000Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.973Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="MQ">
+<meta property="article:tag" content="高并发">
+<meta property="article:tag" content="幂等">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://vancsj.github.io/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>幂等的实现方案 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          幂等的实现方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-30 11:55:54" itemprop="dateCreated datePublished" datetime="2019-05-30T11:55:54+08:00">2019-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxODcyNjEzNQ==&mid=2247486580&idx=1&sn=7b97af5b67ae020ef285be3b76c630a3&chksm=9bd0a1ecaca728facb97015874ee4f4b34303545870eed544ad29caa6dde9b2acb17ce8baa5d&scene=21" title="Permalink to ">Source</a></p>
+<h3 id="幂等的概念"><a href="#幂等的概念" class="headerlink" title="幂等的概念"></a>幂等的概念</h3><p>幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。 复制代码</p>
+<p>在编程中，一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，”getUsername()和setTrue()”函数就是一个幂等函数。</p>
+<blockquote>
+<p>用通俗的话讲：就是针对一个操作，不管做多少次，产生效果或返回的结果都是一样的</p>
+</blockquote>
+<span id="more"></span>
+
+<h4 id="举几个例子："><a href="#举几个例子：" class="headerlink" title="举几个例子："></a>举几个例子：</h4><ol>
+<li><p>比如前端对同一表单数据的重复提交，后台应该只会产生一个结果</p>
+</li>
+<li><p>比如我们发起一笔付款请求，应该只扣用户账户一次钱，当遇到网络重发或系统bug重发，也应该只扣一次钱</p>
+</li>
+<li><p>比如发送消息，也应该只发一次，同样的短信如果多次发给用户，用户会崩溃</p>
+</li>
+<li><p>比如创建业务订单，一次业务请求只能创建一个，不能出现创建多个订单 复制代码</p>
+</li>
+</ol>
+<p>还有很多诸如此类的，这些逻辑都需要幂等的特性来支持。</p>
+<h3 id="实现幂等性的技术方案"><a href="#实现幂等性的技术方案" class="headerlink" title="实现幂等性的技术方案"></a>实现幂等性的技术方案</h3><h4 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h4><p>查询一次和查询多次，在数据不变的情况下，查询结果是一样的，select是天然的幂等操作。</p>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>删除操作也是幂等的，删除一次和多次删除都是把数据删除。(注意可能返回结果不一样，删除的数据不存在，返回0，删除的数据多条，返回结果多个)。</p>
+<h4 id="唯一索引，防止新增脏数据"><a href="#唯一索引，防止新增脏数据" class="headerlink" title="唯一索引，防止新增脏数据"></a>唯一索引，防止新增脏数据</h4><p>拿资金账户和用户账户来说，每个用户只能有一个资金账户，怎么防止给用户创建资金账户多个，那么给资金账户表中的用户ID加唯一索引，在新增的时候只有一个能请求成功，剩下都会抛出唯一索引重复异常。比如 <code>org.springframework.dao.DuplicateKeyException</code>，这时候再查询一次就可以了，数据存在，返回结果</p>
+<h4 id="token机制，防止页面重复提交"><a href="#token机制，防止页面重复提交" class="headerlink" title="token机制，防止页面重复提交"></a>token机制，防止页面重复提交</h4><p><strong>要求</strong>：页面的数据只能被点击提交一次<strong>发生原因</strong>：由于重复点击或者网络重发，或者nginx重发等情况会导致数据被重复提交<strong>解决办法</strong>：</p>
+<ul>
+<li>集群环境：采用token加redis</li>
+<li>单JVM环境：采用token加redis或token加jvm内存 <strong>处理流程</strong>：</li>
+<li>数据提交前要向服务的申请token，token放到redis或jvm内存，token有效时间</li>
+<li>提交后后台校验token，同时删除token，生成新的token返回 <strong>token特点</strong>：要申请，一次有效性，可以限流</li>
+</ul>
+<blockquote>
+<p>注意：redis要用删除操作来判断token，删除成功代表token校验通过，如果用select+delete来校验token， 存在并发问题，不建议使用</p>
+</blockquote>
+<h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>获取数据的时候加锁获取</p>
+<pre><code>    1. select * from table_xxx where id=&#39;xxx&#39; for update;
+</code></pre>
+<blockquote>
+<p>注意：id字段一定是主键或者唯一索引，不然是锁表，会出事的。悲观锁使用时一般伴随事务一起使用，数据锁定时间可能会很长，根据实际情况选用</p>
+</blockquote>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观锁只是在更新数据那一刻锁表，其他时间不锁表，所以相对于悲观锁，效率更高。</p>
+<p>乐观锁的实现方式多种多样可以通过version或者其他状态条件：</p>
+<p>1.通过版本号实现</p>
+<pre><code>    1. update table_xxx set name=#name#,version=version+1 where version=#version#
+</code></pre>
+<p>2.通过条件限制</p>
+<pre><code>    1. update table_xxx set avai_amount=avai_amount-#subAmount# where avai_amount-#subAmount# &gt;= 0
+</code></pre>
+<p><strong>要求</strong>： <code>avai_amount-subAmount&gt;=0</code>这个情景适合不用版本号，只更新是做数据安全校验，适合库存模型，扣份额和回滚份额，性能更高。</p>
+<blockquote>
+<p>注意：乐观锁的更新操作，最好用主键或者唯一索引来更新,这样是行锁，否则更新时会锁表，上面两个sql改成下面的两个更好。</p>
+</blockquote>
+<pre><code>    1. update table_xxx set name=#name#,version=version+1 where id=#id# and version=#version#
+
+2. 3. update table_xxx set avai_amount=avai_amount-#subAmount# where id=#id# and
+
+4. avai_amount-#subAmount# &gt;= 0
+</code></pre>
+<h4 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h4><p>还是拿插入数据的例子，如果是分布是系统，构建全局唯一索引比较困难，例如唯一性的字段没法确定，这时候可以引入分布式锁，通过第三方的系统(redis或zookeeper)，在业务系统插入数据或者更新数据，获取分布式锁，然后做操作，之后释放锁，其实就是为了控制多线程并发的操作，也是分布式系统中经常用到的解决思路。</p>
+<h4 id="select-insert"><a href="#select-insert" class="headerlink" title="select + insert"></a>select + insert</h4><p>并发不高的后台系统，或者一些任务JOB，为了支持幂等，支持重复执行，简单的处理方法是，先查询下一些关键数据，判断是否已经执行过，在进行业务处理，就可以了。</p>
+<blockquote>
+<p>注意：核心高并发流程不要用这种方法。</p>
+</blockquote>
+<h4 id="状态机幂等"><a href="#状态机幂等" class="headerlink" title="状态机幂等"></a>状态机幂等</h4><p>在设计单据相关的业务，或者是任务相关的业务，肯定会涉及到状态机(状态变更图)，就是业务单据上面有个状态，状态在不同的情况下会发生变更，一般情况下存在有限状态机，这时候，如果状态机已经处于下一个状态，这时候来了一个上一个状态的变更，理论上是不能够变更的，这样的话，保证了有限状态机的幂等。</p>
+<blockquote>
+<p>注意：订单等单据类业务，存在很长的状态流转，一定要深刻理解状态机，对业务系统设计能力提高有很大帮助。</p>
+</blockquote>
+<h4 id="对外提供接口的api如何保证幂等"><a href="#对外提供接口的api如何保证幂等" class="headerlink" title="对外提供接口的api如何保证幂等"></a>对外提供接口的api如何保证幂等</h4><p>如银联提供的付款接口：需要接入商户提交付款请求时附带：source来源，seq序列号</p>
+<p>source+seq在数据库里面做唯一索引，防止多次付款，(并发时，只能处理一个请求)。</p>
+<p><strong>重点</strong>：</p>
+<p>对外提供接口为了支持幂等调用，接口有两个字段必须传，一个是来源source，一个是来源方序列号seq，这个两个字段在提供方系统里面做联合唯一索引，这样当第三方调用时，先在本方系统里面查询一下，是否已经处理过，返回相应处理结果；没有处理过，进行相应处理，返回结果。注意，为了幂等友好，一定要先查询一下，是否处理过该笔业务，不查询直接插入业务系统，会报错，但实际已经处理了。</p>
+<h3 id="最后总结："><a href="#最后总结：" class="headerlink" title="最后总结："></a>最后总结：</h3><p>幂等性应该是合格程序员的一个基因，在设计系统时，是首要考虑的问题，尤其是在像第三方支付平台，银行，互联网金融公司等涉及的网上资金系统，既要高效，数据也要准确，所以不能出现多扣款，多打款等问题，这样会很难处理，并会大大降低用户体验。</p>
+<p><strong>·END·</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MQ/" rel="tag"># MQ</a>
+              <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag"># 高并发</a>
+              <a href="/tags/%E5%B9%82%E7%AD%89/" rel="tag"># 幂等</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/" rel="next" title="不可不说的Java锁事-美团技术团队">
+      不可不说的Java锁事-美团技术团队 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

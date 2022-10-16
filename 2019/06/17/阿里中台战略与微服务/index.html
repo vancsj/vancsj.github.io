@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="传统企业平台都是烟囱式的系统架构，企业内部为了迎合业务发展不停的打造各种系统，导致各系统间的重复功能建设和维护带来的重复投资。重复投资不仅消耗的是人力，财力还有时间。但打通烟囱式系统间交互的集成和协作成本高昂，各大企业不得不借助ESB产品，构建企业服务总线，打通各系统间的交互问题。 　　但这种借助ESB“中心化”的服务架构缺点也有不少，“中心化”架构的所有服务调用者和服务提供者之间的交互都必须">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里中台战略与微服务">
+<meta property="og:url" content="http://vancsj.github.io/2019/06/17/%E9%98%BF%E9%87%8C%E4%B8%AD%E5%8F%B0%E6%88%98%E7%95%A5%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="传统企业平台都是烟囱式的系统架构，企业内部为了迎合业务发展不停的打造各种系统，导致各系统间的重复功能建设和维护带来的重复投资。重复投资不仅消耗的是人力，财力还有时间。但打通烟囱式系统间交互的集成和协作成本高昂，各大企业不得不借助ESB产品，构建企业服务总线，打通各系统间的交互问题。 　　但这种借助ESB“中心化”的服务架构缺点也有不少，“中心化”架构的所有服务调用者和服务提供者之间的交互都必须">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160630.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160648.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160654.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160705.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160714.png">
+<meta property="article:published_time" content="2019-06-17T06:06:20.000Z">
+<meta property="article:modified_time" content="2022-10-16T15:12:40.982Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="中台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160630.png">
+
+<link rel="canonical" href="http://vancsj.github.io/2019/06/17/%E9%98%BF%E9%87%8C%E4%B8%AD%E5%8F%B0%E6%88%98%E7%95%A5%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>阿里中台战略与微服务 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/06/17/%E9%98%BF%E9%87%8C%E4%B8%AD%E5%8F%B0%E6%88%98%E7%95%A5%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          阿里中台战略与微服务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-17 14:06:20" itemprop="dateCreated datePublished" datetime="2019-06-17T14:06:20+08:00">2019-06-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>　　传统企业平台都是<strong>烟囱式的系统架构</strong>，企业内部为了迎合业务发展不停的打造各种系统，导致各系统间的重复功能建设和维护带来的重复投资。重复投资不仅消耗的是人力，财力还有时间。但打通烟囱式系统间交互的<strong>集成和协作</strong>成本高昂，各大企业不得不借助ESB产品，构建企业服务总线，打通各系统间的交互问题。</p>
+<p>　　但这种借助ESB“中心化”的服务架构缺点也有不少，“中心化”架构的所有服务调用者和服务提供者之间的交互都必须通过这个中心点，而这个中心点的能力是很难进行扩展的，导致这中心会成为一个瓶颈。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>2015年阿里巴巴集团启动了中台战略，目标是要构建符合互联网大数据时代的，具有创新性、灵活性的“大中台、小前台”的机制，即作为前台的一线业务会更敏捷、更快速的适用瞬息万变的市场，而中台将集合整个集团的运营数据能力，产品技术能力，对各前台业务形成强有力的支撑。整体内容如下：</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160630.png"></p>
+<h2 id="阿里的“大中台、小前台”架构"><a href="#阿里的“大中台、小前台”架构" class="headerlink" title="阿里的“大中台、小前台”架构"></a>阿里的“大中台、小前台”架构</h2><p>　　起初，阿里只有一个淘宝事业部，后来成立了天猫事业部，此时淘宝的技术团队同时支撑着这两个事业部。当时的淘宝和天猫的电商系统像我们很多大型企业的一样是分为两套独立的烟囱式体系，两套体系中都包含的有商品、交易、支付、评价、物流等功能。因为上述原因，阿里集团又成立了共享业务事业部，其成员主要来自之前的淘宝技术团队，同时将两套电商业务做了梳理和沉淀，将两个平台中公共的、通用的业务功能沉淀到共享事业部，避免重复建设和维护。后来上线的聚划算、1688、菜鸟物流等业务，均是基于这个“大中台，小前台”思路建设的。如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160648.png"></p>
+<p> 　　“大中台、小前台”架构主要集中在<strong>业务共享服务层，业务共享服务团队</strong>，有独立的团队来做，也更利于业务的沉淀，降低研发成本，提高研发效率。打破了产品壁垒，之前是系统之间要数据，现在是都去找共享服务中心要数据，共享服务中心提供统一的，标准的数据。减少了系统间交互、团队间协作的成本。站在巨人的肩膀上。新产品研发不用考虑之前已有的东西，可以快速孵化新的产品，试错成本低，产品敢于创新，敢于拥抱变化，原来追竞争对手都很困难，现在相当于竞争对手的产品经理不停的给我们提供新点子。可持续发展，技术和业务能力能够沉淀积累。</p>
+<h2 id="“大中台、小前台”与微服务的关系"><a href="#“大中台、小前台”与微服务的关系" class="headerlink" title="“大中台、小前台”与微服务的关系"></a>“大中台、小前台”与微服务的关系</h2><p>　　微服务体现去中心化、天然分布式，与阿里的中台战略思想类似，是战略的具体实现方式的一种。现有架构师可以学习这种模式来解决企业本身的应用高并发、高可用、运维等难题，也是现有互联网经典架构，毕竟是经过阿里实践过的，除了BAT，Uber、网易、美团、京东等互联网公司都在很早前就实现了平台微服务化。</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160654.png"></p>
+<h2 id="为什么要微服务化？"><a href="#为什么要微服务化？" class="headerlink" title="为什么要微服务化？"></a>为什么要微服务化？</h2><p>　　在传统单体或SOA架构下，应用如果频繁升级更新，开发团队非常痛苦。企业的业务应用经过多年IT建设，系统非常庞大，要改动其中任何一小部分，都需要重新部署整个应用，敏捷开发和快速交付无从谈起。</p>
+<p>　　传统企业在长期的IT建设过程中，通常大量使用外包团队，这导致采用的技术栈之间差异较大，统一管控和运维要求更高。需要运维7*24小时全天候值守、在线升级，并快速响应。</p>
+<p>　　在此时脱颖而出的微服务技术，面对上述困惑几乎浑身优点：独立开发、独立部署、独立发布，去中心化管理，支持高并发高可用，支持丰富技术栈，企业可以根据需要灵活技术选型。</p>
+<h2 id="实践微服务架构的选择"><a href="#实践微服务架构的选择" class="headerlink" title="实践微服务架构的选择"></a>实践微服务架构的选择</h2><p>微服务架构中所包含的内容：</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160705.png"></p>
+<p> 　　微服务是将企业通用服务按业务化分成一个个单体服务，增强可用性、服务易扩展、减少开发成本、减少服务发布对整个平台的影响。微服务是一种思想，实现有很多方式，企业转由单个系统转向微服务就要考虑很多问题，比如**<u>技术选型、业务拆分问题、高可用、服务通信、服务发现和治理、集群容错、配置管理、数据一致性问题、康威定律、分布式调用跟踪、CI/CD、微服务测试，以及调度和部署</u>**等等，这并非一些简单招数能够化解。</p>
+<p>　　微服务框架必须能够达到借助虚拟化平台，能够按需创建机器并调整大小，借助基础设施的自动化从一台机器扩展到多台，拥有业务监控预警、异常熔断等等功能，现有框架有Dubbo和SpringCloud，Dubbo是RPC服务治理框架，和SpringCloud一样具备服务注册、发现、路由、负载均衡等能力。</p>
+<h2 id="Dubbo和Spring-Cloud有何不同？"><a href="#Dubbo和Spring-Cloud有何不同？" class="headerlink" title=" Dubbo和Spring Cloud有何不同？"></a> Dubbo和Spring Cloud有何不同？</h2><p>首先做一个简单的功能对比：_<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160714.png">_</p>
+<p>　　从上图可以看出Dubbo的功能只是Spring Cloud体系的一部分，Dubbo已停更了几年，虽然最近宣布加强了开源支持，但对于其它框架来说已经非常滞后了。<br>　　需要说明的是 Dubbo 是 SOA 时代的产物，它的关注点主要在于服务的调用，流量分发、流量监控和熔断。而 Spring Cloud 诞生于微服务架构时代，考虑的是微服务治理的方方面面，另外由于依托了 Spirng、Spirng Boot 的优势之上，两个框架在开始目标就不一致，Dubbo 定位服务治理、Spirng Cloud 是一个生态。</p>
+<h2 id="那如何做技术选型"><a href="#那如何做技术选型" class="headerlink" title="那如何做技术选型"></a>那如何做技术选型</h2><p>相信更多的架构师为选择Spring Cloud生态，引用网友的理由：</p>
+<blockquote>
+<p>1）从两个公司的背景来谈：Dubbo，是阿里巴巴服务化治理的核心框架，并被广泛应用于中国各互联网公司；Spring Cloud是大名鼎鼎的Spring家族的产品。阿里巴巴是一个商业公司，虽然也开源了很多的顶级的项目，但从整体战略上来讲，仍然是服务于自身的业务为主。Spring专注于企业级开源框架的研发，不论是在中国还是在世界上使用都非常广泛，开发出通用、开源、稳健的开源框架就是他们的主业。</p>
+<p>2）从社区活跃度这个角度来对比，Dubbo虽然也是一个非常优秀的服务治理框架，并且在服务治理、灰度发布、流量分发这方面做的比Spring Cloud还好，除过当当网在基础上增加了rest支持外，已有两年多的时间几乎都没有任何更新了。在使用过程中出现问题，提交到github的Issue也少有回复。</p>
+<p>相反Spring Cloud自从发展到现在，仍然在不断的高速发展，从github上提交代码的频度和发布版本的时间间隔就可以看出，现在Spring Cloud即将发布2.0版本，到了后期会更加完善和稳定。</p>
+<ol start="3">
+<li>从整个大的平台架构来讲，dubbo框架只是专注于服务之间的治理，如果我们需要使用配置中心、分布式跟踪这些内容都需要自己去集成，这样无形中使用dubbo的难度就会增加。Spring Cloud几乎考虑了服务治理的方方面面，更有Spring Boot这个大将的支持，开发起来非常的便利和简单。</li>
+</ol>
+<p>4）从技术发展的角度来讲，Dubbo刚出来的那会技术理念还是非常先进，解决了各大互联网公司服务治理的问题，中国的各中小公司也从中受益不少。经过了这么多年的发展，互联网行业也是涌现了更多先进的技术和理念，Dubbo一直停滞不前，自然有些掉队，有时候我个人也会感到有点可惜，如果Dubbo一直沿着当初的那个路线发展，并且延伸到周边，今天可能又是另一番景象了。</p>
+</blockquote>
+<p>　　Spring 推出Spring Boot/Cloud也是因为自身的很多原因。Spring最初推崇的轻量级框架，随着不断的发展也越来越庞大，随着集成项目越来越多，配置文件也越来越混乱，慢慢的背离最初的理念。随着这么多年的发展，微服务、分布式链路跟踪等更多新的技术理念的出现，Spring急需一款框架来改善以前的开发模式，因此才会出现Spring Boot/Cloud项目，我们现在访问Spring官网，会发现Spring Boot和Spring Cloud已经放到首页最重点突出的三个项目中的前两个，可见Spring对这两个框架的重视程度。</p>
+<p>　　因此可以看到SpringCloud良好的生态是非常重要的，这里只讲到至SpringCloud实现微服务，具体SpringCloud微服务的详情后面再介绍不做多讲，还有与微服务紧密相关的容器技术也是相当重要的，还有微服务的DevOps自动化运维到智能化运维后面再作主题介绍。</p>
+<p> 　　最后要说的是由于服务能力的集中管控，很大程度会促进我们一体化运维的能力，但在“大中台、小前台”的模式下，每一个服务都负责对N多个前端业务应用提供支持，这就要求运维在信息安全、备份、监控等方面要有更强的能力，这也将改变企业的组织架构调整。</p>
+<p> 　　以上是每一位架构师都需要不断学习的内容，相关衍生出来的内容更多，这里只作抛砖引玉，文中部分引用了圈内大咖的内容 ，在此感谢他们的付出。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"># 架构</a>
+              <a href="/tags/%E4%B8%AD%E5%8F%B0/" rel="tag"># 中台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/13/mutex%E4%B8%8E%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="mutex与信号量的区别">
+      <i class="fa fa-chevron-left"></i> mutex与信号量的区别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/17/LockSupport%E4%B8%AD%E7%9A%84park%E4%B8%8Eunpark%E8%A7%A3%E6%9E%90/" rel="next" title="LockSupport中的park与unpark解析">
+      LockSupport中的park与unpark解析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
