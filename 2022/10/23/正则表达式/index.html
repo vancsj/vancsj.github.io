@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。 捕获组的编号规则编号规则指的是以数字为捕获组进行编号的规则，在普通捕获组或命名捕获组单独出现的正则表达式中，编号规则比较清晰，在普通捕获组与命名捕获组混合出现的正则表达式中，捕获组的编号规则稍显复杂。 在展开讨论之前，需要说明的">
+  <meta name="description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="正则表达式">
 <meta property="og:url" content="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。 捕获组的编号规则编号规则指的是以数字为捕获组进行编号的规则，在普通捕获组或命名捕获组单独出现的正则表达式中，编号规则比较清晰，在普通捕获组与命名捕获组混合出现的正则表达式中，捕获组的编号规则稍显复杂。 在展开讨论之前，需要说明的">
+<meta property="og:description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023005844.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023005948.png">
@@ -204,9 +204,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h1><p>捕获组就是把正则表达式中<strong>子表达式</strong>匹配的内容，保存到内存中以<strong>数字编号</strong>或<strong>显式命名</strong>的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。</p>
+        <h1 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h1><p>捕获组就是把正则表达式中<strong>子表达式</strong>匹配的内容，保存到内存中以<strong>数字编号</strong>或<strong>显式命名</strong>的组里，方便后面引用。<br>当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。</p>
+<span id="more"></span>
+
 <h2 id="捕获组的编号规则"><a href="#捕获组的编号规则" class="headerlink" title="捕获组的编号规则"></a>捕获组的编号规则</h2><p>编号规则指的是以数字为捕获组进行编号的规则，在普通捕获组或命名捕获组单独出现的正则表达式中，编号规则比较清晰，在普通捕获组与命名捕获组混合出现的正则表达式中，捕获组的编号规则稍显复杂。</p>
-<p>在展开讨论之前，需要说明的是，编号为0的捕获组，指的是正则表达式整体，这一规则在支持捕获组的语言中，基本上都是适用的。下面对其它编号规则逐一展开讨论。</p>
+<p>在展开讨论之前，需要说明的是，<strong>编号为0的捕获组，指的是正则表达式整体</strong>，这一规则在支持捕获组的语言中，基本上都是适用的。下面对其它编号规则逐一展开讨论。</p>
 <h3 id="普通捕获组编号规则"><a href="#普通捕获组编号规则" class="headerlink" title="普通捕获组编号规则"></a>普通捕获组编号规则</h3><p>如果没有显式为捕获组命名，即没有使用命名捕获组，那么需要按数字顺序来访问所有捕获组。在只有普通捕获组的情况下，捕获组的编号是按照“(”出现的顺序，从左到右，从1开始进行编号的 。</p>
 <p>正则表达式：(\d{4})-(\d{2}-(\d\d))<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023005844.png"></p>
 <p>上面的正则表达式可以用来匹配格式为yyyy-MM-dd的日期，为了在下表中得以区分，月和日分别采用了\d{2}和\d\d这两种写法。</p>
