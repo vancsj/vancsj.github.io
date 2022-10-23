@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="当正则表达式通常与大型数据集相匹配时它们的编写必须高效。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提高正则表达式性能的几点建议">
+<meta property="og:url" content="http://vancsj.github.io/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="当正则表达式通常与大型数据集相匹配时它们的编写必须高效。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-22T16:40:23.000Z">
+<meta property="article:modified_time" content="2022-10-22T16:40:23.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://vancsj.github.io/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>提高正则表达式性能的几点建议 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          提高正则表达式性能的几点建议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-23 00:40:23" itemprop="dateCreated datePublished" datetime="2022-10-23T00:40:23+08:00">2022-10-23</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>当正则表达式通常与大型数据集相匹配时它们的编写必须高效。</p>
+<span id="more"></span>
+
+<h1 id="为什么正则表达式效率很重要？"><a href="#为什么正则表达式效率很重要？" class="headerlink" title="为什么正则表达式效率很重要？"></a>为什么正则表达式效率很重要？</h1><p>虽然写得好的正则表达式可能非常有效，但写得不好的正则表达可能需要很长时间才能运行，并且会显著降低系统的速度。编写一个需要数小时或数天才能完成的正则表达式是很有可能的，甚至可以编写一个在宇宙生命周期内无法完成的正则表达，因为它是针对中等大小的字符串运行的。</p>
+<p>在实践中已经做了一些改进，使其比以前的版本更能抵抗低效的正则表达式。它现在最小化了在决定运行哪些TPL模式时所需的正则表达式匹配。它还扩展了在多个处理器之间运行TPL模式的工作，这样，如果一个处理器忙于长正则表达式匹配，其他处理器可以继续工作。</p>
+<p>尽管有了这些改进，编写高效的正则表达式对于保持系统发现的最佳运行仍然很重要。如果扫描网络时系统发现速度明显减慢，并且推理或发现服务长时间使用100%CPU，则一个可能的原因是效率低下的正则表达式。</p>
+<h1 id="低效正则表达式的剖析"><a href="#低效正则表达式的剖析" class="headerlink" title="低效正则表达式的剖析"></a>低效正则表达式的剖析</h1><p>那么，如何编写低效的正则表达式呢？一个问题是当正则表达式执行过度回溯时；当正则表达式中有多个重复运算符时，可能会发生这种情况。重复运算符是+，*，或{n，m}。如果正则表达式进行了部分匹配，但随后失败，那么它必须返回并尝试任何其他可能的部分匹配，以防其中任何一个成功。</p>
+<p>例如，考虑匹配正则表达式a.<em>b</em>cd对字符串abc abc abc。匹配永远不会成功，因为字符串中没有d，但正则表达式在放弃之前仍必须检查字母a、b和c的所有可能组合。即：</p>
+<blockquote>
+<p>“<em>abc</em> abc abc”,<br>“<em>ab</em>c ab<em>c</em> abc”,<br>“<em>ab</em>c abc ab<em>c</em>“,<br>“<em>a</em>bc a<em>bc</em> abc”,<br>“<em>a</em>bc a<em>b</em>c ab<em>c</em>“,<br>“<em>a</em>bc abc a<em>bc</em>“,<br>“abc <em>abc</em> abc”,<br>“abc <em>ab</em>c ab<em>c</em>“,<br>“abc <em>a</em>bc a<em>bc</em>“,<br>“abc abc <em>abc</em>“</p>
+</blockquote>
+<p>作为粗略的指导，正则表达式需要执行的比较次数与字符串长度乘以可能的中间匹配次数成比例。</p>
+<p>在本例中，使用非贪婪运算符，即a.<em>?b.</em>?cd对匹配的数量没有影响，因为正则表达式引擎仍然需要尝试每个组合。</p>
+<h1 id="真实例子"><a href="#真实例子" class="headerlink" title="真实例子"></a>真实例子</h1><p>让我们来看一些基于实际正则表达式的示例，这些示例在实际系统运行中造成了问题：</p>
+<blockquote>
+<p>\b.*xx.*foo</p>
+</blockquote>
+<p>这是一个正则表达式，与主机上的进程命令行进行比较。当运行一个半兆字节的字符串时，它失败了，该字符串包含大量的xx重复，但不包含foo。</p>
+<p>让我们来分析它与字符串匹配时发生的情况：</p>
+<p>引擎从字符串的开头开始扫描。<br>引擎向前扫描，直到找到单词边界\b。<br>引擎从单词边界向前扫描，直到找到匹配的xx。<br>引擎从xx向前扫描，直到找到字符串foo或到达字符串的末尾。<br>如果它已经到达字符串的末尾，并且不匹配foo，则它将返回到步骤3并向前扫描到下一个xx。<br>如果它匹配了所有的xx，但仍然没有找到foo，那么它将返回到步骤2，并向前扫描到下一个单词边界。<br>因此正则表达式匹配包含嵌套循环；总处理时间由字符串长度（对于导致问题的命令行，该长度约为500000）乘以xx子字符串数（约500）乘以字边界数（约80000）确定。这大致相当于扫描一个20万亿字符长的字符串，需要一天多的时间才能完成。</p>
+<p>这通过两种方式解决：</p>
+<p>首先，是\b.*从正则表达式的开始处删除，因为它除了减慢整个过程之外没有其他用途。此更改将运行时间从几天减少到几秒。</p>
+<p>其次，我们可以使用关于我们想要匹配的数据的知识；在这种情况下，我们只对从字符串开始到第一个空格的文本感兴趣。因此，为了停止正则表达式扫描整个字符串，我们可以将正则表达式锚定到字符串的开头，并使用\S标记匹配非空白字符。最后一个正则表达式^\S<em>xx\S</em>foo将在到达空白字符时立即停止。现在，对同一字符串运行时需要几微秒。</p>
+<blockquote>
+<p>-A(\D+)+-B(\D+)</p>
+</blockquote>
+<p>这被用作敏感数据过滤器。其目的是扫描命令行并删除以-A和-B开头的选项。然而，它不仅没有达到作者的意图，而且它的执行方式可能永远无法处理。</p>
+<p>让我们把它分解：</p>
+<p>从字符串开始扫描，直到找到-A。<br>匹配所有非数字字符，直到找到-B。<br>如果找不到-B，请尝试匹配-A和字符串末尾或下一个数字之间的每个组组合。例如，如果字符串的其余部分是abcd，则它将与（\D+）的以下每个组匹配+</p>
+<blockquote>
+<p>(abcd)<br>(abc)(d)<br>(ab)(cd)<br>(ab)(c)(d)<br>(a)(b)(cd)<br>(a)(bc)(d)<br>(a)(bcd)<br>(a)(b)(c)(d).</p>
+</blockquote>
+<p>对于剩余字符串中的每个附加字符，组合数将加倍。</p>
+<p>因此，对于命令行包含-A但不后跟-B的情况，它将花费与2n成比例的时间，其中N是-A和下一个数字或字符串结尾之间的字符数。为了更好地理解这一点，在标准PC上，22个字符的字符串大约需要一秒钟。一个40个字符的字符串大约需要3天，而一个100个字符的串需要95836965945500年，尽管这尚未经过测试。</p>
+<p>此正则表达式通过删除组重复来固定，因为它没有任何用途：</p>
+<p>-A(\D+)-B(\D+).运行时间从永远下降到几微秒。</p>
+<h1 id="编写高效正则表达式的指南"><a href="#编写高效正则表达式的指南" class="headerlink" title="编写高效正则表达式的指南"></a>编写高效正则表达式的指南</h1><p>本节提供了帮助您避免常见问题和编写高效正则表达式的指南。</p>
+<h2 id="考虑故障场景"><a href="#考虑故障场景" class="headerlink" title="考虑故障场景"></a>考虑故障场景</h2><p>如前面的示例所示，当正则表达式无法完全匹配，但存在多个部分匹配时，就会出现问题。编写正则表达式时，仅考虑正则表达式成功时会发生什么是不够的，还需要考虑正则表达式失败时的执行情况。实际发现中使用的正则表达式通常与大量的命令行相匹配，这些命令行可能非常长（多达一百万个字符不是未知的），并且可能包含与正则表达式部分匹配的文本，而不是全部。</p>
+<h2 id="注意通配符标记的多次重复"><a href="#注意通配符标记的多次重复" class="headerlink" title="注意通配符标记的多次重复"></a>注意通配符标记的多次重复</h2><p>通配符标记是可以匹配多个字符的任何内容；这包括：.、\w、\D、字符类、否定字符类等。</p>
+<p>如果一个正则表达式有两个或多个连续的通配符重复，则存在回溯的可能性。例如，如果目标字符串以a开头，长度为N个字符，并且不包含x，则：</p>
+<p>a.*.*x - 需要N2场比赛。<br>a.<em>x</em>.<em>x -也需要N2个匹配，因为x</em>可以是零长度匹配，所以可以匹配字符串中的任何位置。<br>a.*y.<em>x -将取N</em>M个匹配，其中M是y的出现次数。<br>真的要当心嵌套组重复</p>
+<p>如上所述，如果存在一个包含重复的组，并且该组本身也被重复，例如（.*），则可能的匹配数可能呈指数增长。</p>
+<h2 id="不要以通配符重复开始正则表达式"><a href="#不要以通配符重复开始正则表达式" class="headerlink" title="不要以通配符重复开始正则表达式"></a>不要以通配符重复开始正则表达式</h2><p>这是上述第二点的特例。正则表达式引擎在字符串中的任何位置搜索匹配项，因此它尝试从第一个字符开始匹配正则表达式，然后从第二个字符开始，依此类推，直到找到匹配项。*x的正则表达式等价于^.<em>的正则表达式</em>x，其遭受上述回溯问题。</p>
+<p>由于这是一个非常常见的错误，实际发现会查找以不必要的*开头的正则表达式，并在可能的情况下将其去掉。</p>
+<h2 id="只匹配你真正需要的"><a href="#只匹配你真正需要的" class="headerlink" title="只匹配你真正需要的"></a>只匹配你真正需要的</h2><p>正则表达式应设计为在有足够的匹配项时立即停止，或者知道它无法匹配。例如，考虑正则表达式\b\w+XXX*</p>
+<p>\b\w+是冗余的，可以用“\w”替换。这将在原始正则表达式匹配的所有情况下匹配。<br>末尾的.*也是多余的，因为它对匹配是否成功没有影响。<br>因此，整个正则表达式可以替换为\wXXX。</p>
+<p>例外情况是，您需要使用匹配的字符串，而不是简单地测试匹配是否成功</p>
+<h2 id="试着快速失败"><a href="#试着快速失败" class="headerlink" title="试着快速失败"></a>试着快速失败</h2><p>如果整个正则表达式达到不可能与预期目标匹配的程度，请尝试使其失败。</p>
+<p>上面所示的第一个真实世界示例就是一个例子。正则表达式^\S<em>xx\S</em>foo永远不会扫描超过第一个空格字符的字符串，无论它是否成功。在使用它的上下文中，这意味着扫描一个大约100个字符的序列和扫描一个数十万个字符的顺序之间的区别。</p>
+<h2 id="Profile-尤其是故障案例"><a href="#Profile-尤其是故障案例" class="headerlink" title="Profile-尤其是故障案例"></a>Profile-尤其是故障案例</h2><p>测试正则表达式以确保它与您期望的匹配是很重要的。但是，测试与正则表达式部分匹配的长字符串（例如，随机字符的兆字节字符串）的性能也是很重要的。</p>
+<h2 id="尽量减少从主机中提取的数据"><a href="#尽量减少从主机中提取的数据" class="headerlink" title="尽量减少从主机中提取的数据"></a>尽量减少从主机中提取的数据</h2><p>TPL模式允许您在主机上运行命令，并检索要用正则表达式搜索的数据，例如版本信息。</p>
+<p>一个常见的错误是收回大量信息，例如：</p>
+<p>cat file1 file2 file3…</p>
+<p>然后对数据运行正则表达式以提取一条信息。</p>
+<p>这可能会返回大量数据，因此正则表达式匹配不仅需要很长时间，而且在网络上传输数据也会很慢，并占用数据存储中的大量空间。</p>
+<p>更好的方法是只通过在主机上运行命令（如grep或head）来获取您感兴趣的信息。例如：</p>
+<p>grep VERSION file1 file2 file3…</p>
+<p>然后可以在返回的更短文本上运行正则表达式。</p>
+<h2 id="除非绝对必要，否则不要使用组"><a href="#除非绝对必要，否则不要使用组" class="headerlink" title="除非绝对必要，否则不要使用组"></a>除非绝对必要，否则不要使用组</h2><p>当使用括号将正则表达式的一部分括在组中时，正则表达式引擎必须做额外的工作来保存组匹配的文本，以备以后需要。在某些情况下，这可能会使匹配过程减慢四倍或更多。</p>
+<p>如果需要使用括号，例如对于重复的正则表达式的一部分，但不需要在之后使用组的内容，则可以使用非分组版本的括号- (?:…).这通常仍然比没有括号慢，但比普通括号快。例如：</p>
+<p>(abc|def) -*慢速。仅在以后需要使用匹配文本时使用。<br>(?:abc|def) - 更快<br>abc|def -最快</p>
+<h2 id="考虑正则表达式"><a href="#考虑正则表达式" class="headerlink" title="考虑正则表达式"></a>考虑正则表达式</h2><p>虽然这些指导方针可能会有所帮助，但没有什么可以替代退一步重新检查正则表达式以提高效率和准确性所带来的思想和理解。</p>
+<h1 id="TPL触发器的正则表达式优化"><a href="#TPL触发器的正则表达式优化" class="headerlink" title="TPL触发器的正则表达式优化"></a>TPL触发器的正则表达式优化</h1><p>使用正则表达式索引来提高模式性能。索引用于快速消除那些显然无法与给定字符串匹配的正则表达式。这大大减少了必须执行的正则表达式的数量。因此，推理通常可以避免执行本文档其余部分描述的病理正则表达式。</p>
+<p>在优化TPL模式触发器的正则表达式时，有助于基本了解索引的工作方式。</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>正则表达式由一个称为提示的属性索引。提示是不区分大小写的字符串，是与表达式匹配的每个字符串的子字符串。例如，表达式提升（后桅|主支架），ye（陆上流浪狗124坏血病狗）！它有三个明显的提示：</p>
+<ul>
+<li>&#123;&#123; Hoist the &#125;&#125;</li>
+<li>, ye “</li>
+<li>!</li>
+</ul>
+<p>为简单起见，每个表达式仅按其最长提示进行索引。在上面的例子中，提示将是｛｛提升｝｝。</p>
+<p>一些正则表达式没有任何提示。例如，\d+[-/]\d++[-]\d+没有必须作为匹配字符串一部分的子字符串。提示计算器（目前）也相当幼稚，遗漏了一些可能被提取的提示。没有提示的表达式必须单独处理。</p>
+<p>当尝试匹配字符串时，将查询索引中的一组正则表达式，其提示显示为所匹配字符串的子字符串。一旦建立，索引可以非常快地执行此查询。这个集合与一组没有提示的表达式组合在一起，形成了所有可能与字符串匹配的正则表达式的集合。尝试依次将字符串与每个表达式匹配，直到找到一个表达式或没有表达式，这意味着字符串不匹配。</p>
+<h2 id="试着给点提示"><a href="#试着给点提示" class="headerlink" title="试着给点提示"></a>试着给点提示</h2><p>必须对给定给索引的每个字符串运行没有提示的正则表达式。因此，尝试使用可以计算提示的正则表达式是很重要的。</p>
+<p>索引的提示提取算法无法处理以下类型的子表达式，将使用它们来划分提示：</p>
+<p>内置字符类，如\d、\w和。<br>自定义字符类，如[ijkxyz]<br>可选表达式，如？和*<br>组，如（foo）+<br>交替，如foo|bar<br>在表达式的顶层使用交替始终会阻止提取提示。组内的交替不会阻止从组外的表达式部分提取提示。</p>
+<h2 id="尝试做出独特的提示"><a href="#尝试做出独特的提示" class="headerlink" title="尝试做出独特的提示"></a>尝试做出独特的提示</h2><p>如果正则表达式只有一个类似java的提示，则需要对照大量字符串进行检查。尝试设计您的表达式，使其最长的提示相当罕见。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/21/Java%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="prev" title="Java模块化">
+      <i class="fa fa-chevron-left"></i> Java模块化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="next" title="正则表达式">
+      正则表达式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

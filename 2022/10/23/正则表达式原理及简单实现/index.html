@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="转载自: https:&#x2F;&#x2F;houbb.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;regex-and-dfa-02">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式原理及简单实现">
+<meta property="og:url" content="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="转载自: https:&#x2F;&#x2F;houbb.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;regex-and-dfa-02">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161552.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161628.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161700.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161742.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161809.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161823.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161850.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162043.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162139.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162157.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162241.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162353.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163151.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163800.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163906.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163926.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163959.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023164219.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023164441.png">
+<meta property="article:published_time" content="2022-10-23T08:15:01.000Z">
+<meta property="article:modified_time" content="2022-10-23T08:15:01.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161552.png">
+
+<link rel="canonical" href="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>正则表达式原理及简单实现 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          正则表达式原理及简单实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-23 16:15:01" itemprop="dateCreated datePublished" datetime="2022-10-23T16:15:01+08:00">2022-10-23</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>转载自: <a target="_blank" rel="noopener" href="https://houbb.github.io/2020/01/07/regex-and-dfa-02">https://houbb.github.io/2020/01/07/regex-and-dfa-02</a></p>
+<span id="more"></span>
+
+<h1 id="有限状态机"><a href="#有限状态机" class="headerlink" title="有限状态机"></a>有限状态机</h1><p>有限状态机(Finite-state machine)，也被称为有限状态自动机(finite-state automation)，是表示<strong>有限个状态以及在这些状态之间的转移和动作等行为</strong>的数学计算模型(From 维基百科 状态机) 。<br>听起来晦涩难懂，我用大白话描述一遍，状态机其实就是用图把状态和状态之间的关系描述出来，状态机中的一个状态可以在某些给定条件下变成另外一种状态。<br>举个很简单的例子你就懂了。比如我今年18岁，我现在就是处于18岁的状态，如果时间过了一年，我就变成19岁的状态了，再过一年就20了。当然我20岁时时光倒流2年我又可以回到18岁的状态。<br>这里我们就可以把我的年龄状态和时间流逝之间的关系用一个自动机表示出来，如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161552.png"><br>每个圈代表一个节点表示一种状态，每条有向边表示一个状态到另一个状态的转移条件。<br>上图中状态是我的年龄，边表示时间正向或者逆向流逝。<br>有了状态机之后，我们就可以用状态机来描述特定的模式，比如上图就是年龄随时间增长的模式。如果有人说我今年18岁，1年后就20岁了。照着上面的状态机我们来算下，1年后你才19岁，你这不是瞎说吗！ 没错，状态机可以来判定某些内容是否符合你状态机描述的模式了。哟，一不小心就快扯到正则表达式上了。</p>
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>我们这里再引入两种特殊的状态：**起始态和接受态(终止态)**，见名知意，不用我过多介绍了吧，起始态和终止态的符号如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161628.png"></p>
+<h2 id="字符串匹配"><a href="#字符串匹配" class="headerlink" title="字符串匹配"></a>字符串匹配</h2><p>我们拿状态机来做个简单的字符串匹配。<br>比如我们有个字符串“zsx”，要判断其他字符串是否和”zxs”是一致的，我们可以为”zxs”先建立一个自动机，如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161700.png"><br>对于任意一个其他的字符串，我们从起始态0开始，如果下一个字符能匹配到0后边的边上就往后走，匹配不上就停止，一直重复，如果走到终止态3说明这个字符串和”zxs“一样。<br>任意字符串都可以转化成上述的状态机，其实到这里你就知道如何实现一个只支持字符串匹配的正则表达式引擎了，如果想支持更多的正则语义，我们要做的更多。</p>
+<h1 id="状态机下的正则表达式"><a href="#状态机下的正则表达式" class="headerlink" title="状态机下的正则表达式"></a>状态机下的正则表达式</h1><p>我们再来引入一条特殊的边，学名叫 __<strong>ϵ 闭包</strong>__，其实就是一条不需要任何条件就能转移状态的边。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161742.png"><br>没错，就只这条红边本边了，它在正则表达式状态机中起着非常重要的连接作用，可以不依赖其他条件直接跳转状态，也就是说在上图中你可以直接从1到2。<br>有了 ϵ 闭包的加持，我们就可以开始学如何画正则表达式文法对应的状态机了。</p>
+<h2 id="串联匹配"><a href="#串联匹配" class="headerlink" title="串联匹配"></a>串联匹配</h2><p>首先来看下纯字符匹配的自动机，其实上面已经给过一个”zxs”的例子了，这里再贴一下，其实就是简单地用字符串在一起而已，如果还有其他字符，就继续往后串。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161809.png"><br>两个表达式如何串在一起，也很简单，假如我们已经有两个表达式A B对应的状态机，我们只需要将其用 ϵ 串一起就行了。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161823.png"></p>
+<h2 id="并联匹配"><a href="#并联匹配" class="headerlink" title="并联匹配"></a>并联匹配</h2><p>正则表达式中的 | 标识二选一都可以，比如 A|B A能匹配 B也能匹配，那么 A|B 就可以表示为下面这样的状态图。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161850.png"><br>从0状态走A或B都可以到1状态，完美的诠释了A|B语义。<br>ps: 这里将表达式和图联系起来。一个或，就是两条路径都可以走通的意思。</p>
+<h2 id="重复匹配-正则表达式中的"><a href="#重复匹配-正则表达式中的" class="headerlink" title="重复匹配(正则表达式中的 ? + *)"></a>重复匹配(正则表达式中的 ? + *)</h2><p>正则表达式里有4种表示重复的方式，分别是：</p>
+<ul>
+<li>?重复0-1次</li>
+<li>+重复1次以上</li>
+<li>*重复0次以上</li>
+<li>{n,m} 重复n到m次</li>
+</ul>
+<p>我来分别画下这4种方式如何在状态机里表示。<br>0-1 次<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162043.png"><br>重复1次以上<br>0到1后可以再通过 ϵ 跳回来，就可以实现E的1次以上匹配了。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162139.png"><br>重复0次以上<br>其实就是 ? + 的结合。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162157.png"><br>匹配指定次数<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162241.png"><br>这种建图方式简单粗暴，但问题就是如果n和m很大的话，最后生成的状态图也会很大。<br>其实可以把指定次数的匹配做成一条特殊的边，可以极大减小图的大小。</p>
+<h2 id="特殊符号-正则表达式中的-d-s……"><a href="#特殊符号-正则表达式中的-d-s……" class="headerlink" title="特殊符号(正则表达式中的 . \d \s……)"></a>特殊符号(正则表达式中的 . \d \s……)</h2><p>正则表达式中还支持很多某类的字符，比如 . 表示任意非换行符，\d 标识数字，[] 可以指定字符集。<br>其实这些都和图的形态无关，只是某条特殊的边而已，自己实现的时候可以选择具体的实现方式，比如后面代码中我用了策略模式来实现不同的匹配策略，简化了正则引擎的代码。</p>
+<h2 id="子表达式-正则表达式"><a href="#子表达式-正则表达式" class="headerlink" title="子表达式(正则表达式 () )"></a>子表达式(正则表达式 () )</h2><p>子表达可以Tompson算法，其实就是用递归去生成 () 中的子图，然后把子图拼接到当前图上面。<br>（什么Tompson说的那么高大上，不就是递归吗！）</p>
+<h1 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h1><p>来练习画下 a(c|b)* 的状态图，这里我也给出我画的，你可以参考下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023162353.png"></p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h2 id="建图"><a href="#建图" class="headerlink" title="建图"></a>建图</h2><p>看完上文之后相信你一直知道如果将一个正则表达式转化为状态机的方法了，这里我们要将理论转化为代码。<br>首先我们要将图转化为代码标识，我用State表示一个节点，其中用了 Map&lt;MatchStrategy, List&gt; next 表示其后继节点，next中有个key-value就是一条边，MatchStrategy用来描述边的信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> idCnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> stateType;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">State</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = idCnt++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Map&lt;MatchStrategy, List&lt;State&gt;&gt; next = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addNext</span><span class="params">(MatchStrategy path, State state)</span> </span>&#123;</span><br><span class="line">        List&lt;State&gt; list = next.get(path);</span><br><span class="line">        <span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">            list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            next.put(path, list);</span><br><span class="line">        &#125;</span><br><span class="line">        list.add(state);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setStateType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        stateType = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isEndState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stateType == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>NFAGraph表示一个完整的图，其中封装了对图的操作，比如其中就实现了上文中图串并联和重复的操作（注意我没有实现 {} ）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NFAGraph</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> State start;</span><br><span class="line">    <span class="keyword">public</span> State end;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NFAGraph</span><span class="params">(State start, State end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.start = start;</span><br><span class="line">        <span class="keyword">this</span>.end = end;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// |</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addParallelGraph</span><span class="params">(NFAGraph NFAGraph)</span> </span>&#123;</span><br><span class="line">        State newStart = <span class="keyword">new</span> State();</span><br><span class="line">        State newEnd = <span class="keyword">new</span> State();</span><br><span class="line">        MatchStrategy path = <span class="keyword">new</span> EpsilonMatchStrategy();</span><br><span class="line">        newStart.addNext(path, <span class="keyword">this</span>.start);</span><br><span class="line">        newStart.addNext(path, NFAGraph.start);</span><br><span class="line">        <span class="keyword">this</span>.end.addNext(path, newEnd);</span><br><span class="line">        NFAGraph.end.addNext(path, newEnd);</span><br><span class="line">        <span class="keyword">this</span>.start = newStart;</span><br><span class="line">        <span class="keyword">this</span>.end = newEnd;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ϵ</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSeriesGraph</span><span class="params">(NFAGraph NFAGraph)</span> </span>&#123;</span><br><span class="line">        MatchStrategy path = <span class="keyword">new</span> EpsilonMatchStrategy();</span><br><span class="line">        <span class="keyword">this</span>.end.addNext(path, NFAGraph.start);</span><br><span class="line">        <span class="keyword">this</span>.end = NFAGraph.end;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// * 重复0-n次</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">repeatStar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        repeatPlus();</span><br><span class="line">        addSToE(); <span class="comment">// 重复0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ? 重复0次哦</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSToE</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        MatchStrategy path = <span class="keyword">new</span> EpsilonMatchStrategy();</span><br><span class="line">        start.addNext(path, end);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// + 重复1-n次</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">repeatPlus</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        State newStart = <span class="keyword">new</span> State();</span><br><span class="line">        State newEnd = <span class="keyword">new</span> State();</span><br><span class="line">        MatchStrategy path = <span class="keyword">new</span> EpsilonMatchStrategy();</span><br><span class="line">        newStart.addNext(path, <span class="keyword">this</span>.start);</span><br><span class="line">        end.addNext(path, newEnd);</span><br><span class="line">        end.addNext(path, start);</span><br><span class="line">        <span class="keyword">this</span>.start = newStart;</span><br><span class="line">        <span class="keyword">this</span>.end = newEnd;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>整个建图的过程就是依照输入的字符建立边和节点之间的关系，并完成图的拼接。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> NFAGraph <span class="title">regex2nfa</span><span class="params">(String regex)</span> </span>&#123;</span><br><span class="line">    Reader reader = <span class="keyword">new</span> Reader(regex);</span><br><span class="line">    NFAGraph nfaGraph = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (reader.hasNext()) &#123;</span><br><span class="line">        <span class="keyword">char</span> ch = reader.next();</span><br><span class="line">        String edge = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">switch</span> (ch) &#123;</span><br><span class="line">            <span class="comment">// 子表达式特殊处理</span></span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;(&#x27;</span> : &#123;</span><br><span class="line">                String subRegex = reader.getSubRegex(reader);</span><br><span class="line">                NFAGraph newNFAGraph = regex2nfa(subRegex);</span><br><span class="line">                checkRepeat(reader, newNFAGraph);</span><br><span class="line">                <span class="keyword">if</span> (nfaGraph == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    nfaGraph = newNFAGraph;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    nfaGraph.addSeriesGraph(newNFAGraph);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 或表达式特殊处理</span></span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;|&#x27;</span> : &#123;</span><br><span class="line">                String remainRegex = reader.getRemainRegex(reader);</span><br><span class="line">                NFAGraph newNFAGraph = regex2nfa(remainRegex);</span><br><span class="line">                <span class="keyword">if</span> (nfaGraph == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    nfaGraph = newNFAGraph;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    nfaGraph.addParallelGraph(newNFAGraph);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;[&#x27;</span> : &#123;</span><br><span class="line">                edge = getCharSetMatch(reader);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;^&#x27;</span> : &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;$&#x27;</span> : &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;.&#x27;</span> : &#123;</span><br><span class="line">                edge = <span class="string">&quot;.&quot;</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 处理特殊占位符</span></span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;\\&#x27;</span> : &#123;</span><br><span class="line">                <span class="keyword">char</span> nextCh = reader.next();</span><br><span class="line">                <span class="keyword">switch</span> (nextCh) &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;d&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\d&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;D&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\D&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;w&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\w&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;W&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\W&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\s&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>: &#123;</span><br><span class="line">                        edge = <span class="string">&quot;\\S&quot;</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 转义后的字符匹配</span></span><br><span class="line">                    <span class="keyword">default</span>:&#123;</span><br><span class="line">                        edge = String.valueOf(nextCh);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">default</span> : &#123;  <span class="comment">// 处理普通字符</span></span><br><span class="line">                edge = String.valueOf(ch);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (edge != <span class="keyword">null</span>) &#123;</span><br><span class="line">            NFAState start = <span class="keyword">new</span> NFAState();</span><br><span class="line">            NFAState end = <span class="keyword">new</span> NFAState();</span><br><span class="line">            start.addNext(edge, end);</span><br><span class="line">            NFAGraph newNFAGraph = <span class="keyword">new</span> NFAGraph(start, end);</span><br><span class="line">            checkRepeat(reader, newNFAGraph);</span><br><span class="line">            <span class="keyword">if</span> (nfaGraph == <span class="keyword">null</span>) &#123;</span><br><span class="line">                nfaGraph = newNFAGraph;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                nfaGraph.addSeriesGraph(newNFAGraph);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nfaGraph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我用了设计模式中的策略模式将不同的匹配规则封装到不同的MatchStrategy类里，目前我实现了 . \d \D \s \S \w \w，具体细节请参考代码。<br>这么设计的好处就是简化了匹配策略的添加，比如如果我想加一个 \x 只匹配16进制字符，我只需要加个策略类就好了，不必改很多代码。</p>
+<h1 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h1><p>其实匹配的过程就出从起始态开始，用输入作为边，一直往后走，如果能走到终止态就说明可以匹配，代码主要依赖于递归和回溯，代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isMatch</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> isMatch(text, <span class="number">0</span>, nfaGraph.start);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isMatch</span><span class="params">(String text, <span class="keyword">int</span> pos, State curState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pos == text.length()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (curState.isEndState()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;MatchStrategy, List&lt;State&gt;&gt; entry : curState.next.entrySet()) &#123;</span><br><span class="line">        MatchStrategy matchStrategy = entry.getKey();</span><br><span class="line">        <span class="keyword">if</span> (matchStrategy <span class="keyword">instanceof</span> EpsilonMatchStrategy) &#123;</span><br><span class="line">            <span class="keyword">for</span> (State nextState : entry.getValue()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (isMatch(text, pos, nextState)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!matchStrategy.isMatch(text.charAt(pos))) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 遍历匹配策略</span></span><br><span class="line">            <span class="keyword">for</span> (State nextState : entry.getValue()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (isMatch(text, pos + <span class="number">1</span>, nextState)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="DFA引擎"><a href="#DFA引擎" class="headerlink" title="DFA引擎"></a>DFA引擎</h1><p>上文只是实现了NFA引擎，NFA的引擎建图时间复杂度是O(n)，但匹配一个长度为m的字符串时因为涉及到大量的递归和回溯，最坏时间复杂度是O(mn)。<br>与之对比DFA引擎的建图时间复杂度O(n^2)，但匹配时没有回溯，所以匹配复杂度只有O(m)，性能差距还是挺大的。<br>DFA引擎实现的大体流程是先构造NFA(本文内容)，然后用子集构造法将NFA转化为DFA，预计未来我会出一篇博客讲解细节和具体实现。</p>
+<h1 id="正则引擎优化"><a href="#正则引擎优化" class="headerlink" title="正则引擎优化"></a>正则引擎优化</h1><p>首先DFA引擎是可以继续优化的，使用Hopcroft算法可以进一步将DFA图压缩，更少的状态节点更少的转移边可以实现更好的性能。<br>其次，目前生产级的正则引擎很多都不是单纯用NFA或者DFA实现的，而是二者的结合，不同正则表达式下用不同的引擎可以达到更好的综合性能，简单说NFA图小但要回溯，DFA不需要回溯但有些情况图会特别大。</p>
+<h2 id="DFA和NFA"><a href="#DFA和NFA" class="headerlink" title="DFA和NFA"></a>DFA和NFA</h2><p>我们已经多次提到了NFA和DFA，它俩究竟是啥？有啥区别？<br>首先，NFA和DFA都是有限状态机，都是有向图，用来描述状态和状态之间的关系。<br>其中NFA全称是非确定性有限状态自动机(Nondeterministic finite automaton)，DFA全称是确定性有限状态自动机(Deterministic finite automaton)。</p>
+<h3 id="确定性"><a href="#确定性" class="headerlink" title="确定性"></a>确定性</h3><p>二者的差异主要在于确定性和非确定性，何为确定性？<br>确定性是指面对同一输入，不会出现有多条可行的路径执行下一个节点。有点绕，看完图你就理解了。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163151.png"><br>图示分别是一个NFA和DFA，上图之所以是NFA是因为它有节点具备不确定性，比如0节点，在输入”a”之后它分别可以到0 1 2 节点。<br>还有，上图有 epsilone 边，它可以在没有输入的情况下跳到下一个节点，这也带来了不确定性。相反，下图DFA中，每个节点对某一特定的输入都只有最多一条边。<br>总结下NFA和DFA的区别就是，<strong>有ε边或者某个节点对同一输入对应多个状态的一定是NFA</strong>。</p>
+<h3 id="等价性"><a href="#等价性" class="headerlink" title="等价性"></a>等价性</h3><p>DFA和NFA存在等价性，也就是说任何NFA都可以转化为等价的DFA。<br>由于NFA的非确定性，在面对一个输入的时候可能有多条可选的路径，所以在一条路径走不通的情况下，需要回溯到选择点去走另外一条路径。<br>但DFA不同，在每个状态下，对每个输入不会存在多条路径，就不需要递归和回溯了，可以一条路走到黑。<br>DFA的匹复杂度只有O(n)，但因为要递归和回溯NFA的匹配复杂度达到了O(n^2)。<br>这也是为什么我们要将引擎中的NFA转化为DFA的主要原因。</p>
+<h3 id="NFA转DFA算法"><a href="#NFA转DFA算法" class="headerlink" title="NFA转DFA算法"></a>NFA转DFA算法</h3><p>NFA转DFA的算法叫做子集构造法，其具体流程如下。</p>
+<blockquote>
+<p><strong>步骤1:</strong> NFA的初始节点和初始节点所有ε可达的节点共同构成DFA的初始节点，然后对初始DFA节点执行步骤2。<br><strong>步骤2:</strong> 对当前DFA节点，找到其中所有NFA节点对输入符号X所有可达的NFA节点，这些节点沟通构成的DFA节点作为当前DFA节点对输入X可达的DFA节点。<br><strong>步骤3:</strong> 如果步骤2中找到了新节点，就对新节点重复执行步骤2。<br><strong>步骤4:</strong> 重复步骤2和步骤3直到找不DFA新节点为止。<br><strong>步骤5:</strong> 把所有包含NFA终止节点的DFA节点标记为DFA的终止节点。</p>
+</blockquote>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>语言描述比较难理解，我们直接上例子。<br>我们已经拿上一篇网站中的正则表达式 a(b|c)* 为例，NFA输出如下。</p>
+<table>
+<thead>
+<tr>
+<th>from</th>
+<th>to</th>
+<th>input</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-&gt;</td>
+<td>1</td>
+<td>a</td>
+</tr>
+<tr>
+<td>1-&gt;</td>
+<td>8</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>8-&gt;</td>
+<td>9</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>8-&gt;</td>
+<td>6</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>6-&gt;</td>
+<td>2</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>6-&gt;</td>
+<td>4</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>2-&gt;</td>
+<td>3</td>
+<td>b</td>
+</tr>
+<tr>
+<td>4-&gt;</td>
+<td>5</td>
+<td>c</td>
+</tr>
+<tr>
+<td>3-&gt;</td>
+<td>7</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>5-&gt;</td>
+<td>7</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>7-&gt;</td>
+<td>9</td>
+<td>Epsilon</td>
+</tr>
+<tr>
+<td>7-&gt;</td>
+<td>6</td>
+<td>Epsilon</td>
+</tr>
+</tbody></table>
+<p>绘图如下：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163800.png"><br>我们在上图的基础上执行步骤1 得到了节点0作为DFA的开始节点。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163906.png"><br>然后对DFA的节点0执行步骤1，找到NFA中所有a可达的NFA节点(<strong>1#2#4#6#8#9</strong>)构成DFA中的节点1，如下图。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163926.png"><br>我以dfa1为出发点，发现了b可达的所有NFA节点(<strong>2#3#4#6#7#9</strong>)和c可达的所有节点(<strong>2#4#5#6#7#9</strong>)，分别构成了DFA中的dfa2和dfa3，如下图。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023163959.png"><br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023164219.png"><br>然后我们分别在dfa2 dfa3上执行步骤三，找不到新节点，但会找到几条新的边，补充如下，至此我们就完成了对 a(b|c)* 对应NFA到DFA的转化。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023164441.png"><br><strong>可以看出DFA图节点明显少于NFA，但NFA更容易看出其对应的正则表达式。</strong></p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><p>代码其实就是对上文流程的表述</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DFAGraph <span class="title">convertNfa2Dfa</span><span class="params">(NFAGraph nfaGraph)</span> </span>&#123;</span><br><span class="line">       DFAGraph dfaGraph = <span class="keyword">new</span> DFAGraph();</span><br><span class="line">       Set&lt;State&gt; startStates = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">       <span class="comment">// 用NFA图的起始节点构造DFA的起始节点 步骤1 </span></span><br><span class="line">       startStates.addAll(getNextEStates(nfaGraph.start, <span class="keyword">new</span> HashSet&lt;&gt;()));</span><br><span class="line">       <span class="keyword">if</span> (startStates.size() == <span class="number">0</span>) &#123;</span><br><span class="line">           startStates.add(nfaGraph.start);</span><br><span class="line">       &#125;</span><br><span class="line">       dfaGraph.start = dfaGraph.getOrBuild(startStates);</span><br><span class="line">       Queue&lt;DFAState&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">       Set&lt;State&gt; finishedStates = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">       <span class="comment">// 如果BFS的方式从已找到的起始节点遍历并构建DFA</span></span><br><span class="line">       queue.add(dfaGraph.start);</span><br><span class="line">       <span class="keyword">while</span> (!queue.isEmpty()) &#123;  <span class="comment">// 步骤2 </span></span><br><span class="line">           DFAState curState = queue.poll();</span><br><span class="line">           <span class="keyword">for</span> (State nfaState : curState.nfaStates) &#123;</span><br><span class="line">               Set&lt;State&gt; nextStates = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">               Set&lt;String&gt; finishedEdges = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">               finishedEdges.add(Constant.EPSILON);</span><br><span class="line">               <span class="keyword">for</span> (String edge : nfaState.next.keySet()) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (finishedEdges.contains(edge)) &#123;</span><br><span class="line">                       <span class="keyword">continue</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">                   finishedEdges.add(edge);</span><br><span class="line">                   Set&lt;State&gt; efinishedState = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">                   <span class="keyword">for</span> (State state : curState.nfaStates) &#123;</span><br><span class="line">                       Set&lt;State&gt; edgeStates = state.next.getOrDefault(edge, Collections.emptySet());</span><br><span class="line">                       nextStates.addAll(edgeStates);</span><br><span class="line">                       <span class="keyword">for</span> (State eState : edgeStates) &#123;</span><br><span class="line">                           <span class="comment">// 添加E可达节点</span></span><br><span class="line">                           <span class="keyword">if</span> (efinishedState.contains(eState)) &#123;</span><br><span class="line">                               <span class="keyword">continue</span>;</span><br><span class="line">                           &#125;</span><br><span class="line">                           nextStates.addAll(getNextEStates(eState, efinishedState));</span><br><span class="line">                           efinishedState.add(eState);</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">                   <span class="comment">// 将NFA节点列表转化为DFA节点，如果已经有对应的DFA节点就返回，否则创建一个新的DFA节点</span></span><br><span class="line">                   DFAState nextDFAstate = dfaGraph.getOrBuild(nextStates);</span><br><span class="line">                   <span class="keyword">if</span> (!finishedStates.contains(nextDFAstate)) &#123;</span><br><span class="line">                       queue.add(nextDFAstate);</span><br><span class="line">                   &#125;</span><br><span class="line">                   curState.addNext(edge, nextDFAstate);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           finishedStates.add(curState);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> dfaGraph;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>DFAState</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFAState</span> <span class="keyword">extends</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Set&lt;State&gt; nfaStates = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="comment">// 保存对应NFAState的id,一个DFAState可能是多个NFAState的集合,所以拼接成String</span></span><br><span class="line">    <span class="keyword">private</span> String allStateIds;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DFAState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stateType = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DFAState</span><span class="params">(String allStateIds, Set&lt;State&gt; states)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.allStateIds = allStateIds;</span><br><span class="line">        <span class="keyword">this</span>.nfaStates.addAll(states);</span><br><span class="line">         <span class="comment">//这里我将步骤五直接集成在创建DFA节点的过程中了</span></span><br><span class="line">        <span class="keyword">for</span> (State state : states) &#123;</span><br><span class="line">            <span class="keyword">if</span> (state.isEndState()) &#123;</span><br><span class="line">                <span class="keyword">this</span>.stateType = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAllStateIds</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> allStateIds;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外我在DFAGraph中封装了有些NFA节点列表到DFA节点的转化和查找，具体如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DFAGraph</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, DFAState&gt; nfaStates2dfaState = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> DFAState start = <span class="keyword">new</span> DFAState();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里用map保存NFAState结合是已有对应的DFAState, 有就直接拿出来用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DFAState <span class="title">getOrBuild</span><span class="params">(Set&lt;State&gt; states)</span> </span>&#123;</span><br><span class="line">        String allStateIds = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span>[] ids = states.stream()</span><br><span class="line">                          .mapToInt(state -&gt; state.getId())</span><br><span class="line">                          .sorted()</span><br><span class="line">                          .toArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> id : ids) &#123;</span><br><span class="line">            allStateIds += <span class="string">&quot;#&quot;</span>;</span><br><span class="line">            allStateIds += id;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!nfaStates2dfaState.containsKey(allStateIds)) &#123;</span><br><span class="line">            DFAState dfaState = <span class="keyword">new</span> DFAState(allStateIds, states);</span><br><span class="line">            nfaStates2dfaState.put(allStateIds, dfaState);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nfaStates2dfaState.get(allStateIds);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="DFA引擎匹配过程"><a href="#DFA引擎匹配过程" class="headerlink" title="DFA引擎匹配过程"></a>DFA引擎匹配过程</h3><p>dfa引擎的匹配也可以完全复用NFA的匹配过程，所以对之前NFA的匹配代码，可以针对DFA模式取消回溯即可(不取消也没问题，但会有性能影响)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isMatch</span><span class="params">(String text, <span class="keyword">int</span> pos, State curState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (pos == text.length()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (curState.isEndState()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (State nextState : curState.next.getOrDefault(Constant.EPSILON, Collections.emptySet())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (isMatch(text, pos, nextState)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;String, Set&lt;State&gt;&gt; entry : curState.next.entrySet()) &#123;</span><br><span class="line">        String edge = entry.getKey();</span><br><span class="line">        <span class="comment">// 如果是DFA模式,不会有EPSILON边</span></span><br><span class="line">        <span class="keyword">if</span> (Constant.EPSILON.equals(edge)) &#123;</span><br><span class="line">            <span class="keyword">for</span> (State nextState : entry.getValue()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (isMatch(text, pos, nextState)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            MatchStrategy matchStrategy = MatchStrategyManager.getStrategy(edge);</span><br><span class="line">            <span class="keyword">if</span> (!matchStrategy.isMatch(text.charAt(pos), edge)) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 遍历匹配策略</span></span><br><span class="line">            <span class="keyword">for</span> (State nextState : entry.getValue()) &#123;</span><br><span class="line">                <span class="comment">// 如果是DFA匹配模式,entry.getValue()虽然是set,但里面只会有一个元素,所以不需要回溯</span></span><br><span class="line">                <span class="keyword">if</span> (nextState <span class="keyword">instanceof</span> DFAState) &#123;</span><br><span class="line">                    <span class="keyword">return</span> isMatch(text, pos + <span class="number">1</span>, nextState);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (isMatch(text, pos + <span class="number">1</span>, nextState)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为DFA的匹配不需要回溯，所以可以完全改成非递归代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isDfaMatch</span><span class="params">(String text, <span class="keyword">int</span> pos, State startState)</span> </span>&#123;</span><br><span class="line">    State curState = startState;</span><br><span class="line">    <span class="keyword">while</span> (pos &lt; text.length()) &#123;</span><br><span class="line">        <span class="keyword">boolean</span> canContinue = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, Set&lt;State&gt;&gt; entry : curState.next.entrySet()) &#123;</span><br><span class="line">            String edge = entry.getKey();</span><br><span class="line">            MatchStrategy matchStrategy = MatchStrategyManager.getStrategy(edge);</span><br><span class="line">            <span class="keyword">if</span> (matchStrategy.isMatch(text.charAt(pos), edge)) &#123;</span><br><span class="line">                curState = entry.getValue().stream().findFirst().orElse(<span class="keyword">null</span>);</span><br><span class="line">                pos++;</span><br><span class="line">                canContinue = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!canContinue) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> curState.isEndState();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="正则表达式">
+      <i class="fa fa-chevron-left"></i> 正则表达式
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
