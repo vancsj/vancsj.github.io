@@ -202,7 +202,10 @@
 
       
         <h1 id="what-is-optimism"><a href="#what-is-optimism" class="headerlink" title="what is optimism"></a>what is optimism</h1><p>Optimism is a L2 chain of ethereum based on Optimistic Rollups. </p>
-<h1 id="Mechanism"><a href="#Mechanism" class="headerlink" title="Mechanism"></a>Mechanism</h1><h2 id="Block-Storage"><a href="#Block-Storage" class="headerlink" title="Block Storage"></a>Block Storage</h2><p>All Optimism blocks stores in a smart contract on Ethereum chain, making up CanonicalTransactionChain, aka CTC.</p>
+<h1 id="Mechanism"><a href="#Mechanism" class="headerlink" title="Mechanism"></a>Mechanism</h1><h2 id="Block-Storage"><a href="#Block-Storage" class="headerlink" title="Block Storage"></a>Block Storage</h2><p>All Optimism blocks stores in a smart contract on Ethereum chain, making up CanonicalTransactionChain, aka CTC.<br>Optimism blocks are held within an append-only list inside of the CTC.</p>
+<blockquote>
+<p>The CanonicalTransactionChain includes code that guarantees that the existing list of blocks cannot be modified by new Ethereum transactions. However, this guarantee can be broken if the Ethereum blockchain itself is reorganized and the ordering of past Ethereum transactions is changed. The Optimism mainnet is configured to be robust against block reorganizations of up to 50 Ethereum blocks. If Ethereum experiences a reorg larger than this, Optimism will reorg as well.</p>
+</blockquote>
 
     </div>
 
