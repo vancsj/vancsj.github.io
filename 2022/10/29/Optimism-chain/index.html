@@ -208,6 +208,18 @@
 <blockquote>
 <p>The CanonicalTransactionChain includes code that guarantees that the existing list of blocks cannot be modified by new Ethereum transactions. However, this guarantee can be broken if the Ethereum blockchain itself is reorganized and the ordering of past Ethereum transactions is changed. The Optimism mainnet is configured to be robust against block reorganizations of up to 50 Ethereum blocks. If Ethereum experiences a reorg larger than this, Optimism will reorg as well.</p>
 </blockquote>
+<h2 id="Block-production"><a href="#Block-production" class="headerlink" title="Block production"></a>Block production</h2><p>The single party “sequencer” produces all Optimism blocks.<br>What sequencer does:</p>
+<ol>
+<li>Providing <strong>instant</strong> transaction confirmations and state updates</li>
+<li>Constructing and executing L2 blocks</li>
+<li>Submitting user transactions to L1</li>
+</ol>
+<p>It works like another Ethereum miner, but with some differences.</p>
+<ol>
+<li>The sequencer has no mempool, txs are immediately accepted or rejected <strong>in the order they are received</strong></li>
+<li>It is single party</li>
+<li>It submits blocks in large batches to L1 network, to finalize Optimism blocks</li>
+</ol>
 
     </div>
 
