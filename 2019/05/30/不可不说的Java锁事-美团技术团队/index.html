@@ -23,7 +23,7 @@
   <meta name="description" content="Source 前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="不可不说的Java锁事-美团技术团队">
-<meta property="og:url" content="http://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/index.html">
+<meta property="og:url" content="https://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="Source 前言Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。">
 <meta property="og:locale" content="zh_CN">
@@ -53,7 +53,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2018b/7f749fc8.png">
 
-<link rel="canonical" href="http://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/">
+<link rel="canonical" href="https://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/">
 
 
 <script id="page-configurations">
@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">

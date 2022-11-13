@@ -23,7 +23,7 @@
   <meta name="description" content="前言一致性哈希算法在很多领域有应用，例如分布式缓存领域的 MemCache，Redis，负载均衡领域的 Nginx，各类 RPC 框架。不同领域场景不同，需要顾及的因素也有所差异，本文主要讨论在负载均衡中一致性哈希算法的设计。 在介绍一致性哈希算法之前，我将会介绍一些哈希算法，讨论它们的区别和使用场景。也会给出一致性哈希算法的 Java 通用实现，可以直接引用，文末会给出 github 地址。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一致性哈希负载均衡算法的探讨">
-<meta property="og:url" content="http://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/index.html">
+<meta property="og:url" content="https://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="前言一致性哈希算法在很多领域有应用，例如分布式缓存领域的 MemCache，Redis，负载均衡领域的 Nginx，各类 RPC 框架。不同领域场景不同，需要顾及的因素也有所差异，本文主要讨论在负载均衡中一致性哈希算法的设计。 在介绍一致性哈希算法之前，我将会介绍一些哈希算法，讨论它们的区别和使用场景。也会给出一致性哈希算法的 Java 通用实现，可以直接引用，文末会给出 github 地址。">
 <meta property="og:locale" content="zh_CN">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104401">
 
-<link rel="canonical" href="http://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/">
+<link rel="canonical" href="https://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/">
 
 
 <script id="page-configurations">
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2019/05/30/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E7%9A%84%E6%8E%A2%E8%AE%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
