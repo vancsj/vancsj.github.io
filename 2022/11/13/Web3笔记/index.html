@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="愿景 We the Cypherpunks are dedicated to building anonymous systems. We aredefending our privacy with cryptography, with anonymous mail forwardingsystems, with digital signatures, and with electronic mo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web3笔记">
+<meta property="og:url" content="https://vancsj.github.io/2022/11/13/Web3%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="愿景 We the Cypherpunks are dedicated to building anonymous systems. We aredefending our privacy with cryptography, with anonymous mail forwardingsystems, with digital signatures, and with electronic mo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-13T15:47:04.000Z">
+<meta property="article:modified_time" content="2022-11-13T15:47:04.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://vancsj.github.io/2022/11/13/Web3%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Web3笔记 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/11/13/Web3%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web3笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-13 23:47:04" itemprop="dateCreated datePublished" datetime="2022-11-13T23:47:04+08:00">2022-11-13</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="愿景"><a href="#愿景" class="headerlink" title="愿景"></a>愿景</h1><blockquote>
+<p>We the Cypherpunks are dedicated to building anonymous systems. We are<br>defending our privacy with cryptography, with anonymous mail forwarding<br>systems, with digital signatures, and with electronic money.<br>—— Eric Hughes</p>
+</blockquote>
+<span id="more"></span>
+
+<img class="kroki" src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgaGVpZ2h0PSIzODNweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjYwNHB4O2hlaWdodDozODNweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2MDQgMzgzIiB3aWR0aD0iNjA0cHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzLz48Zz48IS0tTUQ1PVtlN2M0NTBlZjZhNzkwNTBjOWUyODU1ODc2NTMzYmU0Y10KZW50aXR5IEJpdGNvaW4tLT48ZyBpZD0iZWxlbV9CaXRjb2luIj48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjQ2LjI5NjkiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg3IiB4PSIzNjgiIHk9IjciLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjEwIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNSIgeD0iNDM1IiB5PSIxMiIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNDMzIiB5PSIxNCIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNDMzIiB5PSIxOCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjQ3IiB4PSIzODMiIHk9IjM5Ljk5NTEiPkJpdGNvaW48L3RleHQ+PC9nPjwhLS1NRDU9W2FmNjhmMGMzNjRiYmRmODBhMmM3Yzc0ODQyNmYxNTY3XQplbnRpdHkgRXRoZXJldW0tLT48ZyBpZD0iZWxlbV9FdGhlcmV1bSI+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSI0Ni4yOTY5IiByeD0iMi41IiByeT0iMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxMDgiIHg9IjIxOC41IiB5PSIxMzAiLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjEwIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNSIgeD0iMzA2LjUiIHk9IjEzNSIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iMzA0LjUiIHk9IjEzNyIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iMzA0LjUiIHk9IjE0MSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjY4IiB4PSIyMzMuNSIgeT0iMTYyLjk5NTEiPkV0aGVyZXVtPC90ZXh0PjwvZz48IS0tTUQ1PVswY2RhYmFmNWU1YjBjZWI3ZWViZTI5MDJlYzk2Y2IzY10KZW50aXR5IERlRmktLT48ZyBpZD0iZWxlbV9EZUZpIj48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjQ2LjI5NjkiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjcxIiB4PSI3IiB5PSIxMzAiLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjEwIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNSIgeD0iNTgiIHk9IjEzNSIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNTYiIHk9IjEzNyIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNTYiIHk9IjE0MSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjMxIiB4PSIyMiIgeT0iMTYyLjk5NTEiPkRlRmk8L3RleHQ+PC9nPjwhLS1NRDU9WzVmYTA3M2U3NTU3Y2VlZGQ1ZmZhYjgxOGRkOTk0NzVmXQplbnRpdHkgTDItLT48ZyBpZD0iZWxlbV9MMiI+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSI0Ni4yOTY5IiByeD0iMi41IiByeT0iMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSI1NiIgeD0iNDQxLjUiIHk9IjEzMCIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMTAiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjE1IiB4PSI0NzcuNSIgeT0iMTM1Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSI0IiB4PSI0NzUuNSIgeT0iMTM3Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSI0IiB4PSI0NzUuNSIgeT0iMTQxIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTYiIHg9IjQ1Ni41IiB5PSIxNjIuOTk1MSI+TDI8L3RleHQ+PC9nPjwhLS1NRDU9W2EwYWNmMDhhYWI3ZDFiNWQzNDUxOGZkMmQzZTk2OThjXQplbnRpdHkgV2ViMy0tPjxnIGlkPSJlbGVtX1dlYjMiPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iNDYuMjk2OSIgcng9IjIuNSIgcnk9IjIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iODAiIHg9IjM3MS41IiB5PSIzMzEiLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjEwIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNSIgeD0iNDMxLjUiIHk9IjMzNiIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNDI5LjUiIHk9IjMzOCIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNCIgeD0iNDI5LjUiIHk9IjM0MiIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjQwIiB4PSIzODYuNSIgeT0iMzYzLjk5NTEiPldlYjM8L3RleHQ+PC9nPjwhLS1NRDU9W2I4NjU5NDljM2ViNGVkNjVkZGE2MDM3NDRmMmJiYTkwXQpsaW5rIEJpdGNvaW4gdG8gRXRoZXJldW0tLT48ZyBpZD0ibGlua19CaXRjb2luX0V0aGVyZXVtIj48cGF0aCBkPSJNMzg2LjAxLDUzLjE5IEMzNjIuMiw3My45MiAzMjYuNjksMTA0LjgzIDMwMS43NCwxMjYuNTQgIiBmaWxsPSJub25lIiBpZD0iQml0Y29pbi10by1FdGhlcmV1bSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIyOTcuODMsMTI5Ljk1LDMwNy4yNDk3LDEyNy4wNzQzLDMwMS42MDcsMTI2LjY3MzcsMzAyLjAwNzYsMTIxLjAzMTEsMjk3LjgzLDEyOS45NSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTE3IiB4PSIzNTEuNSIgeT0iOTYuMDY2OSI+5Zu+54G15a6M5aSH55qE6K6h566X6IO95YqbPC90ZXh0PjwvZz48IS0tTUQ1PVs1MTkwMjMzYzFlY2JjZTVjYWYzMjE2MWQ5MGJlMWYzN10KcmV2ZXJzZSBsaW5rIERlRmkgdG8gRXRoZXJldW0tLT48ZyBpZD0ibGlua19EZUZpX0V0aGVyZXVtIj48cGF0aCBkPSJNODMuNiwxNTMgQzEyMS4xOSwxNTMgMTc3LjA3LDE1MyAyMTguMzEsMTUzICIgZmlsbD0ibm9uZSIgaWQ9IkRlRmktYmFja3RvLUV0aGVyZXVtIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9Ijc4LjE5LDE1Myw4Ny4xOSwxNTcsODMuMTksMTUzLDg3LjE5LDE0OSw3OC4xOSwxNTMiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEwNCIgeD0iOTYuMjUiIHk9IjE0Ni4wNjY5Ij7pk77kuIvmlbDmja7ov5vlhaXpk77kuIo8L3RleHQ+PC9nPjwhLS1NRDU9Wzg2MGJjNjBmZGEzZjIzNzBhODU1ZmRjMmZmZWYyYTJiXQpsaW5rIEV0aGVyZXVtIHRvIEwyLS0+PGcgaWQ9ImxpbmtfRXRoZXJldW1fTDIiPjxwYXRoIGQ9Ik0zMjYuNTksMTUzIEMzNjEuNjksMTUzIDQwNi4zMSwxNTMgNDM2LjI4LDE1MyAiIGZpbGw9Im5vbmUiIGlkPSJFdGhlcmV1bS10by1MMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI0NDEuMzIsMTUzLDQzMi4zMiwxNDksNDM2LjMyLDE1Myw0MzIuMzIsMTU3LDQ0MS4zMiwxNTMiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijc4IiB4PSIzNDUiIHk9IjE0Ni4wNjY5Ij7mianlsZXorqHnrpfog73lips8L3RleHQ+PC9nPjwhLS1NRDU9Wzg4NzdkMDNjYWRmZjFhYjVmOTU4ZWNmNjNmYjE2NzIyXQpsaW5rIEJpdGNvaW4gdG8gV2ViMy0tPjxnIGlkPSJsaW5rX0JpdGNvaW5fV2ViMyI+PHBhdGggZD0iTTQ0Mi41OSw1My4yMSBDNDU0LjA0LDYxLjk2IDQ2Ni44MSw3Mi40NCA0NzcuNSw4MyBDNDk2LjYxLDEwMS44NyA1MDYuNTQsMTA0LjY4IDUxNS41LDEzMCBDNTIyLjMyLDE0OS4yNyA1MjAuODcsMTU2LjI3IDUxNS41LDE3NiBDNDk5LjU2LDIzNC41OSA0NTguNzgsMjkzLjU4IDQzMy4yOCwzMjYuNDkgIiBmaWxsPSJub25lIiBpZD0iQml0Y29pbi10by1XZWIzIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjQyOS45NCwzMzAuNzcsNDM4LjYyNjQsMzI2LjEyODEsNDMzLjAxMjcsMzI2LjgyNTUsNDMyLjMxNTIsMzIxLjIxMTksNDI5Ljk0LDMzMC43NyIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iOTEiIHg9IjUwNS41IiB5PSIyMTkuMDY2OSI+5ZCI55CG55qE5YiG6YWN5py65Yi2PC90ZXh0PjwvZz48IS0tTUQ1PVszODM2MGViNGY2MTY1MjZmNDg4MDdmZDZkOTMyMjQ5Y10KbGluayBFdGhlcmV1bSB0byBXZWIzLS0+PGcgaWQ9ImxpbmtfRXRoZXJldW1fV2ViMyI+PHBhdGggZD0iTTI4Ny45MSwxNzYuMDYgQzMxMy42OSwyMTIuOTYgMzY1LjQ1LDI4Ny4wNyAzOTMuMSwzMjYuNjYgIiBmaWxsPSJub25lIiBpZD0iRXRoZXJldW0tdG8tV2ViMyIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIzOTYuMDIsMzMwLjg0LDM5NC4xMzM1LDMyMS4xNzM1LDM5My4xNTE3LDMyNi43NDQ1LDM4Ny41ODA3LDMyNS43NjI3LDM5Ni4wMiwzMzAuODQiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjkxIiB4PSIzNTQuNSIgeT0iMjY2LjA2NjkiPuWQiOeQhueahOWIhumFjeacuuWItjwvdGV4dD48L2c+PCEtLU1ENT1bMDA1ZmZmOTVjYzBlNmNjNzQwODI0OWNhMWYyNzQ2NWFdCkBzdGFydHVtbA0KW0JpdGNvaW5dIC0gLT4gW0V0aGVyZXVtXTrlm77ngbXlrozlpIfnmoTorqHnrpfog73lipsNCltFdGhlcmV1bV0gLWxlZnQtPiBbRGVGaV066ZO+5LiL5pWw5o2u6L+b5YWl6ZO+5LiKDQpbRXRoZXJldW1dIC1yaWdodC0+IFtMMl065omp5bGV6K6h566X6IO95YqbDQpbQml0Y29pbl0gLSAtIC0gLT4gW1dlYjNdOuWQiOeQhueahOWIhumFjeacuuWItg0KW0V0aGVyZXVtXSAtIC0+IFtXZWIzXTrlkIjnkIbnmoTliIbphY3mnLrliLYNCkBlbmR1bWwNCgpQbGFudFVNTCB2ZXJzaW9uIDEuMjAyMi4xMihTdW4gT2N0IDIzIDE4OjEyOjI2IEdNVCAyMDIyKQooR1BMIHNvdXJjZSBkaXN0cmlidXRpb24pCkphdmEgUnVudGltZTogT3BlbkpESyBSdW50aW1lIEVudmlyb25tZW50CkpWTTogT3BlbkpESyA2NC1CaXQgU2VydmVyIFZNCkRlZmF1bHQgRW5jb2Rpbmc6IFVURi04Ckxhbmd1YWdlOiBlbgpDb3VudHJ5OiBVUwotLT48L2c+PC9zdmc+'>
+
+<h1 id="路线图"><a href="#路线图" class="headerlink" title="路线图"></a>路线图</h1><p>Web1: 阅读<br>Web2: 阅读, 写作<br>Web3: 阅读, 写作, 拥有</p>
+<p>在Web1时代, 科技巨头向用户提供信息而获得收益<br>在Web2时代, 科技巨头充当用户的中间人而获得收益; 平台即中心<br>Web3是去中心化的, 用户无需中间人即可通讯和交易</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.developerdao.com/35-github-repositories-every-solidity-developer-should-bookmark">35+ GitHub Repositories Every Solidity Developer Should Bookmark </a></li>
+<li><a target="_blank" rel="noopener" href="https://www.developerdao.com/zh-CN">Developer DAO</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bkrem/awesome-solidity">Awesome Solidity</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sigp/solidity-security-blog">Solidity security blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/frankiefab100/Web3.0-Roadmap">Web3 Roadmap</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/alianse777/solidity-standard-library">Solidity Standard Library</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/29/Optimism-chain/" rel="prev" title="Optimism chain">
+      <i class="fa fa-chevron-left"></i> Optimism chain
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/19/%E5%88%86%E5%B1%82%E6%80%9D%E6%83%B3%E5%9C%A8%E5%9B%A2%E9%98%9F%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" rel="next" title="分层思想在团队架构中的应用">
+      分层思想在团队架构中的应用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
