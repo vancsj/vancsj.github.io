@@ -22,20 +22,23 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Schnorr签名简介schnorr身份证明协议Schnorr从ID到签名Schnorr MuSigSchnorr隐形脚本Schnorr签名批量验证Schnorr门限签名Schnorr签名:最优轮次的灵活Schnorr门限签名Schnorr盲签名Taproot升级详解一文读懂ECDSA算法如何保护数据">
+  <meta name="description" content="简介Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="加密学笔记">
-<meta property="og:url" content="https://vancsj.github.io/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="Avax介绍">
+<meta property="og:url" content="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="Schnorr签名简介schnorr身份证明协议Schnorr从ID到签名Schnorr MuSigSchnorr隐形脚本Schnorr签名批量验证Schnorr门限签名Schnorr签名:最优轮次的灵活Schnorr门限签名Schnorr盲签名Taproot升级详解一文读懂ECDSA算法如何保护数据">
+<meta property="og:description" content="简介Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-12-03T16:10:21.000Z">
-<meta property="article:modified_time" content="2022-12-03T16:10:21.000Z">
+<meta property="article:published_time" content="2022-12-04T09:30:06.000Z">
+<meta property="article:modified_time" content="2022-12-04T09:30:06.000Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="Java, 后端开发">
+<meta property="article:tag" content="AVAX">
+<meta property="article:tag" content="Avalanche">
+<meta property="article:tag" content="雪崩">
+<meta property="article:tag" content="共识协议">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://vancsj.github.io/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/">
+<link rel="canonical" href="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/">
 
 
 <script id="page-configurations">
@@ -48,7 +51,7 @@
   };
 </script>
 
-  <title>加密学笔记 | 已所欲，己所从</title>
+  <title>Avax介绍 | 已所欲，己所从</title>
   
 
 
@@ -156,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +172,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          加密学笔记
+          Avax介绍
         </h1>
 
         <div class="post-meta">
@@ -179,7 +182,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-12-04 00:10:21" itemprop="dateCreated datePublished" datetime="2022-12-04T00:10:21+08:00">2022-12-04</time>
+              <time title="创建时间：2022-12-04 17:30:06" itemprop="dateCreated datePublished" datetime="2022-12-04T17:30:06+08:00">2022-12-04</time>
             </span>
 
           
@@ -200,7 +203,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/20/introduction-to-schnorr-signatures-by-suredbits/">Schnorr签名简介</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/22/schnorr-security-part-1-schnorr-id-protocol/">schnorr身份证明协议</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/24/schnorr-security-part-2-from-id-to-signature/">Schnorr从ID到签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/29/schnorr-applications-musig/">Schnorr MuSig</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/02/schnorr-applications-scriptless-scripts/">Schnorr隐形脚本</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/06/schnorr-applications-batch-verification/">Schnorr签名批量验证</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/08/schnorr-applications-threshold-signatures/">Schnorr门限签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/09/schnorr-applications-frost/">Schnorr签名:最优轮次的灵活Schnorr门限签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/13/schnorr-applications-blind-signatures/">Schnorr盲签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/02/the-taproot-upgrade-explainer-from-Suredbits/">Taproot升级详解</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97953640">一文读懂ECDSA算法如何保护数据</a></p>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。<br>其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。<br>X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。</p>
+<span id="more"></span>
+
+<h1 id="历史沿革"><a href="#历史沿革" class="headerlink" title="历史沿革"></a>历史沿革</h1><p>Avalanche于2020年9月由纽约的Ava Labs创立。<br>Ava Labs创始团队的成员包括Kevin Sekniqi、Maofan “Ted” Yin以及Emin Gün Sirer。</p>
+<h1 id="链上运转"><a href="#链上运转" class="headerlink" title="链上运转"></a>链上运转</h1><p>它实际上由三条可互操作的区块链组成：X链、C链与P链。</p>
+<ol>
+<li>交易链（X链）负责AVAX代币及其他数字资产的创建与交易。交易费通过AVAX代币支付，区块链使用Avalanche共识协议，</li>
+<li>在合约链（C链）中，开发者可为DApp创建智能合约。该链实现了以太坊虚拟机(EVM)的一项实例，支持兼容EVM的DApp。合约链使用Snowman共识协议，它是Avalanche共识协议的修改版。</li>
+<li>平台链（P链）协调网络验证者，跟踪子网活动，为创建子网提供支持。P链同样使用Snowman协议。</li>
+</ol>
+<p>Avalanche为每条区块链赋予不同功能，与所有处理操作集中于一条区块链相比，这种方案提升了速度与可扩展性。开发人员根据每条区块链的需求量身定制了共识机制。用户使用AVAX来质押和支付网络手续费，使得生态系统拥有一个共同的可用资产。</p>
+<h1 id="共识协议"><a href="#共识协议" class="headerlink" title="共识协议"></a>共识协议</h1><h4 id="雪崩-Avalanche-共识协议"><a href="#雪崩-Avalanche-共识协议" class="headerlink" title="雪崩(Avalanche)共识协议"></a>雪崩(Avalanche)共识协议</h4><p>工作量证明(PoW)、权益证明(PoS)、委托权益证明(DPoS)等传统共识协议需要领导者促成共识，但雪崩共识协议恰好相反，它使得Avalanche网络兼具高度去中心化与可扩展性。PoW、PoS和DPoS等传统共识协议终将演变成一方处理交易，其他各方验证交易的模式。<br>Avalanche采用经有向无环图(DAG)优化的共识协议。DAG支持网络并行处理交易。验证者抽取其他验证者的样本并确认其是否验证了新交易。经过多轮随机采样，统计数据可以证明，交易造假的可能性近乎为零。<br>所有交易立即得到确认，无需其他任何附加操作。运行验证者节点和验证交易的硬件门槛极低，这将吸引大量参与者，有助于提高性能、去中心化水平以及气候友善。</p>
+<h4 id="雪人-Snowman-共识协议"><a href="#雪人-Snowman-共识协议" class="headerlink" title="雪人(Snowman)共识协议"></a>雪人(Snowman)共识协议</h4><p>雪人共识协议基于雪崩共识协议，不同之处在于，前者使用线性交易验证方式。这种方式在处理智能合约方面尤为有效。与雪崩共识协议相比，雪人共识协议还存在区块创建过程。</p>
+<h1 id="代币"><a href="#代币" class="headerlink" title="代币"></a>代币</h1><p>AVAX是Avalanche网络的原生代币，总供应量为7.2亿枚。所有在网络上支付的手续费会基于通货紧缩机制加以销毁，为更广大的Avalanche社区带来福利AVAX 具有以下三大主要用例：</p>
+<ol>
+<li><p>您可以质押一定数量的AVAX并成为验证者，亦可将代币委托给其他验证者。验证者可享受10%的年收益率(APY)并向委托人收取一定比例的管理费，具体比例可自行设定。</p>
+</li>
+<li><p>AVAX可作为子网的通用单位，有助于提升子网的互操作性。</p>
+</li>
+<li><p>AVAX可用于支付交易费用以及子网订阅费。</p>
+</li>
+</ol>
 
     </div>
 
@@ -209,6 +233,12 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AVAX/" rel="tag"># AVAX</a>
+              <a href="/tags/Avalanche/" rel="tag"># Avalanche</a>
+              <a href="/tags/%E9%9B%AA%E5%B4%A9/" rel="tag"># 雪崩</a>
+              <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" rel="tag"># 共识协议</a>
+          </div>
 
         
 
@@ -216,13 +246,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/11/27/GrayScale-Valuing-Ethereum-%E7%AC%94%E8%AE%B0/" rel="prev" title="GrayScale Valuing Ethereum 笔记">
-      <i class="fa fa-chevron-left"></i> GrayScale Valuing Ethereum 笔记
+    <a href="/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/" rel="prev" title="加密学笔记">
+      <i class="fa fa-chevron-left"></i> 加密学笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/" rel="next" title="Avax介绍">
-      Avax介绍 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
