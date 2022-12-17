@@ -192,8 +192,14 @@
 
       
           <h2 id="FLP不可能原理"><a href="#FLP不可能原理" class="headerlink" title="FLP不可能原理"></a>FLP不可能原理</h2><p>FLP 不可能原理：<strong>在网络可靠、但允许节点失效（即便只有一个）的最小化异步模型系统中，不存在一个可以解决一致性问题的确定性共识算法</strong>（No completely asynchronous consensus protocol can tolerate even a single unannounced process death）。<br>提出并证明该定理的论文《Impossibility of Distributed Consensus with One Faulty Process》是由 Fischer、Lynch 和 Patterson 三位科学家于 1985 年发表，该论文后来获得了 Dijkstra（就是发明最短路径算法的那位计算机科学家）奖。<br>FLP 不可能原理告诉我们，不要浪费时间去试图为异步分布式系统设计面向任意场景的共识算法。</p>
-<p>FLP 不可能原理在论文中以图论的形式进行了严格证明。要理解其基本原理并不复杂，一个不严谨的例子如下。<br>三个人在不同房间进行投票（投票结果是 0 或者 1），彼此可以通过电话进行沟通，但经常有人会时不时睡着。比如某个时候，A 投票 0，B 投票 1，C 收到了两人的投票，然后 C 睡着了。此时，A 和 B 将永远无法在有限时间内获知最终的结果，因为他们无法判断究竟是 C 没有应答还是应答的时间过长。如果可以重新投票，则类似情形可以在每次取得结果前发生，这将导致共识过程永远无法完成。<br>FLP 不可能原理实际上说明<strong>对于允许节点失效情况下，纯粹异步系统无法确保共识在有限时间内完成</strong>。即便对于非拜占庭错误的前提下，包括 Paxos、Raft 等算法也都存在无法达成共识的极端情况，只是在工程实践中这种情况出现的概率很小。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
