@@ -224,7 +224,12 @@
 <li>Bitcoin-NG – 通过Pow选举一个leader并让他在一段时间内主导记账</li>
 <li>Thunderella – 类似Bitcoin-NG, 并且在可信算力超过3/4时, 允许更快的确认</li>
 <li>ByzCoin – 定期选举一部分节点, 运行PBFT类似的协议进行记账</li>
-<li>PBFT – <h2 id="雪崩协议"><a href="#雪崩协议" class="headerlink" title="雪崩协议"></a>雪崩协议</h2></li>
+<li>PBFT – 基于多数选举的状态复制, 在primary和backup之间广播, 类似两阶段提交协议, pre-prepare -&gt; prepare -&gt; commit; 当多数(超过三分之二)节点达成一致时, 认为完成状态复制 </li>
+<li>PBFT改进 – <h2 id="共识协议的比较维度"><a href="#共识协议的比较维度" class="headerlink" title="共识协议的比较维度"></a>共识协议的比较维度</h2></li>
+<li>latency: 达成共识所需的时间</li>
+<li>吞吐量</li>
+<li>节点容量</li>
+<li>健壮性: 拜占庭节点-可靠性曲线<h2 id="雪崩协议"><a href="#雪崩协议" class="headerlink" title="雪崩协议"></a>雪崩协议</h2></li>
 <li>类拜占庭协议</li>
 <li>容纳更多验证节点</li>
 <li>容忍50%作恶验证者</li>
