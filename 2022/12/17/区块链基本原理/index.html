@@ -29,12 +29,22 @@
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="FLP不可能原理FLP 不可能原理：在网络可靠、但允许节点失效（即便只有一个）的最小化异步模型系统中，不存在一个可以解决一致性问题的确定性共识算法（No completely asynchronous consensus protocol can tolerate even a single unannounced process death）。提出并证明该定理的论文《Impossibility">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204617.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204645.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204707.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204805.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204821.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204939.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205056.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205020.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205031.png">
 <meta property="article:published_time" content="2022-12-17T15:40:08.000Z">
 <meta property="article:modified_time" content="2022-12-17T15:40:08.000Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="区块链">
 <meta property="article:tag" content="原理">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204617.png">
 
 <link rel="canonical" href="https://vancsj.github.io/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">
 
@@ -205,6 +215,24 @@
 <span id="more"></span>
 
 <p>FLP 不可能原理在论文中以图论的形式进行了严格证明。要理解其基本原理并不复杂，一个不严谨的例子如下。<br>三个人在不同房间进行投票（投票结果是 0 或者 1），彼此可以通过电话进行沟通，但经常有人会时不时睡着。比如某个时候，A 投票 0，B 投票 1，C 收到了两人的投票，然后 C 睡着了。此时，A 和 B 将永远无法在有限时间内获知最终的结果，因为他们无法判断究竟是 C 没有应答还是应答的时间过长。如果可以重新投票，则类似情形可以在每次取得结果前发生，这将导致共识过程永远无法完成。<br>FLP 不可能原理实际上说明<strong>对于允许节点失效情况下，纯粹异步系统无法确保共识在有限时间内完成</strong>。即便对于非拜占庭错误的前提下，包括 Paxos、Raft 等算法也都存在无法达成共识的极端情况，只是在工程实践中这种情况出现的概率很小。</p>
+<h2 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h2><p>CAP理论是指一个分布式系统不能同时满足一致性、可用性和分区容错性。</p>
+<h4 id="分布式系统模型"><a href="#分布式系统模型" class="headerlink" title="分布式系统模型"></a>分布式系统模型</h4><p>假设我们有这样一个简单的分布式系统，它包含两个服务G1和G2，这俩服务都保存着同一变量v，其初始值是v0。 G1和G2之间可以互相沟通，同时他们也可以和其他的客户端沟通，如下图所示：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204617.png" alt="分布式系统"><br>客户端可以读取和修改任意一个服务端的值。当服务端收到请求，他会做相应处理后回复客户端。如果是写请求执行过程如下图所示：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204645.png" alt="分布式数据写入"><br>如果是读请求，执行过程如下图：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204707.png" alt="分布式数据读取"><br>现在我们已经建立了一个简单的分布式系统</p>
+<h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><p>Gilbert和Lynch的论文中是这样描述一致性的：</p>
+<blockquote>
+<p>any read operation that begins after a write operation completes must return that value, or the result of a later write operation<br>在某个写操作完成之后的任何读操作都必须返回该写操作写入的值，或者再之后的写操作写入的值。</p>
+</blockquote>
+<p>在一个一致性的系统中，如果一个客户端写入了某个值到任意一个服务端上，并且得到了服务端的确认，那么客户端再去读的时候，不管是读的哪个服务，都期望拿到写入后的值或者是更新的值。<br>下图所示是有个不保证一致性的系统：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204805.png"><br>客户端向G1发送了写请求将v的值从v0变更到v1，然后也得到了G1的写入成功确认，但从G2读到的数据还是旧的数据v0。<br>下图是一个保证一致性的系统：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204821.png"><br>在这个系统中，当客户端向G1写入数据v1后，G1也会把数据同步到G2，当G1 G2都完成数据更新后，G1才会告诉客户端写入成功。 之后不过是客户端从G1读还是从G2读，读到的都是最新的值v1。</p>
+<h4 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h4><p>Gilbert和Lynch的论文对可用性的描述如下：</p>
+<blockquote>
+<p>every request received by a non-failing node in the system must result in a response 任何一个在线的节点收到的请求必须都做出相应。</p>
+</blockquote>
+<p>在保证可用性的系统中，如果客户端向某个没有宕机的服务端发送了请求，服务端必须响应客户端的请求，不能选择忽略掉客户端的请求。</p>
+<h4 id="分区容错性"><a href="#分区容错性" class="headerlink" title="分区容错性"></a>分区容错性</h4><p>Gilbert和Lynch的论文对分区容错性的描述如下：</p>
+<blockquote>
+<p>the network will be allowed to lose arbitrarily many messages sent from one node to another 允许网络丢失从一个服务节点到另外一个服务节点的任意信息</p>
+</blockquote>
+<p>这就意味着在我们的分布式系统中，G1发送给G2的信息可能会丢失，如果所有的信息都丢失了，我们的系统可能就会变成这样。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218204939.png"><br>为了保证分区容错性，我们的系统必须在任意个不通的网络分区下正常工作。</p>
+<h4 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h4><p>现在我们已经了解了什么是一致性、可用性和分区容错性，接下来我们证明下为什么一个分布式系统不能同时满足这三者。<br>假设存在一个同时满足一致性、可用性和分区容错性的分布式系统。首先我们把这个系统分成两个部分，如下图：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205056.png"><br>接下来客户端将G1中的v从v0改成v1，因为要满足可用性的要求，G1必须响应客户端的写入请求，但是因为网络的问题，G1没法将数据同步到G2。Gilbert和Lynch将这个阶段称为alpha1阶段，如下图：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205020.png"><br>再然后，假设有个客户端从G2读了v的值，因为满足可用性要求，G2也必须正常响应，因为网络的问题，G2没有更新到G1的数据，所以G2只能返回v0，Gilbert和Lynch将这个阶段称为alpha2阶段，如下图：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/12/18/20221218205031.png"><br>在这里G1返回v1，G2只能返回v1，产生了不一致，和我们的假设相悖，所以证明同时满足一致性、可用性和分区容错性的分布式系统不存在。</p>
 
     </div>
 
