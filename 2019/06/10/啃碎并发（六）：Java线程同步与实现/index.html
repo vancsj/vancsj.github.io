@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="来源 0 前言为何要使用Java线程同步？ Java允许多线程并发控制，当多个线程同时操作一个可共享的资源变量时，将会导致数据不准确，相互之间产生冲突，因此加入同步锁以避免在该线程没有完成操作之前，被其他线程的调用，从而保证了该变量的唯一性和准确性。 但其并发编程的根本，就是使线程间进行正确的通信。其中两个比较重要的关键点，如下：    线程通信：重点关注线程同步的几种方式；  正确通信：重点关注">
 <meta property="og:type" content="article">
 <meta property="og:title" content="啃碎并发（六）：Java线程同步与实现">
-<meta property="og:url" content="http://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:url" content="https://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="来源 0 前言为何要使用Java线程同步？ Java允许多线程并发控制，当多个线程同时操作一个可共享的资源变量时，将会导致数据不准确，相互之间产生冲突，因此加入同步锁以避免在该线程没有完成操作之前，被其他线程的调用，从而保证了该变量的唯一性和准确性。 但其并发编程的根本，就是使线程间进行正确的通信。其中两个比较重要的关键点，如下：    线程通信：重点关注线程同步的几种方式；  正确通信：重点关注">
 <meta property="og:locale" content="zh_CN">
@@ -36,7 +38,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/7/11/164889b8552c32a4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 
-<link rel="canonical" href="http://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+<link rel="canonical" href="https://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
 
 
 <script id="page-configurations">
@@ -83,7 +85,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -142,10 +144,7 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -160,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2019/06/10/%E5%95%83%E7%A2%8E%E5%B9%B6%E5%8F%91%EF%BC%88%E5%85%AD%EF%BC%89%EF%BC%9AJava%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -434,7 +433,7 @@ all thread over
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -476,12 +475,8 @@ all thread over
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/muse.js"></script>

@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="简介建立在以太坊链上的去中心化借贷合约。 方案加密货币借贷就是专指将加密货币作为抵押品，借出如稳定币或其他加密货币的金融行为。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Compound概述">
-<meta property="og:url" content="http://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:url" content="https://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="简介建立在以太坊链上的去中心化借贷合约。 方案加密货币借贷就是专指将加密货币作为抵押品，借出如稳定币或其他加密货币的金融行为。">
 <meta property="og:locale" content="zh_CN">
@@ -43,7 +45,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210821224642.png">
 
-<link rel="canonical" href="http://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/">
+<link rel="canonical" href="https://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/">
 
 
 <script id="page-configurations">
@@ -90,7 +92,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -149,10 +151,7 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -167,7 +166,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2021/08/21/Compound%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -221,14 +220,14 @@
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>建立在以太坊链上的去中心化借贷合约。</p>
 <h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>加密货币借贷就是专指将加密货币作为抵押品，借出如稳定币或其他加密货币的金融行为。</p>
 <span id="more"></span>
-<p>Compound的基本架构如下。cDAI是放贷人的放贷凭证和结算依据；放贷与借贷行为异步发生，不需要进行撮合；放贷利率和贷款利率均由系统自动计算得来。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821224642.png" alt="Compound基本架构"><br>其中放贷人的利息来自于<strong>兑换率</strong>（cDAI与DAI)的增加。兑换率公式如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082102.png" alt="img" style="zoom:50%;"><br>其中：</p>
+<p>Compound的基本架构如下。cDAI是放贷人的放贷凭证和结算依据；放贷与借贷行为异步发生，不需要进行撮合；放贷利率和贷款利率均由系统自动计算得来。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821224642.png" alt="Compound基本架构"><br>其中放贷人的利息来自于<strong>兑换率</strong>（cDAI与DAI)的增加。兑换率公式如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082102.png" alt="img" style="zoom:50%;" /><br>其中：</p>
 <ul>
 <li>totalCash        = 放入智能合約，但还没被借走 DAI 的总数量</li>
 <li>totalBorrows   = 所有借款人，所应偿还 DAI 的总数量 (含本金利息)</li>
 <li>totalReserves = 保留金总数量 (借款人所应支付的利息，部分被视为保留金)</li>
 <li>totalSupply     = 所有放贷人所得到 cDAI 的总数量</li>
 </ul>
-<p>totalBorrows 跟 totalReserves 又受到放贷年利率和借款年利率的影响。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082116.png" alt="img" style="zoom:50%;"></p>
+<p>totalBorrows 跟 totalReserves 又受到放贷年利率和借款年利率的影响。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082116.png" alt="img" style="zoom:50%;" /></p>
 <h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
 <li>即时放贷，即时还款，无需撮合</li>
 <li>每15秒（1个block的间隔）更新一次利息，相当于每15秒计息，计息周期短</li>
@@ -239,7 +238,7 @@
 <li>以太坊GAS费高，容量有限</li>
 </ul>
 <h2 id="竞品"><a href="#竞品" class="headerlink" title="竞品"></a>竞品</h2><p>Aave<br>Maker<br>InstaDApp<br>dYdX</p>
-<h2 id="存量"><a href="#存量" class="headerlink" title="存量"></a>存量</h2><p>COMP总量1000万枚。<br>其中423万枚将免费发放给其用户，4年发完。其中50%给放贷人，50%给借款人。每个以太坊区块转出0.5个COMP。<br>总体的分配方案如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821223941.jpg-article" alt="Compound「借贷即挖矿」治理代币分配方案" style="zoom:50%;"></p>
+<h2 id="存量"><a href="#存量" class="headerlink" title="存量"></a>存量</h2><p>COMP总量1000万枚。<br>其中423万枚将免费发放给其用户，4年发完。其中50%给放贷人，50%给借款人。每个以太坊区块转出0.5个COMP。<br>总体的分配方案如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821223941.jpg-article" alt="Compound「借贷即挖矿」治理代币分配方案" style="zoom:50%;" /></p>
 <h2 id="关联方"><a href="#关联方" class="headerlink" title="关联方"></a>关联方</h2><p>创始人 Robert Leshner<br>开发商 Compound Labs</p>
 <h2 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h2><p>2018年9月27日 以太坊主网启动。<br>2019年5月23日 V2启动。<br>2020年6月15日 发布治理代币COMP，开启流动性挖矿。</p>
 <h2 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>官网 <a target="_blank" rel="noopener" href="https://compound.finance/">https://compound.finance/</a><br>治理 <a target="_blank" rel="noopener" href="https://compound.finance/governance">https://compound.finance/governance</a><br>治理提案 <a target="_blank" rel="noopener" href="https://compound.finance/governance/proposals">https://compound.finance/governance/proposals</a><br>文档 <a target="_blank" rel="noopener" href="https://compound.finance/docs">https://compound.finance/docs</a></p>
@@ -321,7 +320,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -363,12 +362,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/muse.js"></script>

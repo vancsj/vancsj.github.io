@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="拜占庭将军问题(Byzantine Generals Problem) 一组拜占庭将军分别各率领一支军队共同围困一座城市。为了简化问题，将各支军队的行动策略限定为进攻或撤离两种。因为部分军队进攻部分军队撤离可能会造成灾难性后果，因此各位将军必须通过投票来达成一致策略，即所有军队一起进攻或所有军队一起撤离。因为各位将军分处城市不同方向，他们只能通过信使互相联系。在投票过程中每位将军都将自己投票给进攻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BFT算法综述">
+<meta property="og:url" content="https://vancsj.github.io/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="拜占庭将军问题(Byzantine Generals Problem) 一组拜占庭将军分别各率领一支军队共同围困一座城市。为了简化问题，将各支军队的行动策略限定为进攻或撤离两种。因为部分军队进攻部分军队撤离可能会造成灾难性后果，因此各位将军必须通过投票来达成一致策略，即所有军队一起进攻或所有军队一起撤离。因为各位将军分处城市不同方向，他们只能通过信使互相联系。在投票过程中每位将军都将自己投票给进攻">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-17T14:50:49.000Z">
+<meta property="article:modified_time" content="2022-12-17T14:50:49.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="BFT">
+<meta property="article:tag" content="拜占庭容错">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://vancsj.github.io/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BFT算法综述 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BFT算法综述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-17 22:50:49" itemprop="dateCreated datePublished" datetime="2022-12-17T22:50:49+08:00">2022-12-17</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="拜占庭将军问题-Byzantine-Generals-Problem"><a href="#拜占庭将军问题-Byzantine-Generals-Problem" class="headerlink" title="拜占庭将军问题(Byzantine Generals Problem)"></a>拜占庭将军问题(Byzantine Generals Problem)</h2><blockquote>
+<p>一组拜占庭将军分别各率领一支军队共同围困一座城市。为了简化问题，将各支军队的行动策略限定为<strong>进攻</strong>或<strong>撤离</strong>两种。因为部分军队进攻部分军队撤离可能会造成灾难性后果，因此各位将军必须通过投票来达成一致策略，即所有军队一起进攻或所有军队一起撤离。因为各位将军分处城市不同方向，他们只能通过信使互相联系。在投票过程中每位将军都将自己投票给进攻还是撤退的信息通过信使分别通知其他所有将军，这样一来每位将军根据自己的投票和其他所有将军送来的信息就可以知道共同的投票结果而决定行动策略。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="拜占庭容错"><a href="#拜占庭容错" class="headerlink" title="拜占庭容错"></a>拜占庭容错</h2><p>拜占庭将军中可能出现叛徒，他们不仅可能向较为糟糕的策略投票，还可能<strong>选择性地发送投票信息</strong>。假设有9位将军投票，其中1名叛徒。8名忠诚的将军中出现了4人投进攻，4人投撤离的情况。这时候叛徒可能故意给4名投进攻的将领送信表示投票进攻，而给4名投撤离的将领送信表示投撤离。这样一来在4名投进攻的将领看来，投票结果是5人投进攻，从而发起进攻；而在4名投撤离的将军看来则是5人投撤离。这样各支军队的一致协同就遭到了破坏。对于分布式系统来说, 这就是出现了”<strong>脑裂</strong>“的情况。<br>由于将军之间需要通过信使通讯，叛变将军可能通过伪造信件来以其他将军的身份发送假投票。而即使在保证所有将军忠诚的情况下，也不能排除信使被敌人截杀，甚至被敌人间谍替换等情况。因此很难通过保证人员可靠性及通讯可靠性来解决问题。<br>假使那些忠诚（或是没有出错）的将军仍然能通过多数决定来决定他们的战略，便称达到了<strong>拜占庭容错</strong>。</p>
+<h2 id="早期解决方案"><a href="#早期解决方案" class="headerlink" title="早期解决方案"></a>早期解决方案</h2><p>拜占庭容错算法最早的讨论可以追溯到 Leslie Lamport 等人 1982 年 发表的论文《The Byzantine Generals Problem》，之后出现了大量的改进工作，代表性成果包括《Optimal Asynchronous Byzantine Agreement》（1992 年）、《Fully Polynomial Byzantine Agreement for n&gt;3t Processors in t+1 Rounds》（1998 年）等。长期以来，拜占庭问题的解决方案都存在<strong>运行过慢，或复杂度过高</strong>的问题，直到“实用拜占庭容错算法”（Practical Byzantine Fault Tolerance，PBFT） 算法的提出。</p>
+<h2 id="实用拜占庭容错-PBFT"><a href="#实用拜占庭容错-PBFT" class="headerlink" title="实用拜占庭容错(PBFT)"></a>实用拜占庭容错(PBFT)</h2><p>PBFT 算法采用密码学相关技术（RSA 签名算法、消息验证编码和摘要）确保消息传递过程无法被篡改和破坏。<br>算法的基本过程如下：</p>
+<ul>
+<li>首先，通过轮换或随机算法选出某个节点为主节点，此后<strong>只要主节点不切换，则称为一个视图（View）</strong>。</li>
+<li>在某个视图中，客户端将请求 &lt;REQUEST,operation,timestamp,client&gt; 发送给主节点（如果客户端发给从节点，从节点可以转发给主节点），主节点负责广播请求到所有其它从节点并完成共识。</li>
+<li>所有节点处理完成请求，将处理结果 &lt;REPLY,view,timestamp,client,id_node,response&gt; 返回给客户端。客户端检查是否收到了至少 f+1 个来自不同节点的相同结果，作为最终结果。</li>
+</ul>
+<p>主节点广播过程包括三个阶段的处理：预准备（Pre-Prepare）、准备（Prepare）和提交（Commit）。预准备和准备阶段确保在同一个视图内请求发送的顺序正确；准备和提交阶段则确保在不同视图之间的确认请求是保序的。</p>
+<ul>
+<li><strong>预准备阶段</strong>：主节点为从客户端收到的请求分配提案编号，然后发出预准备消息 &lt;&lt;PRE-PREPARE,view,n,digest&gt;,message&gt; 给各从节点，主节点需要对预准备消息进行签名。其中 n 是主节点为这个请求分配的序号，message 是客户端的请求消息，digest 是消息的摘要。这一步的目的是为请求分配序号并通知其他节点，因此可以不包括原始的请求消息，可以通过其他方式将请求同步到从节点。</li>
+<li><strong>准备阶段</strong>：从节点收到预准备消息后，检查消息（包括核对签名、视图、编号）。如消息合法，则向其它节点发送准备消息 &lt;PREPARE,view,n,digest,id&gt;，带上自己的 id 信息，并添加签名。收到准备消息的节点同样对消息进行合法性检查。节点集齐至少 2f+1 个验证过的消息则认为验证通过，把这个准备消息写入本地提交消息日志中。这一步是为了确认大多数节点已经对序号达成共识，本节点已经准备好进行提交了。</li>
+<li><strong>提交阶段</strong>：广播 commit 消息 &lt;COMMIT,v,n,d,id&gt; 并添加自己签名，告诉其它节点某个编号为 n 的提案在视图 v 里已经处于提交状态。如果集齐至少 2f+1 个验证过的 commit 消息，则说明提案被整个系统接受。</li>
+</ul>
+<p>PBFT 算法和 Raft 算法的过程十分类似。区别在于 <strong>PBFT 算法中并不假设主节点一定是可靠的</strong>，因此增加了额外的从节点之间的交互，当发现主节点不可靠时通过重新选举选出新的主节点。<br>具体实现上还包括 checkpoint（同步节点状态和清理本地日志数据）、视图切换（重新选举主节点）等机制，读者可自行参考论文内容，在此不再赘述。<br>拜占庭容错类的算法因为要考虑<strong>最恶意的存在“捣乱”者</strong>的情况，在大规模场景下共识性能往往会受到影响。</p>
+<h2 id="比特币的新思路"><a href="#比特币的新思路" class="headerlink" title="比特币的新思路"></a>比特币的新思路</h2><p>拜占庭问题之所以难解, 主要是因为:</p>
+<ol>
+<li>提案成本过低, 导致同一时间存在多个提案</li>
+<li>最终确认过程易受干扰, 导致大规模场景下确认成本过高</li>
+</ol>
+<p>比特币的创造性在于</p>
+<ol>
+<li>向拜占庭问题引入经济模型, 提高提案成本, 降低同时存在的提案个数</li>
+<li>从最终确认转向概率确认, 即不要求100%达成一致, 而是一直沿着最长链进行拓展, 使最终确认成为概率性的; 当概率确认的概率足够高, 则可等价于最终确认</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/blockchain_guide/04_distributed_system/bft">区块链技术指南</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/BFT/" rel="tag"># BFT</a>
+              <a href="/tags/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%AE%B9%E9%94%99/" rel="tag"># 拜占庭容错</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/" rel="prev" title="Avax介绍">
+      <i class="fa fa-chevron-left"></i> Avax介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" rel="next" title="区块链基本原理">
+      区块链基本原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

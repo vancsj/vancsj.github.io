@@ -1196,7 +1196,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff1411;
+  background: #36ffff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1503,41 +1503,15 @@ pre .javascript .function {
     transform: scale(1.1);
   }
 }
-.back-to-top {
-  font-size: 12px;
-  text-align: center;
-  transition-delay: 0s;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-}
-.back-to-top {
-  background: #222;
-  bottom: -100px;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  left: 30px;
-  opacity: 1;
-  padding: 0 6px;
+.reading-progress-bar {
+  background: #37c6c0;
+  display: block;
+  height: 3px;
+  left: 0;
   position: fixed;
-  transition-property: bottom;
-  z-index: 1300;
-  width: 24px;
-}
-.back-to-top span {
-  display: none;
-}
-.back-to-top:hover {
-  color: #87daff;
-}
-.back-to-top.back-to-top-on {
-  bottom: 19px;
-}
-@media (max-width: 991px) {
-  .back-to-top {
-    left: 20px;
-    opacity: 0.8;
-  }
+  width: 0;
+  z-index: 1500;
+  top: 0;
 }
 .post-body {
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;

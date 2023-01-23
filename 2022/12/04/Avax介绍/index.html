@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简介Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Avax介绍">
+<meta property="og:url" content="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="简介Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-04T09:30:06.000Z">
+<meta property="article:modified_time" content="2022-12-04T09:30:06.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AVAX">
+<meta property="article:tag" content="Avalanche">
+<meta property="article:tag" content="雪崩">
+<meta property="article:tag" content="共识协议">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Avax介绍 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Avax介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-04 17:30:06" itemprop="dateCreated datePublished" datetime="2022-12-04T17:30:06+08:00">2022-12-04</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。<br>其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。<br>X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。</p>
+<span id="more"></span>
+
+<h1 id="历史沿革"><a href="#历史沿革" class="headerlink" title="历史沿革"></a>历史沿革</h1><p>Avalanche于2020年9月由纽约的Ava Labs创立。<br>Ava Labs创始团队的成员包括Kevin Sekniqi、Maofan “Ted” Yin以及Emin Gün Sirer。</p>
+<h1 id="链上运转"><a href="#链上运转" class="headerlink" title="链上运转"></a>链上运转</h1><p>它实际上由三条可互操作的区块链组成：X链、C链与P链。</p>
+<ol>
+<li>交易链（X链）负责AVAX代币及其他数字资产的创建与交易。交易费通过AVAX代币支付，区块链使用Avalanche共识协议，</li>
+<li>在合约链（C链）中，开发者可为DApp创建智能合约。该链实现了以太坊虚拟机(EVM)的一项实例，支持兼容EVM的DApp。合约链使用Snowman共识协议，它是Avalanche共识协议的修改版。</li>
+<li>平台链（P链）协调网络验证者，跟踪子网活动，为创建子网提供支持。P链同样使用Snowman协议。</li>
+</ol>
+<p>Avalanche为每条区块链赋予不同功能，与所有处理操作集中于一条区块链相比，这种方案提升了速度与可扩展性。开发人员根据每条区块链的需求量身定制了共识机制。用户使用AVAX来质押和支付网络手续费，使得生态系统拥有一个共同的可用资产。</p>
+<h1 id="共识协议"><a href="#共识协议" class="headerlink" title="共识协议"></a>共识协议</h1><h4 id="雪崩-Avalanche-共识协议"><a href="#雪崩-Avalanche-共识协议" class="headerlink" title="雪崩(Avalanche)共识协议"></a>雪崩(Avalanche)共识协议</h4><p>工作量证明(PoW)、权益证明(PoS)、委托权益证明(DPoS)等传统共识协议需要领导者促成共识，但雪崩共识协议恰好相反，它使得Avalanche网络兼具高度去中心化与可扩展性。PoW、PoS和DPoS等传统共识协议终将演变成一方处理交易，其他各方验证交易的模式。<br>Avalanche采用经有向无环图(DAG)优化的共识协议。DAG支持网络并行处理交易。验证者抽取其他验证者的样本并确认其是否验证了新交易。经过多轮随机采样，统计数据可以证明，交易造假的可能性近乎为零。<br>所有交易立即得到确认，无需其他任何附加操作。运行验证者节点和验证交易的硬件门槛极低，这将吸引大量参与者，有助于提高性能、去中心化水平以及气候友善。</p>
+<h4 id="雪人-Snowman-共识协议"><a href="#雪人-Snowman-共识协议" class="headerlink" title="雪人(Snowman)共识协议"></a>雪人(Snowman)共识协议</h4><p>雪人共识协议基于雪崩共识协议，不同之处在于，前者使用线性交易验证方式。这种方式在处理智能合约方面尤为有效。与雪崩共识协议相比，雪人共识协议还存在区块创建过程。</p>
+<h1 id="共识协议详情"><a href="#共识协议详情" class="headerlink" title="共识协议详情"></a>共识协议详情</h1><h2 id="共识协议分类"><a href="#共识协议分类" class="headerlink" title="共识协议分类"></a>共识协议分类</h2><ol>
+<li>传统BFT协议</li>
+<li>中本聪共识协议(BTC pow)</li>
+<li>PoS/PoH/雪崩等新协议<h2 id="共识协议举例"><a href="#共识协议举例" class="headerlink" title="共识协议举例"></a>共识协议举例</h2></li>
+<li>Bitcoin – Pow</li>
+<li>Bitcoin-NG – 通过Pow选举一个leader并让他在一段时间内主导记账</li>
+<li>Thunderella – 类似Bitcoin-NG, 并且在可信算力超过3/4时, 允许更快的确认</li>
+<li>ByzCoin – 定期选举一部分节点, 运行PBFT类似的协议进行记账</li>
+<li>PBFT – 基于多数选举的状态复制, 在primary和backup之间广播, 类似两阶段提交协议, pre-prepare -&gt; prepare -&gt; commit; 当多数(超过三分之二)节点达成一致时, 认为完成状态复制 </li>
+<li>PBFT改进 – <h2 id="共识协议的比较维度"><a href="#共识协议的比较维度" class="headerlink" title="共识协议的比较维度"></a>共识协议的比较维度</h2></li>
+<li>latency: 达成共识所需的时间</li>
+<li>吞吐量</li>
+<li>节点容量</li>
+<li>健壮性: 拜占庭节点-可靠性曲线<h2 id="雪崩协议"><a href="#雪崩协议" class="headerlink" title="雪崩协议"></a>雪崩协议</h2></li>
+<li>类拜占庭协议</li>
+<li>容纳更多验证节点</li>
+<li>容忍50%作恶验证者</li>
+<li>核心机制: subsampling</li>
+</ol>
+<h1 id="代币"><a href="#代币" class="headerlink" title="代币"></a>代币</h1><p>AVAX是Avalanche网络的原生代币，总供应量为7.2亿枚。<br>所有在网络上支付的手续费会基于通货紧缩机制加以销毁<br>主要用途：</p>
+<ol>
+<li>质押一定数量的AVAX并成为验证者，或将代币委托给其他验证者。验证者可享受**10%的年收益率(APY)**并向委托人收取一定比例的管理费，具体比例可自行设定。</li>
+<li>AVAX可作为子网的通用单位，有助于提升子网的互操作性。</li>
+<li>AVAX可用于支付交易费用以及子网订阅费。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AVAX/" rel="tag"># AVAX</a>
+              <a href="/tags/Avalanche/" rel="tag"># Avalanche</a>
+              <a href="/tags/%E9%9B%AA%E5%B4%A9/" rel="tag"># 雪崩</a>
+              <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" rel="tag"># 共识协议</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/" rel="prev" title="加密学笔记">
+      <i class="fa fa-chevron-left"></i> 加密学笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/" rel="next" title="BFT算法综述">
+      BFT算法综述 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

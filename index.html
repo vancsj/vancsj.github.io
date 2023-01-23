@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="已所欲，己所从；己所之，己所终">
 <meta property="og:type" content="website">
 <meta property="og:title" content="已所欲，己所从">
-<meta property="og:url" content="http://vancsj.github.io/index.html">
+<meta property="og:url" content="https://vancsj.github.io/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="已所欲，己所从；己所之，己所终">
 <meta property="og:locale" content="zh_CN">
@@ -31,7 +33,7 @@
 <meta property="article:tag" content="Java, 后端开发">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://vancsj.github.io/">
+<link rel="canonical" href="https://vancsj.github.io/">
 
 
 <script id="page-configurations">
@@ -78,7 +80,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -137,10 +139,7 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -154,7 +153,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2023/01/23/%E6%8C%81%E7%BB%AD%E6%BC%94%E8%BF%9B%E7%9A%84CloudNative/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +167,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">正则表达式原理及简单实现</a>
+            <a href="/2023/01/23/%E6%8C%81%E7%BB%AD%E6%BC%94%E8%BF%9B%E7%9A%84CloudNative/" class="post-title-link" itemprop="url">持续演进的CloudNative 读书笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -178,7 +177,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-23 16:15:01" itemprop="dateCreated datePublished" datetime="2022-10-23T16:15:01+08:00">2022-10-23</time>
+              <time title="创建时间：2023-01-23 16:56:08" itemprop="dateCreated datePublished" datetime="2023-01-23T16:56:08+08:00">2023-01-23</time>
             </span>
 
           
@@ -192,10 +191,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>转载自: <a target="_blank" rel="noopener" href="https://houbb.github.io/2020/01/07/regex-and-dfa-02">https://houbb.github.io/2020/01/07/regex-and-dfa-02</a></p>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>软件组织需要考虑技术架构、组织架构（研发流程）和组织文化三个方面。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/#more" rel="contents">
+              <a class="btn" href="/2023/01/23/%E6%8C%81%E7%BB%AD%E6%BC%94%E8%BF%9B%E7%9A%84CloudNative/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -219,7 +218,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2023/01/08/%E5%BC%80%E6%94%BE%E7%A4%BE%E4%BC%9A%E5%8F%8A%E5%85%B6%E6%95%8C%E4%BA%BA%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -233,7 +232,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-title-link" itemprop="url">正则表达式</a>
+            <a href="/2023/01/08/%E5%BC%80%E6%94%BE%E7%A4%BE%E4%BC%9A%E5%8F%8A%E5%85%B6%E6%95%8C%E4%BA%BA%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url"><开放社会及其敌人>笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -243,7 +242,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-23 00:56:37" itemprop="dateCreated datePublished" datetime="2022-10-23T00:56:37+08:00">2022-10-23</time>
+              <time title="创建时间：2023-01-08 10:53:33" itemprop="dateCreated datePublished" datetime="2023-01-08T10:53:33+08:00">2023-01-08</time>
             </span>
 
           
@@ -257,10 +256,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h1><p>捕获组就是把正则表达式中<strong>子表达式</strong>匹配的内容，保存到内存中以<strong>数字编号</strong>或<strong>显式命名</strong>的组里，方便后面引用。<br>当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。</p>
+          <blockquote>
+<p>社会工程师并不关心历史趋势或人类命运。他相信人是历史的主宰，相信<strong>我们可以按照我们的目的来影响或改变人类历史</strong>，就像我们已经改变地球表层一样。<br>他并不相信这些目的是我们的历史背景或历史趋势强加给我们的，而认为这是<strong>我们自己的选择或创造</strong>，就像我们创造新的思想、新的艺术作品、新的房子或新的机器一样。<br>历史主义者则与认为，只有首先判定历史的未来进程，才能有明智的政治行动。<br>然而， 与历史主义者相反，社会工程师认为，政治的科学基础将是完全不同的另一回事儿；它是按照<strong>我们的愿望和目的</strong>来创造和改变各种社会建构所必需的事实知识。<br>这种科学必须告诉我们，比方说，如果我们希望避免经济衰退或出现经济衰退，或者如果我们希望财富分配较为平均或较为不平均，我们就要采取哪些步骤。<br>换言之，社会工程师把社会工艺视为政治的科学基础。<br>（我们将看到，柏拉图把它比作医学的科学背景，） 而历史主义者则与此相反，他们认为<strong>政治的科学基础乃是不可改变的历史趋势</strong>的科学。</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/#more" rel="contents">
+              <a class="btn" href="/2023/01/08/%E5%BC%80%E6%94%BE%E7%A4%BE%E4%BC%9A%E5%8F%8A%E5%85%B6%E6%95%8C%E4%BA%BA%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -284,7 +285,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/25/%E6%88%90%E4%B8%BA%E6%8A%80%E6%9C%AF%E9%A2%86%E5%AF%BC%E8%80%85-%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -298,7 +299,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/" class="post-title-link" itemprop="url">提高正则表达式性能的几点建议</a>
+            <a href="/2022/12/25/%E6%88%90%E4%B8%BA%E6%8A%80%E6%9C%AF%E9%A2%86%E5%AF%BC%E8%80%85-%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url"><成为技术领导者>笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -308,7 +309,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-23 00:40:23" itemprop="dateCreated datePublished" datetime="2022-10-23T00:40:23+08:00">2022-10-23</time>
+              <time title="创建时间：2022-12-25 13:37:13" itemprop="dateCreated datePublished" datetime="2022-12-25T13:37:13+08:00">2022-12-25</time>
             </span>
 
           
@@ -322,10 +323,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>当正则表达式通常与大型数据集相匹配时它们的编写必须高效。</p>
+          <blockquote>
+<p>全面模型的价值在于, 它容许各种各样的人找到复杂环境中共事的基础. 相信此模型的人会在其他人身上发现同样的生活动力/同样的精神基础, 以及个人特质之间的类似联系. 他们不会以统一的标准来衡量所有的人, 所以他们根本不希望锻造完美的人. 这些人多半认为, 领导的职责在于让人实现内心的和谐. </p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/23/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/#more" rel="contents">
+              <a class="btn" href="/2022/12/25/%E6%88%90%E4%B8%BA%E6%8A%80%E6%9C%AF%E9%A2%86%E5%AF%BC%E8%80%85-%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -349,7 +352,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/21/Java%E6%A8%A1%E5%9D%97%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -363,7 +366,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/21/Java%E6%A8%A1%E5%9D%97%E5%8C%96/" class="post-title-link" itemprop="url">Java模块化</a>
+            <a href="/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">区块链基本原理</a>
         </h2>
 
         <div class="post-meta">
@@ -373,7 +376,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-21 11:36:58" itemprop="dateCreated datePublished" datetime="2022-10-21T11:36:58+08:00">2022-10-21</time>
+              <time title="创建时间：2022-12-17 23:40:08" itemprop="dateCreated datePublished" datetime="2022-12-17T23:40:08+08:00">2022-12-17</time>
             </span>
 
           
@@ -387,10 +390,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>关于面向服务架构和模块化、云原生</p>
+          <h2 id="FLP不可能原理"><a href="#FLP不可能原理" class="headerlink" title="FLP不可能原理"></a>FLP不可能原理</h2><p>FLP 不可能原理：<strong>在网络可靠、但允许节点失效（即便只有一个）的最小化异步模型系统中，不存在一个可以解决一致性问题的确定性共识算法</strong>（No completely asynchronous consensus protocol can tolerate even a single unannounced process death）。<br>提出并证明该定理的论文《Impossibility of Distributed Consensus with One Faulty Process》是由 Fischer、Lynch 和 Patterson 三位科学家于 1985 年发表，该论文后来获得了 Dijkstra（就是发明最短路径算法的那位计算机科学家）奖。</p>
+<blockquote>
+<p>FLP 不可能原理告诉我们，不要浪费时间去试图为异步分布式系统设计面向任意场景的共识算法。</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/21/Java%E6%A8%A1%E5%9D%97%E5%8C%96/#more" rel="contents">
+              <a class="btn" href="/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -414,7 +420,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/16/Eth-2-0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -428,7 +434,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/16/Eth-2-0/" class="post-title-link" itemprop="url">Eth 2.0</a>
+            <a href="/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/" class="post-title-link" itemprop="url">BFT算法综述</a>
         </h2>
 
         <div class="post-meta">
@@ -438,7 +444,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-16 23:48:18" itemprop="dateCreated datePublished" datetime="2022-10-16T23:48:18+08:00">2022-10-16</time>
+              <time title="创建时间：2022-12-17 22:50:49" itemprop="dateCreated datePublished" datetime="2022-12-17T22:50:49+08:00">2022-12-17</time>
             </span>
 
           
@@ -452,16 +458,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h1><p>To increase</p>
-<ol>
-<li>speed</li>
-<li>efficiency</li>
-<li>scalability</li>
-</ol>
-<p>of Ethereum network.</p>
+          <h2 id="拜占庭将军问题-Byzantine-Generals-Problem"><a href="#拜占庭将军问题-Byzantine-Generals-Problem" class="headerlink" title="拜占庭将军问题(Byzantine Generals Problem)"></a>拜占庭将军问题(Byzantine Generals Problem)</h2><blockquote>
+<p>一组拜占庭将军分别各率领一支军队共同围困一座城市。为了简化问题，将各支军队的行动策略限定为<strong>进攻</strong>或<strong>撤离</strong>两种。因为部分军队进攻部分军队撤离可能会造成灾难性后果，因此各位将军必须通过投票来达成一致策略，即所有军队一起进攻或所有军队一起撤离。因为各位将军分处城市不同方向，他们只能通过信使互相联系。在投票过程中每位将军都将自己投票给进攻还是撤退的信息通过信使分别通知其他所有将军，这样一来每位将军根据自己的投票和其他所有将军送来的信息就可以知道共同的投票结果而决定行动策略。</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/16/Eth-2-0/#more" rel="contents">
+              <a class="btn" href="/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -485,7 +487,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/16/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -499,7 +501,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/16/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Web服务分层设计模型</a>
+            <a href="/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">Avax介绍</a>
         </h2>
 
         <div class="post-meta">
@@ -509,7 +511,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-16 23:12:40" itemprop="dateCreated datePublished" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+              <time title="创建时间：2022-12-04 17:30:06" itemprop="dateCreated datePublished" datetime="2022-12-04T17:30:06+08:00">2022-12-04</time>
             </span>
 
           
@@ -523,11 +525,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>如何写好代码，是每个程序员都应该去关注的话题。代码不仅仅是给机器执行的，更是给人看的。我们都希望自己的代码写的好看犹如你的外表，但面对复杂业务需求和多人协同时，如果没有一套基本的原则规范，很难确保不迷失方向。本文就如何写好代码的问题，试图整理出一套规范。</p>
-<h3 id="什么是分层设计"><a href="#什么是分层设计" class="headerlink" title="什么是分层设计"></a>什么是分层设计</h3><p>简单的理解就是，把系统的逻辑功能按照某些原则抽象出几个层次，层次内保持高类聚，层次间保持低耦合，整个系统达到概念清晰，边界清晰，最终功能稳定。</p>
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Avalanche致力于在不影响速度或去中心化的前提下提升可扩展性。<br>其核心平台有三条区块链：交易链（X链）、合约链（C链）及平台链（P链）。<br>X链用于创建和交易资产，C链用于创建智能合约，P链用于协调验证者和子网。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/16/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+              <a class="btn" href="/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -551,7 +552,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -565,7 +566,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" class="post-title-link" itemprop="url">MQ消息最终一致性事务</a>
+            <a href="/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">加密学笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -575,16 +576,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-10-16 23:12:40" itemprop="dateCreated datePublished" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式事务</span></a>
-                </span>
+              <time title="创建时间：2022-12-04 00:10:21" itemprop="dateCreated datePublished" datetime="2022-12-04T00:10:21+08:00">2022-12-04</time>
             </span>
 
           
@@ -598,14 +590,69 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
-<h1 id="MQ消息最终一致性事务"><a href="#MQ消息最终一致性事务" class="headerlink" title="MQ消息最终一致性事务"></a>MQ消息最终一致性事务</h1><p>本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。</p>
-<p>对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。</p>
-<p>但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：RocketMQ、RabbitMQ、Kafka、ActiveMQ等），被动方服务从MQ中消费该消息并进行业务处理，从而形成业务上的闭环。</p>
-<p>这种场景下，我们还是希望异步的多个业务操作同时成功，同时失败，基于TCC的同步型事务解决方案就不可行了，这时就需要祭出可靠消息最终一致性方案。</p>
+          <p><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/20/introduction-to-schnorr-signatures-by-suredbits/">Schnorr签名简介</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/22/schnorr-security-part-1-schnorr-id-protocol/">schnorr身份证明协议</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/24/schnorr-security-part-2-from-id-to-signature/">Schnorr从ID到签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/29/schnorr-applications-musig/">Schnorr MuSig</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/02/schnorr-applications-scriptless-scripts/">Schnorr隐形脚本</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/06/schnorr-applications-batch-verification/">Schnorr签名批量验证</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/08/schnorr-applications-threshold-signatures/">Schnorr门限签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/09/schnorr-applications-frost/">Schnorr签名:最优轮次的灵活Schnorr门限签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/12/13/schnorr-applications-blind-signatures/">Schnorr盲签名</a><br><a target="_blank" rel="noopener" href="https://www.btcstudy.org/2021/11/02/the-taproot-upgrade-explainer-from-Suredbits/">Taproot升级详解</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97953640">一文读懂ECDSA算法如何保护数据</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/11/27/GrayScale-Valuing-Ethereum-%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/27/GrayScale-Valuing-Ethereum-%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">GrayScale Valuing Ethereum 笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-27 17:23:54" itemprop="dateCreated datePublished" datetime="2022-11-27T17:23:54+08:00">2022-11-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h1><h3 id="Value-proposition"><a href="#Value-proposition" class="headerlink" title="Value proposition"></a>Value proposition</h3><p>Bitcoin promises a global, verifiable accounting system. This accounting system,<br>supported and secured by the most powerful computing network in the world,<br>allows users to track value with a high degree of confidence.</p>
+<p>Ethereum similarly facilitates verification, but of a wider set of logic and<br>information. In other words, Ethereum’s robust network ensures that<br>applications run according to the logic that is encoded, without the need<br>for third parties or without the possibility of interference. Ethereum creates an<br>environment of trust, which is historically a prerequisite for prosperous trade.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/16/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/#more" rel="contents">
+              <a class="btn" href="/2022/11/27/GrayScale-Valuing-Ethereum-%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -629,7 +676,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/09/18/eth-pos%E6%9C%BA%E5%88%B6/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/11/19/%E5%88%86%E5%B1%82%E6%80%9D%E6%83%B3%E5%9C%A8%E5%9B%A2%E9%98%9F%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -643,7 +690,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/09/18/eth-pos%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">eth pos机制</a>
+            <a href="/2022/11/19/%E5%88%86%E5%B1%82%E6%80%9D%E6%83%B3%E5%9C%A8%E5%9B%A2%E9%98%9F%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">分层思想在团队架构中的应用</a>
         </h2>
 
         <div class="post-meta">
@@ -653,7 +700,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-09-18 20:55:41" itemprop="dateCreated datePublished" datetime="2022-09-18T20:55:41+08:00">2022-09-18</time>
+              <time title="创建时间：2022-11-19 01:37:51" itemprop="dateCreated datePublished" datetime="2022-11-19T01:37:51+08:00">2022-11-19</time>
             </span>
 
           
@@ -667,10 +714,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="why-pos"><a href="#why-pos" class="headerlink" title="why pos"></a>why pos</h1><p>Ethereum switched on its proof-of-stake mechanism in 2022 because it is more secure, less energy-intensive, and better for implementing new scaling solutions compared to the previous proof-of-work architecture.</p>
+          <h1 id="分层思想"><a href="#分层思想" class="headerlink" title="分层思想"></a>分层思想</h1><h3 id="为什么要分层"><a href="#为什么要分层" class="headerlink" title="为什么要分层"></a>为什么要分层</h3><p>分层的根本原因在于, 人类的脑容量是有限的—大约只能同时处理4-5个事物. 因此, 需要通过分层的方式对信息进行打包/抽象, 从而使人脑能够处理更多的信息.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/09/18/eth-pos%E6%9C%BA%E5%88%B6/#more" rel="contents">
+              <a class="btn" href="/2022/11/19/%E5%88%86%E5%B1%82%E6%80%9D%E6%83%B3%E5%9C%A8%E5%9B%A2%E9%98%9F%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -694,7 +741,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/03/27/About-Inventory-Deduction/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/11/13/Web3%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -708,7 +755,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/27/About-Inventory-Deduction/" class="post-title-link" itemprop="url">About Inventory Deduction</a>
+            <a href="/2022/11/13/Web3%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Web3笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -718,7 +765,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-27 22:37:15" itemprop="dateCreated datePublished" datetime="2022-03-27T22:37:15+08:00">2022-03-27</time>
+              <time title="创建时间：2022-11-13 23:47:04" itemprop="dateCreated datePublished" datetime="2022-11-13T23:47:04+08:00">2022-11-13</time>
             </span>
 
           
@@ -732,67 +779,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://vancsj.github.io/2022/03/20/pmd-6-analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/20/pmd-6-analysis/" class="post-title-link" itemprop="url">pmd-6-analysis</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-03-20 16:11:54" itemprop="dateCreated datePublished" datetime="2022-03-20T16:11:54+08:00">2022-03-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h1><h4 id="Parser"><a href="#Parser" class="headerlink" title="Parser:"></a>Parser:</h4><p>PMD uses JavaCC and JJTree to generate source code parser.<br>When parsing java source file with the generated parser, it produces an AST tree with ASTCompilationUnit as root node.<br>See <a target="_blank" rel="noopener" href="https://javacc.github.io/javacc/documentation/jjtree.html">https://javacc.github.io/javacc/documentation/jjtree.html</a>. </p>
+          <h1 id="愿景"><a href="#愿景" class="headerlink" title="愿景"></a>愿景</h1><blockquote>
+<p>We the Cypherpunks are dedicated to building anonymous systems. We are<br>defending our privacy with cryptography, with anonymous mail forwarding<br>systems, with digital signatures, and with electronic money.<br>—— Eric Hughes</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/03/20/pmd-6-analysis/#more" rel="contents">
+              <a class="btn" href="/2022/11/13/Web3%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -815,7 +807,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -858,7 +850,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -900,12 +892,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/muse.js"></script>
