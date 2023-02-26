@@ -212,7 +212,14 @@
 <span id="more"></span>
 
 <p>Open Application Model by 微软&amp;&amp;阿里巴巴<br><a target="_blank" rel="noopener" href="https://github.com/oam-dev/spec">https://github.com/oam-dev/spec</a><br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/02/19/20230219225056.png"></p>
-<p>Pets vs Cattle<br>Pets are <mark>unique and stateful</mark>, Cattle are almost <mark>identical</mark> to each other and <mark>stateless</mark>.<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/02/26/20230226003534.png"></p>
+<p>Pets vs Cattle<br>Pets are <mark>unique and stateful</mark>, Cattle are almost <mark>identical</mark> to each other and <mark>stateless</mark>.<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/02/26/20230226003534.png"><br>Pets</p>
+<blockquote>
+<p>服务器或服务器对，被视为永不停机的必不可少或独特的系统。通常，它们是手动构建、管理和”手喂”。例如包括大型机，独立服务器，HA 负载均衡或者防火墙（双活或者主备），主从（主备）设计的数据库系统等等</p>
+</blockquote>
+<p>Cattle</p>
+<blockquote>
+<p>两个以上服务器的阵列，使用自动化工具构建，专为故障而设计，其中没有一个，两个甚至三个服务器是不可替代的。通常，在故障事件期间不需要人为干预，因为阵列通过重新启动故障服务器或通过三重复制或擦除编码等策略复制数据来展示”绕故障路由”的属性。例如 Web 服务器阵列，多主数据存储（如 Cassandra 集群），以及几乎任何负载均衡和多主机。</p>
+</blockquote>
 <p>关于容器化和K8s</p>
 <blockquote>
 <p>今天，容器化已经成为在开发、测试和生产环境中运行应用程序的标准方式。因此，容器编排已经成为部署过程中不可或缺的一部分。<br>容器在一个独立的实例中运行应用程序及其所有依赖项，类似于 VM，但更轻量。它们与运行它们的主机共享操作系统内核存储和网络。容器可以在持续集成和持续部署过程中，保证操作系统、依赖项和应用程序不变。<br>目前为止，Docker 仍是最流行的容器运行时。当多个容器同时运行时，我们需要编排。可以在单个或少量 docker 服务器上部署许多容器，但管理网络，存储，容器编排，这就是 K8s 发挥作用的地方。<br>K8s 是一种编排解决方案，它<mark>抽象了运行多个容器的复杂性</mark>，甚至是在多个集群中运行这些容器的复杂性。它接管了成百上千个容器的计算、网络和存储，但它依赖这些底层基础设施。</p>
