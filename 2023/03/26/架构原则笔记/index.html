@@ -29,6 +29,9 @@
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="好架构的特点 by Martin  A good architecture allows major decisions to be DEFERRED!A good architecture maximizes the number of decisions NOT made  设计架构时最容易犯得错误就是先关注细节，例如用什么数据库，用什么框架，但是这些都不是最重要的，架构最需要关注的是  系统">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235323.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235454.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235546.png">
 <meta property="article:published_time" content="2023-03-26T15:01:30.000Z">
 <meta property="article:modified_time" content="2023-03-26T15:01:30.000Z">
 <meta property="article:author" content="vancsj">
@@ -36,6 +39,7 @@
 <meta property="article:tag" content="软件架构">
 <meta property="article:tag" content="Clean Arch">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235323.png">
 
 <link rel="canonical" href="https://vancsj.github.io/2023/03/26/%E6%9E%B6%E6%9E%84%E5%8E%9F%E5%88%99%E7%AC%94%E8%AE%B0/">
 
@@ -221,9 +225,11 @@
 <li>无论是长期还是短期，胡乱设计的代码和架构的工作速度其实比用正确的方式更慢; <strong>唯一可以使工作变快的方法是使用正确的方式做事</strong></li>
 <li>为设计良好的架构而斗争. 如果系统越来越难以维护，最终无法修改, 或者靠大量人力修复无止尽的 bug，这说明架构师没有与需求方做足够的抗争，没有完成自己应尽的职责。</li>
 <li>最小表达力原则(Least expressiveness principle)值得遵守: 只有当使用最简洁的方式（常量，查表）不能表达想法时，再去使用图灵完备的编程语言.</li>
-<li>用尽可能简单的形式解决问题, 达成目标, 符合架构的第一性目标.</li>
+<li>用尽可能简单的形式解决问题, 达成目标, 符合架构的第一性原则.</li>
+<li>架构是关于Trade-off的工作, 一切架构皆是选择, 没有银弹.</li>
 </ul>
 <h2 id="如何做好软件架构"><a href="#如何做好软件架构" class="headerlink" title="如何做好软件架构"></a>如何做好软件架构</h2><ul>
+<li>架构师应该关注的方面: 技术 + 业务 + 组织; 技术往往是最容易解决的部分; 技术和组织都服务于业务; 注意康威定律</li>
 <li>一个优秀的架构师应该致力于最大化可选项的数量，细节的决策要越晚做越好; 需要考虑到的角度，开发，部署，运行，维护，保持可选项</li>
 <li>构建和维护系统过程中, 最消耗人力的是系统中的耦合. 降低耦合, 降低复杂度应该成为第一优先考虑的原则.<ul>
 <li>如果有两段看起来重复的代码, 如果他们有不同的变更频率或者缘由, 那么这两段代码并非真正重复</li>
@@ -233,7 +239,17 @@
 </li>
 <li>不要将未来的需求抽象化, 想象中的需求往往不会落地. 但这并不意味着要忽略可预见的预防性建模.</li>
 <li>架构的任务是找到高层策略和底层细节之间的架构边界, 同时保证这些边界遵守依赖关系原则.</li>
+<li>使用多范式编程: 面向过程, 面向对象, 泛型, 函数式编程, DSL. 架构师不应将视野局限于特定的模型, 而总是选择最适合的范式. 范式的选择应遵循最小表达力原则.</li>
 </ul>
+<h2 id="关于复杂性"><a href="#关于复杂性" class="headerlink" title="关于复杂性"></a>关于复杂性</h2><ul>
+<li>复杂性不能被消除, 只能被转移</li>
+</ul>
+<h2 id="关于高效能团队"><a href="#关于高效能团队" class="headerlink" title="关于高效能团队"></a>关于高效能团队</h2><ul>
+<li>团队有四种基本拓扑: 流动式团队, 赋能团队, 复杂子系统团队, 平台团队<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235323.png" alt="团队拓扑"></li>
+<li>团队的三种核心交互模式: 协作, 服务, 促进<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235454.png" alt="团队协作模式"></li>
+<li>团队协作关系<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235546.png" alt="团队协作关系"></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404802625">高效能团队模式</a></p>
 
     </div>
 
