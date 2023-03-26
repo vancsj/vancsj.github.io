@@ -30,6 +30,7 @@
 <meta property="og:description" content="好架构的特点 by Martin  A good architecture allows major decisions to be DEFERRED!A good architecture maximizes the number of decisions NOT made  设计架构时最容易犯得错误就是先关注细节，例如用什么数据库，用什么框架，但是这些都不是最重要的，架构最需要关注的是  系统">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/27/20230327002505.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/27/20230327004556.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235323.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235454.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235546.png">
@@ -228,6 +229,7 @@
 <li>最小表达力原则(Least expressiveness principle)值得遵守: 只有当使用最简洁的方式（常量，查表）不能表达想法时，再去使用图灵完备的编程语言.</li>
 <li>用尽可能简单的形式解决问题, 达成目标, 符合架构的第一性原则.</li>
 <li>架构是关于Trade-off的工作, 一切架构皆是选择, 没有银弹.</li>
+<li>复杂性不能被消除, 只能被转移. </li>
 </ul>
 <h2 id="如何做好软件架构"><a href="#如何做好软件架构" class="headerlink" title="如何做好软件架构"></a>如何做好软件架构</h2><ul>
 <li>架构师应该关注的方面: 技术 + 业务 + 组织; 技术往往是最容易解决的部分; 技术和组织都服务于业务; 注意康威定律</li>
@@ -243,15 +245,16 @@
 <li>使用多范式编程: 面向过程, 面向对象, 泛型, 函数式编程, DSL. 架构师不应将视野局限于特定的模型, 而总是选择最适合的范式. 范式的选择应遵循最小表达力原则.</li>
 </ul>
 <h2 id="关于复杂性"><a href="#关于复杂性" class="headerlink" title="关于复杂性"></a>关于复杂性</h2><ul>
-<li>复杂性不能被消除, 只能被转移</li>
+<li>复杂性不能被消除, 只能被转移. 参考控制论的”必要多样性”概念: 只有复杂性才能处理复杂性. 实际上, 多想想现实世界的各种”不可能三角”.</li>
 <li>复杂性的来源<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/27/20230327002505.png" alt="复杂性的来源"></li>
+<li>不要尝试消除复杂度, 设法学习专业的知识, 以加强你对复杂度的了解<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/27/20230327004556.png" alt="专业知识帮助理解复杂度"></li>
 </ul>
 <h2 id="关于高效能团队"><a href="#关于高效能团队" class="headerlink" title="关于高效能团队"></a>关于高效能团队</h2><ul>
 <li>团队有四种基本拓扑: 流动式团队, 赋能团队, 复杂子系统团队, 平台团队<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235323.png" alt="团队拓扑"></li>
 <li>团队的三种核心交互模式: 协作, 服务, 促进<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235454.png" alt="团队协作模式"></li>
 <li>团队协作关系<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235546.png" alt="团队协作关系"></li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404802625">高效能团队模式</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/9768480646fad92d7218710f0">软件复杂性的来源与应对</a><br><a target="_blank" rel="noopener" href="https://autonomy.design/">代码防腐实用技术</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/138145081">复杂度是不灭的</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/410049005">复杂度是不灭的-1</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/353619030">找到你的服务边界</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266870885">监控报警的哲学</a><br><a target="_blank" rel="noopener" href="https://github.com/Vonng/ddia">设计数据密集型应用</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/68611994/answer/298845862">顿悟和自我突破时刻</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/262242079">最小表达力原则</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/106603532">整洁架构摘要</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42150666">异地多活方案</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/508877002">复用是邪恶的</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dengchaojie/p/7843881.html">依赖和耦合</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Modular_programming">模块化编程</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)#Types_of_cohesion">耦合</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/1b6637ccee22f8abb90a6c966">细说几种内聚的类型</a><br><a target="_blank" rel="noopener" href="https://yanhaijing.com/program/2016/09/01/about-coupling/">图解7种耦合关系</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404802625">高效能团队模式</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/9768480646fad92d7218710f0">软件复杂性的来源与应对</a><br><a target="_blank" rel="noopener" href="https://autonomy.design/">代码防腐实用技术</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/138145081">复杂度是不灭的</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/410049005">复杂度是不灭的-1</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/353619030">找到你的服务边界</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266870885">监控报警的哲学</a><br><a target="_blank" rel="noopener" href="https://github.com/Vonng/ddia">设计数据密集型应用</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/68611994/answer/298845862">顿悟和自我突破时刻</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/262242079">最小表达力原则</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/106603532">整洁架构摘要</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42150666">异地多活方案</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/508877002">复用是邪恶的</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dengchaojie/p/7843881.html">依赖和耦合</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Modular_programming">模块化编程</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)#Types_of_cohesion">耦合</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/1b6637ccee22f8abb90a6c966">细说几种内聚的类型</a><br><a target="_blank" rel="noopener" href="https://yanhaijing.com/program/2016/09/01/about-coupling/">图解7种耦合关系</a><br><a target="_blank" rel="noopener" href="http://pespmc1.vub.ac.be/REQVAR.html">控制论-必要多样性</a></p>
 
     </div>
 
