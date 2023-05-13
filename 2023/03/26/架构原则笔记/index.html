@@ -222,6 +222,7 @@
 <span id="more"></span>
 
 <h2 id="关于架构的一些原则和知识"><a href="#关于架构的一些原则和知识" class="headerlink" title="关于架构的一些原则和知识"></a>关于架构的一些原则和知识</h2><ul>
+<li>架构的三个维度：业务，技术，组织</li>
 <li>(第一性) 架构的设计目标是以最小的人力来构建和维护系统: <strong>最大化程序员的生产力, 同时最小化系统的运营成本</strong></li>
 <li>工程师一般都会过于自信，而且不会偷懒工作。真正偷懒的地方是持续低估那些优秀的良好设计代码和架构的重要性</li>
 <li>无论是长期还是短期，胡乱设计的代码和架构的工作速度其实比用正确的方式更慢; <strong>唯一可以使工作变快的方法是使用正确的方式做事</strong></li>
@@ -255,6 +256,14 @@
 <li>团队的三种核心交互模式: 协作, 服务, 促进<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235454.png" alt="团队协作模式" title="三种核心交互模式"></li>
 <li>团队协作关系<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/03/26/20230326235546.png" alt="团队协作关系" title="团队协作关系"></li>
 </ul>
+<h2 id="关于整洁架构"><a href="#关于整洁架构" class="headerlink" title="关于整洁架构"></a>关于整洁架构</h2><ol>
+<li>结构化编程限制goto， 限制程序控制权的直接转移，实现函数级别隔离</li>
+<li>面向对象编程限制数据访问和函数访问， 限制程序控制权的间接转义，实现对象级别隔离</li>
+<li>函数式编程限制和规范程序中的赋值，实现可变与不可变部分的隔离</li>
+</ol>
+<h2 id="关于SOLID原则"><a href="#关于SOLID原则" class="headerlink" title="关于SOLID原则"></a>关于SOLID原则</h2><ol>
+<li>里氏替换原则：如果父类可以实例化， 则子类在覆写父类函数时， 行为需要与被覆写函数保持一致：前置条件不能被加强、后置条件（输出）不能被削弱、异常情况保持一致（不能抛出父类不会抛出的异常）</li>
+</ol>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404802625">高效能团队模式</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/9768480646fad92d7218710f0">软件复杂性的来源与应对</a><br><a target="_blank" rel="noopener" href="https://autonomy.design/">代码防腐实用技术</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/138145081">复杂度是不灭的</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/410049005">复杂度是不灭的-1</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/353619030">找到你的服务边界</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266870885">监控报警的哲学</a><br><a target="_blank" rel="noopener" href="https://github.com/Vonng/ddia">设计数据密集型应用</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/68611994/answer/298845862">顿悟和自我突破时刻</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/262242079">最小表达力原则</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/106603532">整洁架构摘要</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42150666">异地多活方案</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/508877002">复用是邪恶的</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dengchaojie/p/7843881.html">依赖和耦合</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Modular_programming">模块化编程</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)#Types_of_cohesion">耦合</a><br><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/1b6637ccee22f8abb90a6c966">细说几种内聚的类型</a><br><a target="_blank" rel="noopener" href="https://yanhaijing.com/program/2016/09/01/about-coupling/">图解7种耦合关系</a><br><a target="_blank" rel="noopener" href="http://pespmc1.vub.ac.be/REQVAR.html">控制论-必要多样性</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d127b8afc8cb">变化驱动-正交设计</a></p>
 
     </div>
@@ -279,7 +288,10 @@
     <a href="/2023/03/19/API%E8%AE%BE%E8%AE%A1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" rel="prev" title="API设计最佳实践">
       <i class="fa fa-chevron-left"></i> API设计最佳实践
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/05/13/%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8-%E7%AC%94%E8%AE%B0/" rel="next" title="设计数据密集型应用-笔记">
+      设计数据密集型应用-笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
