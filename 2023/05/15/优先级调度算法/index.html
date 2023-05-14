@@ -22,21 +22,25 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="一个应用被称为 数据密集型 的，如果 数据是其主要挑战（数据量，数据复杂度或数据变化速度）—— 与之相对的是 计算密集型，即处理器速度是其瓶颈。">
+  <meta name="description" content="磁盘IO调度算法–CFQ、NOOP、Deadline、AS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设计数据密集型应用-笔记">
-<meta property="og:url" content="https://vancsj.github.io/2023/05/13/%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8-%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="优先级调度算法">
+<meta property="og:url" content="https://vancsj.github.io/2023/05/15/%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="一个应用被称为 数据密集型 的，如果 数据是其主要挑战（数据量，数据复杂度或数据变化速度）—— 与之相对的是 计算密集型，即处理器速度是其瓶颈。">
+<meta property="og:description" content="磁盘IO调度算法–CFQ、NOOP、Deadline、AS">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-05-13T14:06:07.000Z">
-<meta property="article:modified_time" content="2023-05-13T14:06:07.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/05/15/20230515001053.png">
+<meta property="article:published_time" content="2023-05-14T16:07:39.000Z">
+<meta property="article:modified_time" content="2023-05-14T16:07:39.000Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="架构">
-<meta property="article:tag" content="数据密集">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="IO">
+<meta property="article:tag" content="调度">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/2023/05/15/20230515001053.png">
 
-<link rel="canonical" href="https://vancsj.github.io/2023/05/13/%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8-%E7%AC%94%E8%AE%B0/">
+<link rel="canonical" href="https://vancsj.github.io/2023/05/15/%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -49,7 +53,7 @@
   };
 </script>
 
-  <title>设计数据密集型应用-笔记 | 已所欲，己所从</title>
+  <title>优先级调度算法 | 已所欲，己所从</title>
   
 
 
@@ -157,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2023/05/13/%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8-%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2023/05/15/%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -170,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          设计数据密集型应用-笔记
+          优先级调度算法
         </h1>
 
         <div class="post-meta">
@@ -180,7 +184,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-05-13 22:06:07" itemprop="dateCreated datePublished" datetime="2023-05-13T22:06:07+08:00">2023-05-13</time>
+              <time title="创建时间：2023-05-15 00:07:39" itemprop="dateCreated datePublished" datetime="2023-05-15T00:07:39+08:00">2023-05-15</time>
             </span>
 
           
@@ -201,29 +205,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>一个应用被称为 数据密集型 的，如果 数据是其主要挑战（数据量，数据复杂度或数据变化速度）—— 与之相对的是 计算密集型，即处理器速度是其瓶颈。</p>
-</blockquote>
+        <p>磁盘IO调度算法–CFQ、NOOP、Deadline、AS</p>
 <span id="more"></span>
-<p>关于可演化性：拥抱变化</p>
-<blockquote>
-<p>系统的需求永远不变，基本是不可能的。更可能的情况是，它们处于常态的变化中，例如：你了解了新的事实、出现意想不到的应用场景、业务优先级发生变化、用户要求新功能、新平台取代旧平台、法律或监管要求发生变化、系统增长迫使架构变化等。</p>
-</blockquote>
-<blockquote>
-<p>良好的可操作性意味着对系统的健康状态具有良好的可见性，并拥有有效的管理手段。</p>
-</blockquote>
-<p>关于规范化</p>
-<blockquote>
-<p>使用 ID 的好处是，ID 对人类没有任何意义，因而永远不需要改变：ID 可以保持不变，即使它标识的信息发生变化。任何对人类有意义的东西都可能需要在将来某个时候改变 —— 如果这些信息被复制，所有的冗余副本都需要更新。这会导致写入开销，也存在不一致的风险（一些副本被更新了，还有些副本没有被更新）。去除此类重复是数据库 规范化（normalization） 的关键思想。</p>
-</blockquote>
-<p>关于数据模式</p>
-<blockquote>
-<p>文档数据库有时称为 无模式（schemaless），但这具有误导性，因为读取数据的代码通常假定某种结构 —— 即存在隐式模式，但不由数据库强制执行。一个更精确的术语是 读时模式（即 schema-on-read，数据的结构是隐含的，只有在数据被读取时才被解释），相应的是 写时模式（即 schema-on-write，传统的关系数据库方法中，模式明确，且数据库确保所有的数据都符合其模式）<br>读时模式类似于编程语言中的动态（运行时）类型检查，而写时模式类似于静态（编译时）类型检查。就像静态和动态类型检查的相对优点具有很大的争议性一样，数据库中模式的强制性是一个具有争议的话题，一般来说没有正确或错误的答案。</p>
-</blockquote>
-<p>关于数据局部性</p>
-<blockquote>
-<p>值得指出的是，为了局部性而分组集合相关数据的想法并不局限于文档模型。例如，Google 的 Spanner 数据库在关系数据模型中提供了同样的局部性属性，允许模式声明一个表的行应该交错（嵌套）在父表内【27】。Oracle 类似地允许使用一个称为 多表索引集群表（multi-table index cluster tables） 的类似特性【28】。Bigtable 数据模型（用于 Cassandra 和 HBase）中的 列族（column-family） 概念与管理局部性的目的类似【29】。</p>
-</blockquote>
+
+<h1 id="I-O调度算法"><a href="#I-O调度算法" class="headerlink" title="I/O调度算法"></a>I/O调度算法</h1><p>I/O 调度算法在各个进程竞争磁盘I/O的时候担当了裁判的角色。他要求请求的次序和时机做最优化的处理，以求得尽可能最好的整体I/O性能。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2023/05/15/20230515001053.png" alt="Linux 4.0 IO协议栈框架图"></p>
+<p>I/O调度程序的总结:<br>1)当向设备写入数据块或是从设备读出数据块时,请求都被安置在一个队列中等待完成.<br>2)每个块设备都有它自己的队列.<br>3)I/O调度程序负责维护这些队列的顺序,以更有效地利用介质.I/O调度程序将无序的I/O操作变为有序的I/O操作.<br>4)内核必须首先确定队列中一共有多少个请求,然后才开始进行调度.</p>
+<h1 id="I-O调度的四种算法"><a href="#I-O调度的四种算法" class="headerlink" title="I/O调度的四种算法"></a>I/O调度的四种算法</h1><h2 id="CFQ-完全公平排队I-O调度程序"><a href="#CFQ-完全公平排队I-O调度程序" class="headerlink" title="CFQ(完全公平排队I/O调度程序)"></a>CFQ(完全公平排队I/O调度程序)</h2><p>在最新的内核版本和发行版中,都选择CFQ做为默认的I/O调度器,对于通用的服务器也是最好的选择。CFQ对于多媒体应用(video,audio)和桌面系统是最好的选择。CFQ赋予I/O请求一个优先级，而I/O优先级请求独立于进程优先级，高优先级的进程的读写不能自动地继承高的I/O优先级。<br>对于很多IO压力较大的场景就并不是很适应，尤其是IO压力集中在某些进程上的场景。因为这种场景我们需要更多的满足某个或者某几个进程的IO响应速度，而不是让所有的进程公平的使用IO，比如数据库应用。<br>CFQ试图均匀地分布对I/O带宽的访问,避免进程被饿死并实现较低的延迟,是deadline和as调度器的折中.<br><strong>工作原理:</strong><br>CFQ为每个进程/线程,单独创建一个队列来管理该进程所产生的请求,也就是说每个进程一个队列,每个队列按照上述规则进行merge和sort。各队列之间的调度使用时间片来调度,以此来保证每个进程都能被很好的分配到I/O带宽.I/O调度器每次执行一个进程的4次请求。可以调 queued 和 quantum 来优化</p>
+<h2 id="NOOP-电梯式调度程序"><a href="#NOOP-电梯式调度程序" class="headerlink" title="NOOP(电梯式调度程序)"></a>NOOP(电梯式调度程序)</h2><p>在Linux2.4或更早的版本的调度程序,那时只有这一种I/O调度算法.I/O请求被分配到队列，调度由硬件进行，只有当CPU时钟频率比较有限时进行。<br>Noop对于I/O不那么操心，对所有的I/O请求都用FIFO队列形式处理，默认认为 I/O不会存在性能问题。这也使得CPU也不用那么操心。它像电梯的工作主法一样对I/O请求进行组织,当有一个新的请求到来时,它将请求合并到最近的请求之后,以此来保证请求同一介质.<br>NOOP倾向饿死读而利于写.<br>NOOP对于闪存设备,RAM,嵌入式系统是最好的选择.<br><strong>电梯算法饿死读请求的解释:</strong><br>因为写请求比读请求更容易.写请求通过文件系统cache,不需要等一次写完成,就可以开始下一次写操作,写请求通过合并,堆积到I/O队列中.读请求需要等到它前面所有的读操作完成,才能进行下一次读操作.在读操作之间有几毫秒时间,而写请求在这之间就到来,饿死了后面的读请求.</p>
+<h2 id="Deadline-截止时间调度程序"><a href="#Deadline-截止时间调度程序" class="headerlink" title="Deadline(截止时间调度程序)"></a>Deadline(截止时间调度程序)</h2><p>通过时间以及硬盘区域进行分类,这个分类和合并要求类似于noop的调度程序.<br>Deadline确保了在一个截止时间内服务请求,这个截止时间是可调整的,而默认读期限短于写期限.这样就防止了写操作因为不能被读取而饿死的现象.<br>Deadline对数据库环境(ORACLE RAC,MYSQL等)是最好的选择。<br>deadline实现了四个队列，其中两个分别处理正常read和write，按扇区号排序，进行正常io的合并处理以提高吞吐量.因为IO请求可能会集中在某些磁盘位置，这样会导致新来的请求一直被合并，于是可能会有其他磁盘位置的io请求被饿死。于是实现了另外两个处理超时read和write的队列，按请求创建时间排序，如果有超时的请求出现，就放进这两个队列，调度算法保证超时(达到最终期限时间)的队列中的请求会优先被处理，防止请求被饿死。由于deadline的特点，无疑在这里无法区分进程，也就不能实现针对进程的io资源控制。</p>
+<h2 id="AS-预料I-O调度程序"><a href="#AS-预料I-O调度程序" class="headerlink" title="AS(预料I/O调度程序)"></a>AS(预料I/O调度程序)</h2><p>本质上与Deadline一样,但在最后一次读操作后,要等待6ms,才能继续进行对其它I/O请求进行调度.可以从应用程序中预订一个新的读请求,改进读操作的执行,但以一些写操作为代价.它会在每个6ms中插入新的I/O操作,而会将一些小写入流合并成一个大写入流,用写入延时换取最大的写入吞吐量.<br>AS适合于写入较多的环境,比如文件服务器，AS对数据库环境表现很差.</p>
 
     </div>
 
@@ -233,8 +223,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"># 架构</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86/" rel="tag"># 数据密集</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/tags/IO/" rel="tag"># IO</a>
+              <a href="/tags/%E8%B0%83%E5%BA%A6/" rel="tag"># 调度</a>
           </div>
 
         
@@ -243,13 +235,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/03/26/%E6%9E%B6%E6%9E%84%E5%8E%9F%E5%88%99%E7%AC%94%E8%AE%B0/" rel="prev" title="架构原则笔记">
-      <i class="fa fa-chevron-left"></i> 架构原则笔记
+    <a href="/2023/05/13/%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8-%E7%AC%94%E8%AE%B0/" rel="prev" title="设计数据密集型应用-笔记">
+      <i class="fa fa-chevron-left"></i> 设计数据密集型应用-笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/05/15/%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/" rel="next" title="优先级调度算法">
-      优先级调度算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
