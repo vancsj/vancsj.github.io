@@ -22,18 +22,21 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="已所欲，己所从；己所之，己所终">
-<meta property="og:type" content="website">
-<meta property="og:title" content="已所欲，己所从">
-<meta property="og:url" content="https://vancsj.github.io/archives/2022/12/index.html">
+  <meta name="description" content="图环路检测的几种方法  拓扑排序 White-Gray-Black染色DFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法相关">
+<meta property="og:url" content="https://vancsj.github.io/2023/06/11/%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="已所欲，己所从；己所之，己所终">
+<meta property="og:description" content="图环路检测的几种方法  拓扑排序 White-Gray-Black染色DFS">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-06-11T14:56:01.000Z">
+<meta property="article:modified_time" content="2023-06-11T14:56:01.000Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="Java, 后端开发">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://vancsj.github.io/archives/2022/12/">
+<link rel="canonical" href="https://vancsj.github.io/2023/06/11/%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3/">
 
 
 <script id="page-configurations">
@@ -41,12 +44,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | 已所欲，己所从</title>
+  <title>算法相关 | 已所欲，己所从</title>
   
 
 
@@ -147,131 +150,94 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        
-        <span class="collection-header">不错! 目前共计 62 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2023/06/11/%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法相关
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-11 22:56:01" itemprop="dateCreated datePublished" datetime="2023-06-11T22:56:01+08:00">2023-06-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
-    </div>
+        <h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><p>环路检测的几种方法</p>
+<ol>
+<li>拓扑排序</li>
+<li>White-Gray-Black染色DFS</li>
+</ol>
+<span id="more"></span>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-25T13:37:13+08:00"
-              content="2022-12-25">
-          12-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/25/%E6%88%90%E4%B8%BA%E6%8A%80%E6%9C%AF%E9%A2%86%E5%AF%BC%E8%80%85-%E7%AC%94%E8%AE%B0/" itemprop="url">
-            <span itemprop="name"><成为技术领导者>笔记</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-17T23:40:08+08:00"
-              content="2022-12-17">
-          12-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/17/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" itemprop="url">
-            <span itemprop="name">区块链基本原理</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-17T22:50:49+08:00"
-              content="2022-12-17">
-          12-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/17/BFT%E7%AE%97%E6%B3%95%E7%BB%BC%E8%BF%B0/" itemprop="url">
-            <span itemprop="name">BFT算法综述</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-04T17:30:06+08:00"
-              content="2022-12-04">
-          12-04
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/04/Avax%E4%BB%8B%E7%BB%8D/" itemprop="url">
-            <span itemprop="name">Avax介绍</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-12-04T00:10:21+08:00"
-              content="2022-12-04">
-          12-04
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/12/04/%E5%8A%A0%E5%AF%86%E5%AD%A6%E7%AC%94%E8%AE%B0/" itemprop="url">
-            <span itemprop="name">加密学笔记</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><p>环路检测: 快慢指针; 总是在入环点相遇; 慢指针最多一圈</p>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/15/%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/" rel="prev" title="优先级调度算法">
+      <i class="fa fa-chevron-left"></i> 优先级调度算法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
