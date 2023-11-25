@@ -197,108 +197,14 @@
 <li>删除一个字符</li>
 <li>替换一个字符</li>
 </ul>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>以horse转换成ros为例, 很多题解会使用下面这个表格</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>‘’</th>
-<th>r</th>
-<th>o</th>
-<th>s</th>
-<th>行号</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>‘’</td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>1</td>
-</tr>
-<tr>
-<td>h</td>
-<td>1</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>2</td>
-</tr>
-<tr>
-<td>o</td>
-<td>2</td>
-<td>2</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>r</td>
-<td>3</td>
-<td>2</td>
-<td>2</td>
-<td>2</td>
-<td>4</td>
-</tr>
-<tr>
-<td>s</td>
-<td>4</td>
-<td>3</td>
-<td>3</td>
-<td>2</td>
-<td>5</td>
-</tr>
-<tr>
-<td>e</td>
-<td>5</td>
-<td>4</td>
-<td>4</td>
-<td>3</td>
-<td>6</td>
-</tr>
-<tr>
-<td>列号</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td>-</td>
-</tr>
-</tbody></table>
-<p>这个表格的含义如下:</p>
-<blockquote>
-<p>第一行第一列, 表示空字符串到空字符串的编辑距离是0</p>
-<p>第一行第二列, 表示空字符串到r的编辑距离为1</p>
-<p>第一行第二列, 表示空字符串到ro的编辑距离为2 </p>
-<p>以此类推</p>
-<p>最终结果就是右下角单元格的值</p>
-</blockquote>
-<p>每个单元格的取值计算逻辑是考虑该单元格左/上/左上的单元格的值</p>
-<p>如果当前单元格对应的word1和word2字符相同, 则</p>
-<blockquote>
-<p>f(当前单元格)=min(f(左)+1, f(上)+1, f(左上))</p>
-</blockquote>
-<p>否则</p>
-<blockquote>
-<p>f(当前单元格)=min(f(左)+1, f(上)+1, f(左上)+1)</p>
-</blockquote>
-<p>其中如果从左边单元格到达当前单元格, 代表一个插入操作</p>
-<p>如果从上边单元格到达当前单元格, 代表一个删除操作</p>
-<p>如果从左上单元格到达当前单元格, 代表替换或者无操作(如果刚好字符相同)</p>
-<p>然而如何证明这个算法是完备的? 即它考虑了所有可能的情况并得到了最优结果?</p>
-<blockquote>
-<p>考虑horse -&gt; ros的情况</p>
-<p>对于ros的最后一个字符s, 它出现在这个位置可能是因为下面几种情况</p>
-<ol>
-<li>本来就在这里</li>
-<li>把本来在这里的字符替换成s</li>
-<li>在末尾插入一个字符s</li>
-<li>它不动, 删除后面的字符<br>其中1 和 2对应从单元格左上到达的两种情况<br>3对应从左边单元格到达的情况<br>4对应从上面单元格到达的情况</li>
-</ol>
-</blockquote>
-<p>因此前述的推理已经覆盖了所有情况, 所得到的就是最优解</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/11/25/%E5%8A%9B%E6%89%A372-%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
