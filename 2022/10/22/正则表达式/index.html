@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="https://vancsj.github.io/2022/10/22/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="捕获组捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023012421.png">
+<meta property="article:published_time" content="2022-10-22T16:56:37.000Z">
+<meta property="article:modified_time" content="2022-10-22T16:56:37.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023012421.png">
+
+<link rel="canonical" href="https://vancsj.github.io/2022/10/22/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>正则表达式 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2022/10/22/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          正则表达式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-23 00:56:37" itemprop="dateCreated datePublished" datetime="2022-10-23T00:56:37+08:00">2022-10-23</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h1><p>捕获组就是把正则表达式中<strong>子表达式</strong>匹配的内容，保存到内存中以<strong>数字编号</strong>或<strong>显式命名</strong>的组里，方便后面引用。<br>当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。</p>
+<span id="more"></span>
+
+<h2 id="捕获组的编号规则"><a href="#捕获组的编号规则" class="headerlink" title="捕获组的编号规则"></a>捕获组的编号规则</h2><p>编号规则指的是以数字为捕获组进行编号的规则，在普通捕获组或命名捕获组单独出现的正则表达式中，编号规则比较清晰，在普通捕获组与命名捕获组混合出现的正则表达式中，捕获组的编号规则稍显复杂。</p>
+<p>在展开讨论之前，需要说明的是，<strong>编号为0的捕获组，指的是正则表达式整体</strong>，这一规则在支持捕获组的语言中，基本上都是适用的。下面对其它编号规则逐一展开讨论。</p>
+<h3 id="普通捕获组编号规则"><a href="#普通捕获组编号规则" class="headerlink" title="普通捕获组编号规则"></a>普通捕获组编号规则</h3><p>如果没有显式为捕获组命名，即没有使用命名捕获组，那么需要按数字顺序来访问所有捕获组。在只有普通捕获组的情况下，捕获组的编号是按照“(”出现的顺序，从左到右，从1开始进行编号的 。</p>
+<p>正则表达式：(\d{4})-(\d{2}-(\d\d))<br>上面的正则表达式可以用来匹配格式为yyyy-MM-dd的日期，为了在下表中得以区分，月和日分别采用了\d{2}和\d\d这两种写法。<br>用以上正则表达式匹配字符串：2008-12-31，匹配结果为：<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023012421.png"></p>
+<h1 id="捕获组引用"><a href="#捕获组引用" class="headerlink" title="捕获组引用"></a>捕获组引用</h1><p>对捕获组的引用一般有以下几种：</p>
+<ul>
+<li>正则表达式中，对前面捕获组捕获的内容进行引用，称为反向引用；</li>
+<li>正则表达式中，(?(name)yes|no)的条件判断结构；</li>
+<li>在程序中，对捕获组捕获内容的引用。</li>
+</ul>
+<h2 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h2><p>捕获组捕获到的内容，不仅可以在正则表达式外部通过程序进行引用，也可以在正则表达式内部进行引用，这种引用方式就是反向引用。<br>反向引用的作用通常是用来查找或限定重复，限定指定标识配对出现等等。<br>对于普通捕获组和命名捕获组的引用，语法如下：<br>普通捕获组反向引用：\k<number>，通常简写为\number<br>命名捕获组反向引用：\k<name>或者\k’name’<br>普通捕获组反向引用中number是十进制的数字，即捕获组的编号；命名捕获组反向引用中的name为命名捕获组的组名。</p>
+<h3 id="反向引用匹配原理"><a href="#反向引用匹配原理" class="headerlink" title="反向引用匹配原理"></a>反向引用匹配原理</h3><p>捕获组(Expression)在匹配成功时，会将子表达式匹配到的内容，保存到内存中一个以数字编号的组里，可以简单的认为是对一个局部变量进行了赋值，这时就可以通过反向引用方式，引用这个局部变量的值。一个捕获组(Expression)在匹配成功之前，它的内容可以是不确定的，一旦匹配成功，它的内容就确定了，反向引用的内容也就是确定的了。<br>反向引用必然要与捕获组一同使用的，如果没有捕获组，而使用了反向引用的语法，不同语言的处理方式不一致，有的语言会抛异常，有的语言会当作普通的转义处理。</p>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p>源字符串：abcdebbcde<br>正则表达式：([ab])\1</p>
+<p>对于正则表达式“([ab])\1”，捕获组中的子表达式“[ab]”虽然可以匹配“a”或者“b”，但是捕获组一旦匹配成功，反向引用的内容也就确定了。如果捕获组匹配到“a”，那么反向引用也就只能匹配“a”，同理，如果捕获组匹配到的是“b”，那么反向引用也就只能匹配“b”。由于后面反向引用“\1”的限制，要求必须是两个相同的字符，在这里也就是“aa”或者“bb”才能匹配成功。</p>
+<p>考察一下这个正则表达式的匹配过程，在位置0处，由“([ab])”匹配“a”成功，将捕获的内容保存在编号为1的组中，然后把控制权交给“\1”，由于此时捕获组已记录了捕获内容为“a”，“\1”也就确定只有匹配到“a”才能匹配成功，这里显然不满足，“\1”匹配失败，由于没有可供回溯的状态，整个表达式在位置0处匹配失败。</p>
+<p>正则引擎向前传动，在位置5之前，“([ab])”一直匹配失败。传动到位置5处时，，“([ab])”匹配到“b”，匹配成功，将捕获的内容保存在编号为1的组中，然后把控制权交给“\1”，由于此时捕获组已记录了捕获内容为“b”，“\1”也就确定只有匹配到“b”才能匹配成功，满足条件，“\1”匹配成功，整个表达式匹配成功，匹配结果为“bb”，匹配开始位置为5，结束位置为7。</p>
+<p>扩展一下，正则表达式“([a-z])\1{2}”也就表达连续三个相同的小写字母。</p>
+<p>:joy:</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/22/%E6%8F%90%E9%AB%98%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%80%A7%E8%83%BD%E7%9A%84%E5%87%A0%E7%82%B9%E5%BB%BA%E8%AE%AE/" rel="prev" title="提高正则表达式性能的几点建议">
+      <i class="fa fa-chevron-left"></i> 提高正则表达式性能的几点建议
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/23/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%9F%E7%90%86%E5%8F%8A%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/" rel="next" title="正则表达式原理及简单实现">
+      正则表达式原理及简单实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
