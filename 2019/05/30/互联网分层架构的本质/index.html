@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOxsH4QG9XwyWxE8PIogeSocFC33qscL7RYlwshZfZm0Rj7iaQazlOroD63zw0S2USUibrQTLShJHe7g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="https://mp.weixin.qq.com/data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==">
 <meta property="article:published_time" content="2019-05-30T07:43:06.000Z">
-<meta property="article:modified_time" content="2022-10-16T15:12:40.972Z">
+<meta property="article:modified_time" content="2025-03-03T22:48:52.939Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="架构">
 <meta property="article:tag" content="微服务">
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+                <time title="修改时间：2025-03-04 06:48:52" itemprop="dateModified" datetime="2025-03-04T06:48:52+08:00">2025-03-04</time>
               </span>
 
           
@@ -217,109 +217,79 @@
 <p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个<strong>“数据移动”</strong>，然后<strong>“被处理”</strong>和<strong>“被呈现”</strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中<strong>数据移动是整个过程的核心</strong>。</p>
 <span id="more"></span>
 
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115161004.webp"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115161004.webp" alt="典型的互联网分层架构"></p>
 <p>上图是一个典型的互联网分层架构：</p>
 <ul>
-<li><p>  <strong>客户端层</strong>：典型调用方是browser或者APP</p>
-</li>
-<li><p>  <strong>站点应用层</strong>：实现核心业务逻辑，从下游获取数据，对上游返回html或者json</p>
-</li>
-<li><p>  <strong>数据-缓存层</strong>：加速访问存储</p>
-</li>
-<li><p>  <strong>数据-数据库层</strong>：固化数据存储</p>
-</li>
+<li><strong>客户端层</strong>：典型调用方是browser或者APP</li>
+<li><strong>站点应用层</strong>：实现核心业务逻辑，从下游获取数据，对上游返回html或者json</li>
+<li><strong>数据-缓存层</strong>：加速访问存储</li>
+<li><strong>数据-数据库层</strong>：固化数据存储</li>
 </ul>
 <p>如果实施了服务化，这个分层架构图可能是这样：</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115161010.png"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115161010.png" alt="服务化后的分层架构"></p>
 <p>中间多了一个<strong>服务层</strong>。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOxsH4QG9XwyWxE8PIogeSocFC33qscL7RYlwshZfZm0Rj7iaQazlOroD63zw0S2USUibrQTLShJHe7g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOxsH4QG9XwyWxE8PIogeSocFC33qscL7RYlwshZfZm0Rj7iaQazlOroD63zw0S2USUibrQTLShJHe7g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="服务层示意图"></p>
 <p><strong>同一个层次的内部</strong>，例如端上的APP，以及web-server，也都有进行MVC分层：</p>
 <ul>
-<li><p>  <strong>view层</strong>：展现</p>
-</li>
-<li><p>  <strong>control层</strong>：逻辑</p>
-</li>
-<li><p>  <strong>model层</strong>：数据</p>
-</li>
+<li><strong>view层</strong>：展现</li>
+<li><strong>control层</strong>：逻辑</li>
+<li><strong>model层</strong>：数据</li>
 </ul>
 <p>可以看到，每个工程师骨子里，都潜移默化的实施着分层架构。</p>
 <p><strong>那么，互联网分层架构的本质究竟是什么呢？</strong></p>
 <p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个<strong>“数据移动”</strong>，然后<strong>“被处理”</strong>和<strong>“被呈现”</strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中<strong>数据移动是整个过程的核心</strong>。</p>
-<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="></p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="数据移动示意图"></p>
 <p>如上图所示：</p>
 <p>数据处理和呈现要CPU计算，<strong>CPU是固定不动的</strong>：</p>
 <ul>
-<li><p>  db/service/web-server都部署在固定的集群上</p>
-</li>
-<li><p>  端上，不管是browser还是APP，也有固定的CPU处理</p>
-</li>
+<li>db/service/web-server都部署在固定的集群上</li>
+<li>端上，不管是browser还是APP，也有固定的CPU处理</li>
 </ul>
 <p><strong>数据是移动的</strong>：</p>
 <ul>
-<li><p>  跨进程移动：数据从数据库和缓存里，转移到service层，到web-server层，到client层</p>
-</li>
-<li><p>  同进程移动：数据从model层，转移到control层，转移到view层</p>
-</li>
+<li>跨进程移动：数据从数据库和缓存里，转移到service层，到web-server层，到client层</li>
+<li>同进程移动：数据从model层，转移到control层，转移到view层</li>
 </ul>
-<p><img src="https://mp.weixin.qq.com/data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="></p>
+<p><img src="https://mp.weixin.qq.com/data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="数据移动示意图"></p>
 <p>数据要移动，所以有两个东西很重要：</p>
 <ul>
-<li><p>  数据传输的格式</p>
-</li>
-<li><p>  数据在各层次的形态</p>
-</li>
+<li>数据传输的格式</li>
+<li>数据在各层次的形态</li>
 </ul>
 <p>先看<strong>数据传输的格式</strong>，即协议很重要：</p>
 <ul>
-<li><p>  service与db/cache之间，二进制协议/文本协议是数据传输的载体</p>
-</li>
-<li><p>  web-server与service之间，RPC的二进制协议是数据传输的载体</p>
-</li>
-<li><p>  client和web-server之间，http协议是数据传输的载体</p>
-</li>
+<li>service与db/cache之间，二进制协议/文本协议是数据传输的载体</li>
+<li>web-server与service之间，RPC的二进制协议是数据传输的载体</li>
+<li>client和web-server之间，http协议是数据传输的载体</li>
 </ul>
 <p>再看<strong>数据在各层次的形态</strong>，以用户数据为例：</p>
 <ul>
-<li><p>  db层，数据是以“行”为单位存在的row(uid, name, age)</p>
-</li>
-<li><p>  cache层，数据是以kv的形式存在的kv(uid -&gt; User)</p>
-</li>
-<li><p>  service层，会把row或者kv转化为对程序友好的User对象</p>
-</li>
-<li><p>  web-server层，会把对程序友好的User对象转化为对http友好的json对象</p>
-</li>
-<li><p>  client层：最终端上拿到的是json对象</p>
-</li>
+<li>db层，数据是以“行”为单位存在的row(uid, name, age)</li>
+<li>cache层，数据是以kv的形式存在的kv(uid -&gt; User)</li>
+<li>service层，会把row或者kv转化为对程序友好的User对象</li>
+<li>web-server层，会把对程序友好的User对象转化为对http友好的json对象</li>
+<li>client层：最终端上拿到的是json对象</li>
 </ul>
 <p><strong>结论：互联网分层架构的本质，是数据的移动。</strong></p>
 <p>为什么要说这个，这将会引出“分层架构演进”的核心原则与方法：</p>
 <ul>
-<li><p>  让上游更高效的获取与处理数据，<strong>复用</strong></p>
-</li>
-<li><p>  让下游能屏蔽数据的获取细节，<strong>封装</strong></p>
-</li>
+<li>让上游更高效的获取与处理数据，<strong>复用</strong></li>
+<li>让下游能屏蔽数据的获取细节，<strong>封装</strong></li>
 </ul>
 <p>弄清楚这个原则与方法，再加上一些经验积累，就能回答网友经常在评论中提出的这些问题了：</p>
 <ul>
-<li><p>  是否需要引入DAO层，什么时机引入</p>
-</li>
-<li><p>  是否需要服务化，什么时机服务化</p>
-</li>
-<li><p>  是否需要抽取通用中台业务，什么时机抽取</p>
-</li>
-<li><p>  是否需要前后端分离，什么时机分离</p>
-</li>
+<li>是否需要引入DAO层，什么时机引入</li>
+<li>是否需要服务化，什么时机服务化</li>
+<li>是否需要抽取通用中台业务，什么时机抽取</li>
+<li>是否需要前后端分离，什么时机分离</li>
 </ul>
 <p>（网友们的这些提问，其实很难回答。在不了解业务发展阶段，业务规模，数据量并发量的情况下，妄下YES或NO的结论，本身就是不负责任的。）</p>
 <p>更具体的分层架构演进细节，下一篇和大家细究。</p>
 <p><strong>总结</strong></p>
 <ul>
-<li><p>  <strong>互联网分层架构的本质</strong>，是数据的移动</p>
-</li>
-<li><p>  互联网分层架构中，数据的传输格式（协议）与数据在各层次的形态很重要</p>
-</li>
-<li><p>  互联网分层架构演进的核心原则与方法：封装与复用</p>
-</li>
+<li><strong>互联网分层架构的本质</strong>，是数据的移动</li>
+<li>互联网分层架构中，数据的传输格式（协议）与数据在各层次的形态很重要</li>
+<li>互联网分层架构演进的核心原则与方法：封装与复用</li>
 </ul>
 <p><strong>思考</strong></p>
 <p>哪一个系统的架构，<strong>不是</strong>“固定CPU，移动数据”，<strong>而是</strong>“固定数据，移动CPU”呢？</p>
