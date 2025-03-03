@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144558.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144606.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144615.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144629.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144639.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144639.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144647.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144654.jpg">
@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144712.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328144721.jpg">
 <meta property="article:published_time" content="2021-03-28T06:43:25.000Z">
-<meta property="article:modified_time" content="2022-10-16T15:12:40.969Z">
+<meta property="article:modified_time" content="2025-03-03T21:36:05.621Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="架构">
 <meta property="article:tag" content="DDD">
@@ -206,7 +206,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+                <time title="修改时间：2025-03-04 05:36:05" itemprop="dateModified" datetime="2025-03-04T05:36:05+08:00">2025-03-04</time>
               </span>
 
           
@@ -237,12 +237,12 @@
 <h2 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a><strong>战略设计</strong></h2><p>战略设计主要从高层俯视(上帝视角)我们的软件系统，就如同玩即时战略游戏般，可以一览地图全貌，以此来决定我们是要进攻还是防守哪个方向，同样，在软件中我们也可以以此来划分领域，确定权重方向。</p>
 <p><strong>1.统一语言</strong></p>
 <p>提炼领域知识，怎么个提炼法，千万条罗马路，各有各的看家本领。像事件风暴方法，用例分析方法，用户故事，甚至是开大会，各种讨论会等，最终目的都是提炼出领域知识，而提炼过程中，达成描述上的一致性，包括系统目标、系统范围及系统所具有的功能。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144520.jpg" alt="0  我 很 高 兴 我 们 达 成 了 一 致  啊 哈  0  0  0  我 很 高 兴 我 们 达 了 一 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144520.jpg" alt="团队达成一致"></p>
 <p>这不是领域驱动设计所独有的，但却是软件开发中所必须的，为领域专家、业务分析人员、编码人员和测试人员等团队所有成员交流时构建统一频道。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144528.jpg" alt="img"></p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144538.jpg" alt="问 题 域 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144528.jpg" alt="统一语言"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144538.jpg" alt="问题域"></p>
 <h3 id="2-领域拆分"><a href="#2-领域拆分" class="headerlink" title="2.领域拆分"></a><strong>2.领域拆分</strong></h3><p>对于领域这个概念，习惯性会想到制药领域、环境领域、金融领域等这些概念，而领域本身所描述的是范围，是如同现实世界般的复杂，无边际。借助分治法，将问题逐级细分来降低业务和技术复杂度，将这复杂的世界划分出清晰的边界来，反过来控制着划分后不那么复杂的世界，也既领域拆分出细化后的子领域。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144544.jpg" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144544.jpg" alt="领域拆分"></p>
 <p><strong>3.子域划分</strong></p>
 <p>在实际解决问题时，我们也习惯将问题拆分，而怎么拆，基于什么原则拆，可能会依据相关性，权重，甚至分类原则等，对于系统而言，会从架构方面考虑，基础设施考虑等，在领域驱动设计中，更偏向基于业务拆分，降低业务复杂度，也分离技术实现的复杂度，依照业务拆分后的子领域，本身存在权重上的差异，依照重要性和功能划分为三类，投资占比也就有所不同。</p>
 <ul>
@@ -250,15 +250,15 @@
 <li><strong>支撑域</strong>：其所体现的是支撑服务，没它不行，但又达不到核心的价值，围绕着产品内部所需要，但又不能单独变更为第三方服务，即它不是一个通用的服务。</li>
 <li><strong>通用域</strong>：其所体现的中间件服务或第三方服务。本身可以通过现有的解决方案集成来完成的服务。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144550.jpg" alt="子 支 ）  D 子 域 骸 心 ）  〔 子 域 亻 通  8 子 支 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144550.jpg" alt="子域划分"></p>
 <p><strong>4.限界上下文</strong></p>
 <p>深入到一个子域中，又是一片小天地，在这天地中，却又还是存在着因语义与语境上的差异，让一些概念在这子域中显得额外尴尬。在一个领域 / 子域中，我们会创建一个概念上的领域边界，在这个边界中，任何领域对象都只表示特定于该边界内部的确切含义。这样边界便称为限界上下文。</p>
 <p>其本质上是限界+上下文，引用到张逸老师的一句话！</p>
 <p><strong>上下文（Context）其实是动态的业务流程被边界（Bounded）静态切分的产物</strong>。</p>
 <p>对于子域与上下文间的关系，看到很多书籍或是文章中所描述的都不一样，这块的争论也没有一个最终答案，个人更倾向于子域中划分上下文，从拆分角度来讲，这样理解更加简单。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144558.jpg" alt="A 子 域 《 支 劇  B 子 顯 支 河  D 子 域 { 0 心 》  C 子 域 （ 遴 剛  M 上 下 文  N 上 下 文  知 乎 @布 莱 恩 特 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144558.jpg" alt="限界上下文"></p>
 <h3 id="5-上下文识别"><a href="#5-上下文识别" class="headerlink" title="5.上下文识别"></a><strong>5.上下文识别</strong></h3><p>对于上下文的识别，没有可遵循的标准可走，从不同的角度切入将会识别到不同的上下文，可从张逸老师的领域驱动设计实践中窥之一二，以业务复杂度、管理复杂度和技术复杂度出发，面对这三个角度去依次分析，从业务视角、工作视角、应用视角去识别，进而识别出准确的上下文，通过不断的分析斟酌考虑，逐渐识别出符合当前预期的上下文，如在实际操作环节发觉当前上下文的设计显得不那么合理，还可再进行变动、拆分上下文。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144606.jpg" alt="业 务 边 界  领 域 逻 辑 层 面 》  领 域 专 家 与 团 队 ．  团 队 合 作 层 面  项 目 经 理 与 团 队  技 术 实 现 层 面  架 构 师 与 团 队  问 题 域  业 务 期 望  流 程 图  限 界 上 下 文 A  限 界 上 下 文 B  重 用 性  识 别 变 化  质 量 属 性  技 术 选 型  场 景 A  ． 、 场 景 B  ． 8 ． 场 景 N  康 威 原 则  应 用 边 界  限 界 上 下 文  限 界 上 下 文  限 界 上 下 文  活 动 《  活 动 2  活 动 3  活 动 4  活 动 5  语 义 相 关 度  功 能 相 关 度  语 言 概 念 是 否 冲 突  工 作 边 界  活 动 丨  活 动 3  活 动 2  活 动 4  活 动 5  2PTs  特 性 团 队  ： 特 性 团 队  共 性 与 可 变 性 分 析  DR 丫 原 则  通 信 与 集 成 模 式  高 内 聚 低 耦 合  0  微 服 务 架 构  刂 乒 向 ： 巾 飛 ， 亠 ． "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144606.jpg" alt="上下文识别"></p>
 <p>但需注意的一个是，我们识别上下文的目的是什么，是为了控制上下文，准确的说是为了控制上下文的边界、大小，是为了保住我们所守护的上下文不会因过度成长变大而崩溃，亦或因上下文过度缩减而失去价值，保证上下文内一切的稳定，上下文与上下文间交互的可用性，也或者是当我们退出上下文时，交付出来的上下文是非常可观的，而不是一个烂摊子。</p>
 <h3 id="6-上下文映射"><a href="#6-上下文映射" class="headerlink" title="6.上下文映射"></a><strong>6.上下文映射</strong></h3><p>规划了这么多限界上下文，该如何穿针引线将这些上下文串起来便是一个问题了，用例场景的完整实现往往是由多个上下文的协作完成的，怎么去组织这些上下文，领域驱动设计提到的几种方式及软件工程中常用模式。</p>
 <ul>
@@ -275,7 +275,7 @@
 <p><strong>7.分层架构</strong></p>
 <p>我们通常喜欢对各种事情归纳总结，如文章的层次分明，如建筑结构高低有序、疏密有致，给人一种各处所关注的信息视角不同，而组合起来显得如此美妙。软件中同样运用着分层来隔离关注点，以此来隔离每层的演进速率。</p>
 <p>当我们考虑限界上下文时，不仅需要去考虑其内部的领域设计，还得从其应用边界本身考虑，限界上下文是属于架构设计层次，主要针对的是后端架构层次的垂直切分，按照经典 DDD 的分层结构来看，共分为如下四层：</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144615.jpg" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144615.jpg" alt="分层架构"></p>
 <ul>
 <li>User Interface     为用户界面层，向用户展示信息和传入用户命令。这里指的用户不单单只使用用户界面的人，也可能是外部系统，诸如用例中的参与者。</li>
 <li>Application     为应用层，用来协调应用的活动，不包含业务逻辑，通过编排领域模型，包括领域对象及领域服务，使它们互相协作。不保留业务对象的状态，但它保有应用任务的进度状态。</li>
@@ -289,17 +289,17 @@
 <p>- productcontext<br>  - application<br>  - domain<br>  - infrastructure<br> - ordercontext<br>  - application<br>  - domain<br>  - infrastructure</p>
 <p>具体采用哪种方式，并没有强制要求，无论代码组织结构是否表达了层的概念，都需要充分理解分层的意义，并使得整个代码结构在架构上要吻合分层架构的理念。</p>
 <h2 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a><strong>战术设计</strong></h2><p>相比于战略设计的怎么规划，战术设计更侧重于怎么执行，详细的设计和编码。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144629.jpg" alt="Domain  Services  Domain  Events  通 过 它 来 表 示 模 型  通 过 它 来 表 示 模 型  通 过 它 来 表 示 模 型  通 过 它 来 表 示 模 型  Model-Driven  Design  用 分 层 来 隔 离 领 域  通 过 它 推 动 状 态 变 更  Repositories  通 过 它 来 访 问  通 过 它 来 访 问  通 过 它 来 维 护 完 整 性  Entities  作 为 它 的 根  Aggregates  用 它 来 封 装  Value Objects  用 它 来 封 装  X  互 相 排 斥 的 选 择  Smart UI  用 它 来 封 装  Layered  Architecture  用 它 来 封 装  Factories  刂 乒 向 ： 巾 ， 亠 ． "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144639.jpg" alt="聚合"></p>
 <p><strong>1.聚合</strong></p>
 <p>在认识聚合前，我们得对类再次回顾，类是作为我们开发中的最小单元，一切以类构建，而在上下文的视角中，聚合成了最小概念，包装了一组高度相关的对象，上下文内以聚合为最小单元，以此来保证聚合边界。又将分而治之的思想融入到了限界上下文的内部。</p>
 <p>聚合本身是由一个或多个实体及值对象组成，其中一个实体作为聚合根。管理着内部关联的实体与值对象，对外代表着聚合，外部来访者仅可通过聚合根进行访问。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144639.jpg" alt="Class A  Class B  V祯旧0℃@醺 1  ValueObject 3  ValueObject 2 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144639.jpg" alt="聚合"></p>
 <p>对于聚合图的画法，或许因人而异，我更加倾向于用矩形代表实体，椭圆代表值对象，用 UML 类图中的组合-聚合箭头来表示其双方间的关系。</p>
 <p>需要注意的是，此处的聚合不要与 UML 类图中的聚合等同起来，两者含义并不相同。</p>
 <h3 id="2-实体"><a href="#2-实体" class="headerlink" title="2.实体"></a><strong>2.实体</strong></h3><p>对于实体来讲，这个概念对于我们并不陌生，拥有者唯一的身份标识符，内含属性作为该实体的静态特征，作为聚合所拥有的领域知识，拥有着与自身相关的领域行为。</p>
 <h3 id="3-值对象"><a href="#3-值对象" class="headerlink" title="3.值对象"></a>3.值对象</h3><p>对于值对象，我倾向于将它理解为，基础类型之延伸，既能封装基础类型，又能约束内部属性间关系，还能拥有着自身的领域行为，而与实体的区别是，没有唯一身份标识，尽管带来了持久化的一些问题，但还是存在解决方案。以 DateTime 理解值对象最好不过了，DateTime 内部的自身约束保证了，每一次变动的 DateTime 都是最新的，当我们想在 2 月 28 日加 1，这便要依靠 DateTime 中的行为去约束内部的属性。</p>
 <h3 id="4-聚合划分"><a href="#4-聚合划分" class="headerlink" title="4.聚合划分"></a><strong>4.聚合划分</strong></h3><p>经统一语言与业务分析阶段，借助一系列如事件风暴、用例分析法、名次动词法、四色建模法等活动后，获得了一系列相关联的对象。或可形成一张庞大的对象关联图。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144647.jpg" alt="Invoice  Invoice  Attachment  Enterprise  Enterprice  Order  Attachment  Supplier  PartType  PartType  Supplier  PartTypePrice  Orderltem  Order  Attachment  荪 刂 」 严 @后 0 氵 ； ． r 寸 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144647.jpg" alt="对象关联图"></p>
 <p>如不考虑聚合的划分，我们依照以往的思路便是创建一大堆表，运用三范式或是依靠程序去保证数据的一致性不运用主外键。然后疯狂撸码，CRUD 好不快活。</p>
 <p>而随着业务的逐渐扩张，这当初的想法已有点吃力了，如同树苗逐渐成长，枝叶也逐渐增多。借助枝干我们可以分清叶子的归属，而对象网中呢，变得错综复杂了，也就隐约有了大泥球的征兆。</p>
 <p>借助划分聚合的一些方法，将其规整化。将原有复杂的对象图拆分成可控制的小型对象图。</p>
@@ -311,19 +311,22 @@
 <li>聚合与协作聚合间因业务场景、进程边界等因素影响，可依照场景使用强一致性或是最终一致性。</li>
 </ul>
 <p>如上的对象图依照关系的强弱，关系的主与次进行了聚合划分，或许得出的部分聚合存在不合理处，可再调整其边界。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144654.jpg" alt="Invoice  Invoice  Attachment  Enterprise  Enterprice  Attachment  Supplier  PartType  Supplier  PartTypePrIce  Order  PartType  Orderltem  Order  Attachment  荪 刂 」 严 在 上 「 0 冫 匚 、 ． 阿 "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144654.jpg" alt="聚合划分"></p>
 <h3 id="5-聚合协作"><a href="#5-聚合协作" class="headerlink" title="5.聚合协作"></a><strong>5.聚合协作</strong></h3><p>聚合与协作聚合之间依照聚合根实体的唯一标识符进行关联，而不是通过依靠协作聚合的引用实例来完成。保持这个原则有助于保持聚合之间的边界并避免加载不必要的对象。如我们<strong>常习惯</strong>上将关联的集合对象写入到类中，然后在仓储使用时，通过 EF 加载导航属性，以此方便直接加载关联聚合数据。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个聚合内建议用</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Order</span> : <span class="title">AggregateRoot</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">virtual</span> ICollection&lt;OrderItem&gt; OrdrItems &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">   <span class="comment">//...</span></span><br><span class="line"> &#125;</span><br><span class="line"> _orderRepository.Include(e=&gt;e.OrderItems).FirstOrDefault();</span><br></pre></td></tr></table></figure>
+
 <p>如 Order 和 OrderItem，当我们考虑将其作为一个聚合时，这么使用，是可以的，但是不能说跨聚合也这么用着，如 Enterprise 和 Order，划分时我们更加倾向于划分为两个聚合，遵循保持聚合原则中，引用聚合根的 Id 这一原则，这将改善聚合的边界使其更加清晰，控制更加妥当。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//多聚合间不建议这么用</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Order</span> : <span class="title">AggregateRoot</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="comment">//遵循聚合原则引用 Enterprice 聚合根 Id,而不是实例</span></span><br><span class="line">   <span class="keyword">public</span> <span class="built_in">int</span> EnterpriceId &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">   <span class="comment">//public virtual Enterprice Enterprice &#123; get; set; &#125;</span></span><br><span class="line">   <span class="comment">//...</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>考虑到多聚合的协作，便要了解下聚合的首要原则，即在一次事务中，只能更改一个聚合的状态，因此当涉及到多个聚合协作时，如创建订单完毕，需要往库存中某一商品数量减少时，订单本身一般会有商品聚合的标识，借助这个标识，通过领域事件或是集成事件方式，事件接收方将相关联的库存聚合调用起来，以此达到多个聚合间的协作。<br> 又或者考虑到，需要调用商品的信息以使得当前订单中商品信息更加丰富，可通过防腐层调用商品所在上下文远程服务或是应用服务，最终本质上是调用商品聚合中的信息丰富到订单中，也使得多个聚合完成协作。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328145436.png" alt="image-20210328145434850"></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328145436.png" alt="聚合协作"></p>
 <p><strong>6.应用服务</strong></p>
 <p>作为限界上下文对外的门户，也即是外观模式的体现。通过用例分析识别出来的用例在此处一一对应存在着，对外提供统一接口，以此满足完整用例场景所需的功能。在应用服务内部，通过编排领域模型对象来完成用例的功能，自身并不包含领域逻辑，但包含着应用逻辑。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144703.jpg" alt="The Clean Architecture  Controllers  Use Cases  Entities  Interfaces  Web  Enterprise Business Rules  Application Business Rules  Interface Adapters  Frameworks &amp; Drivers  DB  Flow 引 control  Controller  use Case  Output PO  use Case  Interactor  use Case  Input PO "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144703.jpg" alt="应用服务"></p>
 <p>可借鉴整洁架构的经典图例来看应用层本身的职责所在，Use Case(用例层)-Application Business Rules，虽然是依靠着领域模型对象才完成的（具体是编排领域模型对象所具有的领域行为），却也说明了应用服务承担着的是用例的职责。</p>
 <p>需要注意的是，应用服务的职责不仅限于编排领域模型对象，还需要控制着横切关注点，如验证、日志、事物等的管理。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">UnitOfWork</span>]</span><br><span class="line"> [<span class="meta">Authorize(PermissionNames.PartType_Create)</span>]</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">CreatePartType</span>(<span class="params">CreatePartTypeDto input</span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">await</span> _validatingPartTypeManager.CheckUniqueName(input.Name, input.Category);</span><br><span class="line">   <span class="keyword">var</span> partType= PartType.Create(input.Name, input.Description)</span><br><span class="line">     .SetCategory(input.Category)</span><br><span class="line">     .SetFactory(input.FactoryName);</span><br><span class="line">   <span class="keyword">await</span> _partTypeRepository.InsertAsync(partType);</span><br><span class="line">   <span class="keyword">await</span> _appNotifier.NewPartTypeAsync();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>如上，事务、认证、请求参数校验(Dto 内)，协调领域模型对象和基础设施服务，这是应用服务的职责，当然也不仅限于这些职责。</p>
 <p><strong>7.领域服务</strong></p>
 <p>当我们考虑领域逻辑时，首先想到的应该是实体与值对象中具有的领域逻辑，而有些场景下，实体与值对象无法承载这些领域行为，如对多个领域对象作为输入，进行计算并产出一个值对象；又或是需要将操作成集合化的聚合，如在 Supplier 下需要将所有 Order 中的单价汇总，而本身 Supplier 和 Order 是为两个聚合，若考虑借助 Order 去完成该业务操作，不太妥当，在此场景下，可通过领域服务来承载着这些领域行为。</p>
@@ -338,8 +341,10 @@
 <p>值对象（Value Object）→ 实体（Entity）→ 领域服务（Domain Service）</p>
 <p>如下场景，创建 Invoice，存在几条业务规则，相应 Order 的状态需已完成，并且对应的 Supplier 提供财月信息，这就需要多个聚合的协作，在领域服务编排这些领域对象模型及通过调用外部服务网关，完成业务逻辑。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// InvoiceManager</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">ValidCheck</span>(<span class="params"><span class="built_in">string</span> orderId, <span class="built_in">string</span> supplierId</span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">var</span> order = <span class="keyword">await</span> _orderService.GetAsync(orderId);</span><br><span class="line">   <span class="keyword">if</span>(!order.IsCompleted())</span><br><span class="line">   &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UserFriendlyException(<span class="string">&quot;Order status is not completed&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">var</span> supplier = <span class="keyword">await</span> _supplierService.GetAsync(supplierId);</span><br><span class="line">   <span class="keyword">if</span>(!supplier.IsCompleted())</span><br><span class="line">   &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UserFriendlyException(<span class="string">&quot;Order status is not completed&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">SetFinanceMonth</span>(<span class="params">Invoice invoice, <span class="built_in">string</span> supplierId</span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">var</span> supplierFinanceMonth = <span class="keyword">await</span> _supplierService.GetFinanceMonthAsync(supplierId, Current.Date);</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span>(supplierFinanceMonth == <span class="literal">null</span>)</span><br><span class="line">   &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UserFriendlyException(<span class="string">&quot;Supplier not provider finance month&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   invoice.SetFinanceMonth(supplierFinanceMonth.StartDate, supplierFinanceMonth.EndDate);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>在应用服务中，通过调用聚合及领域服务，完成这一创建 Invoice 的用例。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">UnitOfWork</span>]</span><br><span class="line"> [<span class="meta">Authorize(PermissionNames.Invoice_Create)</span>]</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">CreateInvoice</span>(<span class="params">CreateInvoiceDto input</span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">   <span class="keyword">await</span> _invoiceManager.ValidCheck(input.orderId, input.SupplierId);</span><br><span class="line">   <span class="keyword">var</span> invoice = Invoice.Create(input.Name, input.Description)</span><br><span class="line">     .SetOrder(input.OrderId);</span><br><span class="line">   <span class="keyword">await</span> _invoiceManager.SetFinanceMonth(invoice, input.SupplierId);</span><br><span class="line">   <span class="keyword">await</span> _invoiceRepository.InsertAsync(invoice);</span><br><span class="line">   <span class="keyword">await</span> _appNotifier.NewInvoiceAsync();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>借助领域服务，以此来完成多聚合间的协作，通过应用服务编排领域模型对象，完成一个业务用例。</p>
 <p><strong>8.领域事件</strong></p>
 <p>在软件开发中，事件早已被我们所熟悉，一个按钮按下，产生中断事件，一个回车，前端页面有侦听事件，在事件风暴建模活动中，事件也是作为领域建模的突破口，事件的重要性不言而喻。其本质是发生的事实到引发了相关事情，在这其中的传递的信息便是事件的内容。就如同猫叫了，引发着老鼠跑了，主人醒了，其中的事件便是猫叫了，而该事件是猫执行叫的动作后的结果。</p>
@@ -359,7 +364,7 @@
 <h2 id="9-资源库"><a href="#9-资源库" class="headerlink" title="9.资源库"></a><strong>9.资源库</strong></h2><p>在刚接触资源库(Repository)时，第一反应便是这就是个 DAO 层，访问数据库，然后吧啦吧啦，但是，当接触的越久，越发认识到第一反应是错的，资源库更多的是对资源的管理，而不仅仅是数据库中的数据，数据库可以作为资源的一部分，但不是全部，我们习惯将对外部系统的调用称为外部资源的获取，这也是将外部系统作为资源的一部分。</p>
 <p>对于聚合来讲，资源库的作用是负责将聚合持久化到数据库的(通常是持久化到数据库)，并且由于聚合根负责维持聚合的生命周期，也就使得应考虑仅聚合根才应该拥有资源库，这也是与 DAO 层不同的地方。</p>
 <p>在分层设计时，考虑将资源库的抽象划分到领域层，属于领域模型对象的一部分，如同设计防腐层的抽象网关般，资源库的抽象作为特殊的网关，当在应用层或是领域层中操作资源库抽象时，将资源库作为管理聚合状态的工具，可以忽视基础设施层中对资源库的具体实现。而在考虑基础设施层中具体实现时，可根据需要选择适合的工具，以此来管理和操作资源。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144721.jpg" alt="领 域 层  &#39;Repository&lt;T&gt;  基 础 设 施 芸  ADONETRepOSitory&lt;T&gt;  DapperRepository&lt;T&gt;  EFCoreRepository&lt;T&gt;  资 源  MYSql  MongoDb "></p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144721.jpg" alt="资源库"></p>
 <h2 id="工厂"><a href="#工厂" class="headerlink" title="工厂"></a><strong>工厂</strong></h2><p>聚合从 0 到 1 的过程，可以通过多种途径创建，一般来讲，我们开发中常直接实例化或是反射实例化，而对于聚合来讲，整个聚合是一个整体，命运共同体，并且由聚合根掌握聚合的生命周期。通常，我们可以借助几种方式来创建聚合，组装聚合，在创建过程中封装业务逻辑。</p>
 <ul>
 <li>聚合自身担任工厂，在聚合根中实现 Factory 方法</li>
@@ -369,6 +374,7 @@
 </ul>
 <p>聚合根的创建有多种方式，依据聚合内掌握知识的多少与创建逻辑的需要可灵活选择。</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line"> <span class="keyword">var</span> partType= PartType.Create(input.Name, input.Description)</span><br><span class="line">   .SetCategory(input.Category)</span><br><span class="line">   .SetFactory(input.FactoryName);</span><br></pre></td></tr></table></figure>
+
 <p>如借助构建者模式，通过拆分许多小的方法，将过多的参数拆分，以此避免一个创建方法参数中满屏都是参数的情况，需要考虑吧拆分的方法需要满足业务一致性，如内部的一些属性间有约束条件下，需要划分到一个方法中，以维持一致性或不变性。</p>
 <h2 id="学无止境"><a href="#学无止境" class="headerlink" title="学无止境"></a><strong>学无止境</strong></h2><p>从2004年领域驱动设计到现在已经有17年时间了，并且在其中还有诸如六边形架构，洋葱架构，整洁架构等的出现，考虑的侧重点不同，衍生着大量的新概念，也不断地完善着领域驱动设计的思想。在学习与理解领域驱动设计中，总会有新的东西改变我们以往的思想，见到的越多，越发觉认识的越少，这或许也是学起来有点阻力的原因吧。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><ol>

@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105746">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105813">
 <meta property="article:published_time" content="2019-06-10T08:11:25.000Z">
-<meta property="article:modified_time" content="2022-10-16T15:12:40.972Z">
+<meta property="article:modified_time" content="2025-03-03T21:15:40.322Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="锁">
@@ -190,7 +190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-16 23:12:40" itemprop="dateModified" datetime="2022-10-16T23:12:40+08:00">2022-10-16</time>
+                <time title="修改时间：2025-03-04 05:15:40" itemprop="dateModified" datetime="2025-03-04T05:15:40+08:00">2025-03-04</time>
               </span>
 
           
@@ -222,25 +222,25 @@
 <h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>首先，内核态与用户态的切换上不容易优化。但<strong>通过自旋锁，可以减少线程阻塞造成的线程切换</strong>（包括挂起线程和恢复线程）。</p>
 <p>如果锁的粒度小，那么<strong>锁的持有时间比较短</strong>（尽管具体的持有时间无法得知，但可以认为，通常有一部分锁能满足上述性质）。那么，对于竞争这些锁的而言，因为锁阻塞造成线程切换的时间与锁持有的时间相当，减少线程阻塞造成的线程切换，能得到较大的性能提升。具体如下：</p>
 <ul>
-<li>  当前线程竞争锁失败时，打算阻塞自己</li>
-<li>  不直接阻塞自己，而是自旋（空等待，比如一个空的有限for循环）一会</li>
-<li>  在自旋的同时重新竞争锁</li>
-<li>  如果自旋结束前获得了锁，那么锁获取成功；否则，自旋结束后阻塞自己</li>
+<li>当前线程竞争锁失败时，打算阻塞自己</li>
+<li>不直接阻塞自己，而是自旋（空等待，比如一个空的有限for循环）一会</li>
+<li>在自旋的同时重新竞争锁</li>
+<li>如果自旋结束前获得了锁，那么锁获取成功；否则，自旋结束后阻塞自己</li>
 </ul>
 <p>_如果在自旋的时间内，锁就被旧owner释放了，那么当前线程就不需要阻塞自己_（也不需要在未来锁释放时恢复），减少了一次线程切换。</p>
 <p>“锁的持有时间比较短”这一条件可以放宽。实际上，只要锁竞争的时间比较短（比如线程1快释放锁的时候，线程2才会来竞争锁），就能够提高自旋获得锁的概率。这通常发生在<strong>锁持有时间长，但竞争不激烈</strong>的场景中。</p>
 <h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
-<li>  单核处理器上，不存在实际的并行，当前线程不阻塞自己的话，旧owner就不能执行，锁永远不会释放，此时不管自旋多久都是浪费；进而，如果线程多而处理器少，自旋也会造成不少无谓的浪费。</li>
-<li>  自旋锁要占用CPU，如果是计算密集型任务，这一优化通常得不偿失，减少锁的使用是更好的选择。</li>
-<li>  如果锁竞争的时间比较长，那么自旋通常不能获得锁，白白浪费了自旋占用的CPU时间。这通常发生在_锁持有时间长，且竞争激烈_的场景中，此时应主动禁用自旋锁。</li>
+<li>单核处理器上，不存在实际的并行，当前线程不阻塞自己的话，旧owner就不能执行，锁永远不会释放，此时不管自旋多久都是浪费；进而，如果线程多而处理器少，自旋也会造成不少无谓的浪费。</li>
+<li>自旋锁要占用CPU，如果是计算密集型任务，这一优化通常得不偿失，减少锁的使用是更好的选择。</li>
+<li>如果锁竞争的时间比较长，那么自旋通常不能获得锁，白白浪费了自旋占用的CPU时间。这通常发生在_锁持有时间长，且竞争激烈_的场景中，此时应主动禁用自旋锁。</li>
 </ul>
 <blockquote>
 <p>使用-XX:-UseSpinning参数关闭自旋锁优化；-XX:PreBlockSpin参数修改默认的自旋次数。</p>
 </blockquote>
 <h3 id="自适应自旋锁"><a href="#自适应自旋锁" class="headerlink" title="自适应自旋锁"></a>自适应自旋锁</h3><p>自适应意味着自旋的时间不再固定了，而是由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定：</p>
 <ul>
-<li>  如果在同一个锁对象上，自旋等待刚刚成功获得过锁，并且持有锁的线程正在运行中，那么虚拟机就会认为这次自旋也很有可能再次成功，进而它将允许自旋等待持续相对更长的时间，比如100个循环。</li>
-<li>  相反的，如果对于某个锁，自旋很少成功获得过，那在以后要获取这个锁时将可能减少自旋时间甚至省略自旋过程，以避免浪费处理器资源。</li>
+<li>如果在同一个锁对象上，自旋等待刚刚成功获得过锁，并且持有锁的线程正在运行中，那么虚拟机就会认为这次自旋也很有可能再次成功，进而它将允许自旋等待持续相对更长的时间，比如100个循环。</li>
+<li>相反的，如果对于某个锁，自旋很少成功获得过，那在以后要获取这个锁时将可能减少自旋时间甚至省略自旋过程，以避免浪费处理器资源。</li>
 </ul>
 <p><strong>自适应自旋解决的是“锁竞争时间不确定”的问题</strong>。JVM很难感知到确切的锁竞争时间，而交给用户分析就违反了JVM的设计初衷。_自适应自旋假定不同线程持有同一个锁对象的时间基本相当，竞争程度趋于稳定，因此，可以根据上一次自旋的时间与结果调整下一次自旋的时间_。</p>
 <h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>然而，自适应自旋也没能彻底解决该问题，_如果默认的自旋次数设置不合理（过高或过低），那么自适应的过程将很难收敛到合适的值_。</p>
@@ -252,7 +252,7 @@
 <p>当然，由于轻量级锁天然瞄准不存在锁竞争的场景，如果存在锁竞争但不激烈，仍然可以用自旋锁优化，_自旋失败后再膨胀为重量级锁_。</p>
 <h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><p>同自旋锁相似：</p>
 <ul>
-<li>  如果_锁竞争激烈_，那么轻量级将很快膨胀为重量级锁，那么维持轻量级锁的过程就成了浪费。</li>
+<li>如果_锁竞争激烈_，那么轻量级将很快膨胀为重量级锁，那么维持轻量级锁的过程就成了浪费。</li>
 </ul>
 <h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>在没有实际竞争的情况下，还能够针对部分场景继续优化。如果不仅仅没有实际竞争，自始至终，使用锁的线程都只有一个，那么，维护轻量级锁都是浪费的。<strong>偏向锁的目标是，减少无竞争且只有一个线程使用锁的情况下，使用轻量级锁产生的性能消耗</strong>。轻量级锁每次申请、释放锁都至少需要一次CAS，但偏向锁只有初始化时需要一次CAS。</p>
 <p>“偏向”的意思是，_偏向锁假定将来只有第一个申请锁的线程会使用锁_（不会有任何线程再来申请锁），因此，_只需要在Mark Word中CAS记录owner（本质上也是更新，但初始值为空），如果记录成功，则偏向锁获取成功_，记录锁状态为偏向锁，_以后当前线程等于owner就可以零成本的直接获得锁；否则，说明有其他线程竞争，膨胀为轻量级锁_。</p>
@@ -267,9 +267,9 @@
 </blockquote>
 <p>偏向锁、轻量级锁、重量级锁适用于不同的并发场景：</p>
 <ul>
-<li>  偏向锁：无实际竞争，且将来只有第一个申请锁的线程会使用锁。</li>
-<li>  轻量级锁：无实际竞争，多个线程交替使用锁；允许短时间的锁竞争。</li>
-<li>  重量级锁：有实际竞争，且锁竞争时间长。</li>
+<li>偏向锁：无实际竞争，且将来只有第一个申请锁的线程会使用锁。</li>
+<li>轻量级锁：无实际竞争，多个线程交替使用锁；允许短时间的锁竞争。</li>
+<li>重量级锁：有实际竞争，且锁竞争时间长。</li>
 </ul>
 <p>另外，如果锁竞争时间短，可以使用自旋锁进一步优化轻量级锁、重量级锁的性能，减少线程切换。</p>
 <p>如果锁竞争程度逐渐提高（缓慢），那么从偏向锁逐步膨胀到重量锁，能够提高系统的整体性能。</p>
@@ -285,8 +285,8 @@
 </blockquote>
 <p>特别说明两点：</p>
 <ul>
-<li>  CAS记录owner时，_<code>expected == null</code>_，<code>newValue == ownerThreadId</code>，因此，<strong>只有第一个申请偏向锁的线程能够返回成功，后续线程都必然失败</strong>（部分线程检测到可偏向，同时尝试CAS记录owner）。</li>
-<li>  <strong>内置锁只能沿着偏向锁、轻量级锁、重量级锁的顺序逐渐膨胀</strong>，不能“收缩”。这基于JVM的另一个假定，“_一旦破坏了上一级锁的假定，就认为该假定以后也必不成立_”。</li>
+<li>CAS记录owner时，_<code>expected == null</code>_，<code>newValue == ownerThreadId</code>，因此，<strong>只有第一个申请偏向锁的线程能够返回成功，后续线程都必然失败</strong>（部分线程检测到可偏向，同时尝试CAS记录owner）。</li>
+<li><strong>内置锁只能沿着偏向锁、轻量级锁、重量级锁的顺序逐渐膨胀</strong>，不能“收缩”。这基于JVM的另一个假定，“_一旦破坏了上一级锁的假定，就认为该假定以后也必不成立_”。</li>
 </ul>
 <p>另外，当重量级锁被解除后，需要唤醒一个被阻塞的线程，这部分逻辑与ReentrantLock基本相同，详见<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/2017/12/05/%25E6%25BA%2590%25E7%25A0%2581%257C%25E5%25B9%25B6%25E5%258F%2591%25E4%25B8%2580%25E6%259E%259D%25E8%258A%25B1%25E4%25B9%258BReentrantLock%25E4%25B8%258EAQS%25EF%25BC%25881%25EF%25BC%2589%25EF%25BC%259Alock%25E3%2580%2581unlock/">源码|并发一枝花之ReentrantLock与AQS（1）：lock、unlock</a>。</p>
 <h2 id="简化版"><a href="#简化版" class="headerlink" title="简化版"></a>简化版</h2><p>上图记载的很详细，也有Mark Word的图解。看懂上图后，再来看《深入理解Java虚拟机：JVM高级特性与最佳实践（第2版）》中的简化版流程图就能看懂了：</p>
@@ -296,20 +296,20 @@
 <p>简化版中指出了<code>重偏向</code>过程。这一过程对于性能优化和膨胀过程都非常重要；但如果考虑重偏向的话，可能上述特别说明的内容就不成立了。要整理的笔记太多啦时间不够啊，猴子选择暂时放弃这个问题，，，恩，挖个坑，以后再追源码填坑。</p>
 <p>重偏向和epoch的作用参考：</p>
 <ul>
-<li>  <a href="https://link.juejin.im/?target=https://www.zhihu.com/question/56582060/answer/155398235">BiasedLocking模式下markOop中位域epoch的根本作用是什么？</a></li>
+<li><a href="https://link.juejin.im/?target=https://www.zhihu.com/question/56582060/answer/155398235">BiasedLocking模式下markOop中位域epoch的根本作用是什么？</a></li>
 </ul>
 </blockquote>
 <hr>
 <blockquote>
 <p>参考:</p>
 <ul>
-<li>  <a href="https://link.juejin.im/?target=https://blog.dreamtobe.cn/2015/11/13/java_synchronized/">Java Synchronised机制</a></li>
-<li>  <a href="https://link.juejin.im/?target=https://www.zhihu.com/question/57774162/answer/154298044">Java偏向锁是如何撤销的？</a></li>
+<li><a href="https://link.juejin.im/?target=https://blog.dreamtobe.cn/2015/11/13/java_synchronized/">Java Synchronised机制</a></li>
+<li><a href="https://link.juejin.im/?target=https://www.zhihu.com/question/57774162/answer/154298044">Java偏向锁是如何撤销的？</a></li>
 </ul>
 </blockquote>
 <hr>
 <blockquote>
-<p>本文链接：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/2018/01/02/%25E6%25B5%2585%25E8%25B0%2588%25E5%2581%258F%25E5%2590%2591%25E9%2594%2581%25E3%2580%2581%25E8%25BD%25BB%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581%25E3%2580%2581%25E9%2587%258D%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581/">浅谈偏向锁、轻量级锁、重量级锁</a><br>作者：<a href="https://link.juejin.im/?target=mailto:monkeysayhi7@gmail.com">猴子007</a><br>出处：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/">monkeysayhi.github.io</a><br>本文基于<a href="https://link.juejin.im/?target=http://creativecommons.org/licenses/by-sa/4.0/"> 知识共享署名-相同方式共享 4.0 </a>国际许可协议发布，欢迎转载，演绎或用于商业目的，但是必须保留本文的署名及链接。</p>
+<p>本文链接：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/2018/01/02/%25E6%25B5%2585%25E8%25B0%2588%25E5%2581%258F%25E5%2590%2591%25E9%2594%2581%25E3%2580%2581%25E8%25BD%25BB%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581%25E3%2580%2581%25E9%2587%258D%25E9%2587%258F%25E7%25BA%25A7%25E9%2594%2581/">浅谈偏向锁、轻量级锁、重量级锁</a><br>作者：<a href="https://link.juejin.im/?target=mailto:monkeysayhi7@gmail.com">猴子007</a><br>出处：<a href="https://link.juejin.im/?target=https://monkeysayhi.github.io/">monkeysayhi.github.io</a><br>本文基于<a href="https://link.juejin.im/?target=http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0</a>国际许可协议发布，欢迎转载，演绎或用于商业目的，但是必须保留本文的署名及链接。</p>
 </blockquote>
 
     </div>
