@@ -153,6 +153,77 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2025/08/08/a-comparative-analysis-of-ai-coding-assistants/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/08/a-comparative-analysis-of-ai-coding-assistants/" class="post-title-link" itemprop="url">A Comparative Analysis of AI Coding Assistants Aider vs. Gemini CLI vs. Claude Code</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-08-08 23:09:36" itemprop="dateCreated datePublished" datetime="2025-08-08T23:09:36+08:00">2025-08-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>New command-line AI assistants like Aider, Gemini CLI, and Claude Code can now directly modify codebases. This article analyzes their core philosophies and architectures to help you choose the right tool for your workflow.</p>
+<h3 id="Core-Design-Philosophies"><a href="#Core-Design-Philosophies" class="headerlink" title="Core Design Philosophies"></a>Core Design Philosophies</h3><p>These assistants represent three distinct design philosophies for AI-driven coding, each with a different primary emphasis.</p>
+<ul>
+<li>  <strong>The Extensible Platform (Gemini CLI):</strong> A powerful coding assistant built as an extensible platform. While it has core skills in querying and editing code, its design equally emphasizes connecting to other services (like Google Search), custom tools, and other modalities to build powerful, integrated workflows.</li>
+<li>  <strong>The Collaborative Specialist (Aider):</strong> A structured pair programmer that operates in a tight feedback loop with the developer. Its focus is on the reliability and transparency of the code editing process itself.</li>
+<li>  <strong>The Agentic Assistant (Claude Code):</strong> A self-contained agent focused on a suite of pre-built, high-level developer skills. The primary value is in delegating common but complex tasks like debugging, refactoring, and test generation to a capable assistant.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/08/a-comparative-analysis-of-ai-coding-assistants/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2025/02/09/In-Depth-Comparison-of-Popular-AI-Code-Assistants/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -192,203 +263,14 @@
 
       
           <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>AI code agents are evolving beyond code suggestions and completions. Future advancements may enable them to write entire programs, handle tasks like software engineers, interpret PRDs, and collaborate to build software. Leveraging machine learning and natural language processing, these agents can enhance productivity, reduce bugs, and assist developers in learning new languages and frameworks. Seamless integration with development tools will make them indispensable in modern software development.</p>
-<h3 id="Purpose-of-This-Article"><a href="#Purpose-of-This-Article" class="headerlink" title="Purpose of This Article"></a>Purpose of This Article</h3><p>The purpose of this article is to provide an in-depth comparison of popular AI code agents. We aim to evaluate the current state of these tools, highlight their cutting-edge features, and understand their impact on software development. By examining various criteria, we will identify the strengths and weaknesses of each agent, helping developers choose the best tool for their needs.</p>
-<h3 id="Activities-in-software-engineering"><a href="#Activities-in-software-engineering" class="headerlink" title="Activities in software engineering"></a>Activities in software engineering</h3><ul>
-<li>prototyping</li>
-<li>documentation</li>
-<li>coding</li>
-<li>testing</li>
-</ul>
-<p>AI code agents can assist with a variety of activities in software engineering, including but not limited to code completion, bug fixing, code refactoring, test generation, documentation, and even project management. By automating repetitive tasks and providing intelligent suggestions, these agents can significantly enhance developer productivity and code quality.</p>
-<h3 id="Current-State-of-AI-Code-Agents"><a href="#Current-State-of-AI-Code-Agents" class="headerlink" title="Current State of AI Code Agents"></a>Current State of AI Code Agents</h3><p>AI code agents have made significant strides in recent years, evolving from simple code completion tools to sophisticated assistants capable of understanding context and generating complex code snippets. These advancements are driven by improvements in machine learning algorithms, increased computational power, and the availability of large datasets for training. As a result, modern AI code agents can now assist with a wide range of tasks, from basic code suggestions to more advanced functionalities like refactoring, debugging, and even generating entire codebases based on high-level descriptions. Despite these advancements, there are still challenges to overcome, such as improving accuracy, handling ambiguous requirements, and ensuring seamless integration with various development environments.</p>
-<p>Two ways engineers using AI agents[5]:</p>
-<ul>
-<li>Bootstrappers</li>
-<li>iterators</li>
-</ul>
-<h2 id="Levels-of-AI-Code-Agents"><a href="#Levels-of-AI-Code-Agents" class="headerlink" title="Levels of AI Code Agents"></a>Levels of AI Code Agents</h2><p>A recent article on the 16x Prompt blog provides a comprehensive overview of the evolving landscape of AI coding tools, categorizing them into five distinct levels of capability [1]. From basic code completion to fully autonomous software development, this analysis sheds light on the rapid advancements transforming the coding industry. The article serves as a valuable resource for understanding the current state and future trajectory of AI-powered coding solutions.</p>
-<table>
-<thead>
-<tr>
-<th>Level</th>
-<th>High-level Approaches</th>
-<th>Example Popular Products</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>L1</td>
-<td>Code-level Completion</td>
-<td>GitHub Copilot, Tabby</td>
-</tr>
-<tr>
-<td>L2</td>
-<td>Task-level Code Generation</td>
-<td>Ticket to Code, ChatGPT, Claude, aider, cline, 16x Prompt, Cursor, Continue, PearAI, Windsurf</td>
-</tr>
-<tr>
-<td>L3</td>
-<td>Project-level Generation</td>
-<td>Ticket to PR, Prompt to UI, Codegen, Sweep, Pythagora, Plandex, v0</td>
-</tr>
-<tr>
-<td>L4</td>
-<td>PRD to Production</td>
-<td>AI Software Engineer, Marblism, bolt.new, Trickle, Lovable, Devin, Genie, Engine, devlo, Gru</td>
-</tr>
-<tr>
-<td>L5</td>
-<td>AI Development Teams</td>
-<td>AutoDev, MetaGPT, MGX</td>
-</tr>
-</tbody></table>
-<h2 id="Criteria-for-Comparison"><a href="#Criteria-for-Comparison" class="headerlink" title="Criteria for Comparison"></a>Criteria for Comparison</h2><p>Define the criteria you will use to compare the AI code agents. Examples include:</p>
-<ul>
-<li>Features provided</li>
-<li>Accuracy</li>
-<li>Ease of use</li>
-<li>Integration with development environments</li>
-<li>Supported languages</li>
-<li>Performance</li>
-<li>Cost</li>
-</ul>
-<h2 id="Overview-of-AI-Code-Agents"><a href="#Overview-of-AI-Code-Agents" class="headerlink" title="Overview of AI Code Agents"></a>Overview of AI Code Agents</h2><p>Provide a brief overview of each AI code agent you will compare. Examples include:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/features/copilot">GitHub Copilot</a></li>
-<li>[Tabnine(<a target="_blank" rel="noopener" href="https://www.tabnine.com/ai-code-assistant/)]">https://www.tabnine.com/ai-code-assistant/)]</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.crewai.com/">CrewAI</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.codegen.com/introduction/overview">Codegen</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/geekan/MetaGPT">MetaGPT</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/unit-mesh/auto-dev?tab=readme-ov-file">auto-dev</a></li>
-<li><a target="_blank" rel="noopener" href="https://cloud.google.com/gemini/docs/codeassist/write-code-gemini#intellij">Gemini Code Assist</a></li>
-<li><a target="_blank" rel="noopener" href="https://devin.ai/pricing">Devin</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.builder.io/m/pricing">buider.io</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.qodo.ai/pricing/">Qodo</a></li>
-<li><a target="_blank" rel="noopener" href="https://prompt.16x.engineer/comparisons">16x promopt</a></li>
-<li><a target="_blank" rel="noopener" href="https://babyagi.org/">BabyAGI</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/cline/cline">Cline</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/RooVetGit/Roo-Code">Roo Code</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/continuedev/continue">continue</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.mgx.ae/en">alpha intelligence</a></li>
-<li><a target="_blank" rel="noopener" href="https://refact.ai/">Refact.AI</a></li>
-</ul>
-<h2 id="Detailed-Comparison"><a href="#Detailed-Comparison" class="headerlink" title="Detailed Comparison"></a>Detailed Comparison</h2><p>Compare each AI code agent based on the defined criteria. Use tables or charts for clarity.</p>
-<h2 id="Feature-Comparison-Table"><a href="#Feature-Comparison-Table" class="headerlink" title="Feature Comparison Table"></a>Feature Comparison Table</h2><table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>GitHub Copilot</th>
-<th>Tabnine</th>
-<th>Kite</th>
-<th>Codota</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Features Provided</td>
-<td>Code completion, suggestions, and more</td>
-<td>Code completion, suggestions</td>
-<td>Code completion, suggestions</td>
-<td>Code completion, suggestions</td>
-</tr>
-<tr>
-<td>Accuracy</td>
-<td>High</td>
-<td>Medium</td>
-<td>Medium</td>
-<td>Medium</td>
-</tr>
-<tr>
-<td>Ease of Use</td>
-<td>High</td>
-<td>High</td>
-<td>Medium</td>
-<td>Medium</td>
-</tr>
-<tr>
-<td>Integration with IDEs</td>
-<td>Excellent</td>
-<td>Good</td>
-<td>Good</td>
-<td>Good</td>
-</tr>
-<tr>
-<td>Supported Languages</td>
-<td>Multiple</td>
-<td>Multiple</td>
-<td>Python, JavaScript</td>
-<td>Java, JavaScript</td>
-</tr>
-<tr>
-<td>Performance</td>
-<td>Fast</td>
-<td>Fast</td>
-<td>Medium</td>
-<td>Medium</td>
-</tr>
-<tr>
-<td>Cost</td>
-<td>Subscription</td>
-<td>Free/Paid</td>
-<td>Free</td>
-<td>Free/Paid</td>
-</tr>
-</tbody></table>
-<h3 id="Github-Copilot"><a href="#Github-Copilot" class="headerlink" title="Github Copilot"></a>Github Copilot</h3><p>Features:</p>
-<ul>
-<li>Code completion</li>
-<li>Chat</li>
-</ul>
-<p>Test generation</p>
-<ul>
-<li>made up non-existing enums</li>
-</ul>
-<h3 id="Refact-ai"><a href="#Refact-ai" class="headerlink" title="Refact.ai"></a>Refact.ai</h3><p>Features:</p>
-<ul>
-<li>Code completion</li>
-<li>Chat</li>
-<li>Agent mode<ul>
-<li>limitations: context length; iterations limit;</li>
-<li>not quite follow instructions</li>
-</ul>
-</li>
-</ul>
-<p>Q: What tasks I want AI agent to help with?</p>
-<ul>
-<li>Test definitely</li>
-<li>Data class conversion</li>
-</ul>
-<h3 id="Qodo"><a href="#Qodo" class="headerlink" title="Qodo"></a>Qodo</h3><p>Features:</p>
-<ul>
-<li>Intelligent code completion</li>
-<li>Test Generation</li>
-<li>Support for multiple programming languages</li>
-<li>Seamless integration with vs-code and intellij IDEA</li>
-<li>Detailed code analysis and suggestions</li>
-<li>User-friendly interface</li>
-<li>Robust performance</li>
-</ul>
-<p>Context recommendations: </p>
-<p>Test Generation:</p>
-<ul>
-<li>provide your own examples</li>
-<li>customized prompts</li>
-</ul>
-<p>Questions:</p>
-<ul>
-<li>How to make code more predictable for code assistants?</li>
-</ul>
-<h3 id="Roo-Code"><a href="#Roo-Code" class="headerlink" title="Roo Code"></a>Roo Code</h3><p>Features:</p>
-<ul>
-<li>Agent mode: reasoning and acting, interact with CLI</li>
-<li>Context recommendation: agent based</li>
-<li>Test Generation: </li>
-</ul>
-<h2 id="Pros-and-Cons"><a href="#Pros-and-Cons" class="headerlink" title="Pros and Cons"></a>Pros and Cons</h2><p>List the pros and cons of each AI code agent.</p>
-<h2 id="Use-Cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases</h2><p>Provide examples of use cases for each AI code agent.</p>
-<h2 id="The-future"><a href="#The-future" class="headerlink" title="The future"></a>The future</h2><p>The code agents may change the future of software engineering fundmentally.<br>Several software engineering principle will be chanlleged by AI agents.<br>The first one, it’s easy for AI agents to dealing with copy/pasted code.</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Summarize the findings of the comparison. Provide recommendations based on different needs and preferences.</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>Include any references or sources used in the article.</p>
-<p>[1] Zhu Liang, “AI Coding Evolution and Landscape: L1 to L5 | 16x Prompt,” 16x Prompt, March 25, 2024, accessed October 2, 2025, <a target="_blank" rel="noopener" href="https://prompt.16x.engineer/blog/ai-coding-l1-l5">https://prompt.16x.engineer/blog/ai-coding-l1-l5</a>.<br>[2] 60 Growing AI Companies &amp; Startups (2025), <a target="_blank" rel="noopener" href="https://arc.net/l/quote/eunrucrz">https://arc.net/l/quote/eunrucrz</a><br>[3] 15 Best AI Coding Assistant Tools in 2025, <a target="_blank" rel="noopener" href="https://www.qodo.ai/blog/best-ai-coding-assistant-tools/">https://www.qodo.ai/blog/best-ai-coding-assistant-tools/</a><br>[4] 17 Best AI-Powered Coding Assistant Tools in 2025, <a target="_blank" rel="noopener" href="https://spacelift.io/blog/ai-coding-assistant-tools#17-openai-codex">https://spacelift.io/blog/ai-coding-assistant-tools#17-openai-codex</a><br>[5] Future-proofing your Software Engineering career, <a target="_blank" rel="noopener" href="https://addyo.substack.com/p/future-proofing-your-software-engineering">https://addyo.substack.com/p/future-proofing-your-software-engineering</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/02/09/In-Depth-Comparison-of-Popular-AI-Code-Assistants/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -457,65 +339,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2025/01/31/Thought-on-AI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/01/31/Thought-on-AI/" class="post-title-link" itemprop="url">Thought on AI</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-01-31 18:50:49" itemprop="dateCreated datePublished" datetime="2025-01-31T18:50:49+08:00">2025-01-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-</blockquote>
-
       
     </div>
 
@@ -642,14 +465,14 @@
 <li>架构的本质就是对系统进行有序化重构，以符合当前业务的发展，并可以快速扩展。</li>
 </ol>
 </blockquote>
-<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><h3 id="可复用性"><a href="#可复用性" class="headerlink" title="可复用性"></a>可复用性</h3><h4 id="可复用性可能导致耦合："><a href="#可复用性可能导致耦合：" class="headerlink" title="可复用性可能导致耦合："></a>可复用性可能导致耦合：</h4><p>过度通用化：为组件设计高度通用的接口，这些接口可能需要许多配置选项或依赖项以适应各种使用场景。这种设计往往会导致组件间的强耦合，因为改变一个组件可以影响到依赖它的所有其他组件。</p>
-<p>共享状态：可复用组件如果设计为共享状态或数据，那么各个使用该组件的部分之间就有了隐含的依赖关系，这种设计容易导致耦合和非预期的副作用，使得系统行为难以预测和控制。</p>
-<p>细粒度依赖：为了实现代码复用，可能会创建一些细粒度的组件或模块，这些小的组件被多个地方重复引用，形成复杂的依赖链。这种依赖关系的复杂性会增加修改和维护的难度。</p>
-<h4 id="如何避免耦合："><a href="#如何避免耦合：" class="headerlink" title="如何避免耦合："></a>如何避免耦合：</h4><p>接口隔离：遵循接口隔离原则，为不同的使用场景设计专门的接口，确保组件之间仅通过最小且必要的接口进行交互。这有助于减少不必要的依赖和耦合。</p>
-<p>依赖注入：通过依赖注入的方式，动态地将依赖关系从外部传入组件，而不是在组件内部硬编码依赖关系。这种做法提高了组件的独立性和可复用性，同时降低了耦合度。</p>
-<p>模块化和封装：设计时应该注意模块化和封装原则，确保模块或组件之间的交互通过定义良好的接口进行，而不是暴露内部实现细节。这有助于降低模块之间的直接依赖，从而减少耦合。</p>
-<p>设计模式的应用：合理运用设计模式，如工厂模式、策略模式等，可以更好地组织代码结构，明确组件职责，减少组件之间的直接依赖，有效控制耦合。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/09/On%E6%9E%B6%E6%9E%84/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

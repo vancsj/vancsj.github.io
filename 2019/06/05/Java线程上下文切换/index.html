@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="来源 0 前言在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行。 再后来发展到多线程技术，使得在一个程序内部能拥有多个线程并行执行。一个线程的执行可以被认为是一个">
+  <meta name="description" content="来源 前言在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行。 再后来发展到多线程技术，使得在一个程序内部能拥有多个线程并行执行。一个线程的执行可以被认为是一个CP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java线程上下文切换">
 <meta property="og:url" content="https://vancsj.github.io/2019/06/05/Java%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="来源 0 前言在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行。 再后来发展到多线程技术，使得在一个程序内部能拥有多个线程并行执行。一个线程的执行可以被认为是一个">
+<meta property="og:description" content="来源 前言在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行。 再后来发展到多线程技术，使得在一个程序内部能拥有多个线程并行执行。一个线程的执行可以被认为是一个CP">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105114">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105122">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105137">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328105155">
 <meta property="article:published_time" content="2019-06-05T02:11:51.000Z">
-<meta property="article:modified_time" content="2025-03-01T21:27:31.475Z">
+<meta property="article:modified_time" content="2025-06-29T22:35:56.836Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="Java, 后端开发">
 <meta name="twitter:card" content="summary">
@@ -191,7 +191,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-02 05:27:31" itemprop="dateModified" datetime="2025-03-02T05:27:31+08:00">2025-03-02</time>
+                <time title="修改时间：2025-06-30 06:35:56" itemprop="dateModified" datetime="2025-06-30T06:35:56+08:00">2025-06-30</time>
               </span>
 
           
@@ -213,17 +213,17 @@
 
       
         <p><a target="_blank" rel="noopener" href="https://juejin.im/user/5a32089e6fb9a044fd11c7c2">来源</a></p>
-<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h1><p>在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 <strong>多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行</strong>。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在过去单CPU时代，单任务在一个时间点只能执行单一程序。之后发展到多任务阶段，计算机能在同一时间点并行执行多任务或多进程。虽然并不是真正意义上的“同一时间点”，而是 <strong>多个任务或进程共享一个CPU，并交由操作系统来完成多任务间对CPU的运行切换，以使得每个任务都有机会获得一定的时间片运行</strong>。</p>
 <p>再后来发展到多线程技术，使得在一个程序内部能拥有多个线程并行执行。<strong>一个线程的执行可以被认为是一个CPU在执行该程序。当一个程序运行在多线程下，就好像有多个CPU在同时执行该程序</strong>。</p>
 <p>多线程比多任务更加有挑战。<strong>多线程是在同一个程序内部并行执行，因此会对相同的内存空间进行并发读写操作</strong>。这可能是在单线程程序中从来不会遇到的问题。其中的一些错误也未必会在单CPU机器上出现，因为两个线程从来不会得到真正的并行执行。然而，更现代的计算机伴随着多核CPU的出现，也就意味着 <strong>不同的线程能被不同的CPU核得到真正意义的并行执行</strong>。</p>
 <p>所以，<strong>在多线程、多任务情况下，线程上下文切换是必须的</strong>，然而对于CPU架构设计中的概念，应先熟悉了解，这样会有助于理解线程上下文切换原理。</p>
 <span id="more"></span>
 
-<h1 id="1-多核、多CPU、超线程、多线程"><a href="#1-多核、多CPU、超线程、多线程" class="headerlink" title="1 多核、多CPU、超线程、多线程"></a>1 多核、多CPU、超线程、多线程</h1><h2 id="1-1-为什么要多核"><a href="#1-1-为什么要多核" class="headerlink" title="1.1 为什么要多核"></a>1.1 为什么要多核</h2><p>先要说的是多核、多CPU、超线程，这三个其实都是CPU架构设计的概念，<strong>一个现代CPU除了处理器核心之外还包括寄存器、L1L2缓存这些存储设备、浮点运算单元、整数运算单元等一些辅助运算设备以及内部总线等</strong>。一个多核的CPU也就是一个CPU上有多个处理器核心，这样有什么好处呢？比如说现在我们要在一台计算机上跑一个多线程的程序，因为是一个进程里的线程，所以需要一些共享一些存储变量，如果这台计算机都是单核单线程CPU的话，<strong>就意味着这个程序的不同线程需要经常在CPU之间的外部总线上通信，同时还要处理不同CPU之间不同缓存导致数据不一致的问题，所以在这种场景下多核单CPU的架构就能发挥很大的优势，通信都在内部总线，共用同一个缓存</strong>。</p>
-<h2 id="1-2-为什么要多CPU"><a href="#1-2-为什么要多CPU" class="headerlink" title="1.2 为什么要多CPU"></a>1.2 为什么要多CPU</h2><p>前面提了多核的好处，那为什么要多CPU呢？这个其实很容易想到，如果要运行多个程序（进程）的话，假如只有一个CPU的话，就意味着要经常进行进程上下文切换，因为单CPU即便是多核的，也只是多个处理器核心，其他设备都是共用的，所以 <strong>多个进程就必然要经常进行进程上下文切换，这个代价是很高的</strong>。</p>
-<h2 id="1-3-为什么要超线程"><a href="#1-3-为什么要超线程" class="headerlink" title="1.3 为什么要超线程"></a>1.3 为什么要超线程</h2><p>超线程这个概念是Intel提出的，<strong>简单来说是在一个CPU上真正的并发两个线程</strong>，听起来似乎不太可能，因为CPU都是分时的啊，其实这里也是分时，<strong>因为前面也提到一个CPU除了处理器核心还有其他设备，一段代码执行过程也不光是只有处理器核心工作，如果两个线程A和B，A正在使用处理器核心，B正在使用缓存或者其他设备，那AB两个线程就可以并发执行，但是如果AB都在访问同一个设备，那就只能等前一个线程执行完后一个线程才能执行</strong>。实现这种并发的原理是 <strong>在CPU里加了一个协调辅助核心</strong>，根据Intel提供的数据，这样一个设备会使得设备面积增大5%，但是性能提高15%~30%。</p>
-<h2 id="1-4-为什么要多线程"><a href="#1-4-为什么要多线程" class="headerlink" title="1.4 为什么要多线程"></a>1.4 为什么要多线程</h2><p>这个问题也许是面试中问的最多的一个经典问题了，<strong>一个进程里多线程之间可以共享变量，线程间通信开销也较小，可以更好的利用多核CPU的性能，多核CPU上跑多线程程序往往会比单线程更快</strong>，有的时候甚至在单核CPU上多线程程序也会有更好的性能，<strong>因为虽然多线程会有上下文切换和线程创建销毁开销，但是单线程程序会被IO阻塞无法充分利用CPU资源，加上线程的上下文开销较低以及线程池的大量应用，多线程在很多场景下都会有更高的效率</strong>。</p>
-<h2 id="1-5-线程与进程"><a href="#1-5-线程与进程" class="headerlink" title="1.5 线程与进程"></a>1.5 线程与进程</h2><p><strong>进程是操作系统的管理单位，而线程则是进程的管理单位</strong>；一个进程至少包含一个执行线程。不管是在单线程还是多线程中，<strong>每个线程都有一个程序计数器（记录要执行的下一条指令），一组寄存器（保存当前线程的工作变量），堆栈（记录执行历史，其中每一帧保存了一个已经调用但未返回的过程）</strong>。虽然线程寄生在进程中，但与他的进程是不同的概念，并且可以分别处理：<strong>进程是系统分配资源的基本单位，线程是调度CPU的基本单位</strong>。</p>
+<h1 id="多核、多CPU、超线程、多线程"><a href="#多核、多CPU、超线程、多线程" class="headerlink" title="多核、多CPU、超线程、多线程"></a>多核、多CPU、超线程、多线程</h1><h2 id="为什么要多核"><a href="#为什么要多核" class="headerlink" title="为什么要多核"></a>为什么要多核</h2><p>先要说的是多核、多CPU、超线程，这三个其实都是CPU架构设计的概念，<strong>一个现代CPU除了处理器核心之外还包括寄存器、L1L2缓存这些存储设备、浮点运算单元、整数运算单元等一些辅助运算设备以及内部总线等</strong>。一个多核的CPU也就是一个CPU上有多个处理器核心，这样有什么好处呢？比如说现在我们要在一台计算机上跑一个多线程的程序，因为是一个进程里的线程，所以需要一些共享一些存储变量，如果这台计算机都是单核单线程CPU的话，<strong>就意味着这个程序的不同线程需要经常在CPU之间的外部总线上通信，同时还要处理不同CPU之间不同缓存导致数据不一致的问题，所以在这种场景下多核单CPU的架构就能发挥很大的优势，通信都在内部总线，共用同一个缓存</strong>。</p>
+<h2 id="为什么要多CPU"><a href="#为什么要多CPU" class="headerlink" title="为什么要多CPU"></a>为什么要多CPU</h2><p>前面提了多核的好处，那为什么要多CPU呢？这个其实很容易想到，如果要运行多个程序（进程）的话，假如只有一个CPU的话，就意味着要经常进行进程上下文切换，因为单CPU即便是多核的，也只是多个处理器核心，其他设备都是共用的，所以 <strong>多个进程就必然要经常进行进程上下文切换，这个代价是很高的</strong>。</p>
+<h2 id="为什么要超线程"><a href="#为什么要超线程" class="headerlink" title="为什么要超线程"></a>为什么要超线程</h2><p>超线程这个概念是Intel提出的，<strong>简单来说是在一个CPU上真正的并发两个线程</strong>，听起来似乎不太可能，因为CPU都是分时的啊，其实这里也是分时，<strong>因为前面也提到一个CPU除了处理器核心还有其他设备，一段代码执行过程也不光是只有处理器核心工作，如果两个线程A和B，A正在使用处理器核心，B正在使用缓存或者其他设备，那AB两个线程就可以并发执行，但是如果AB都在访问同一个设备，那就只能等前一个线程执行完后一个线程才能执行</strong>。实现这种并发的原理是 <strong>在CPU里加了一个协调辅助核心</strong>，根据Intel提供的数据，这样一个设备会使得设备面积增大5%，但是性能提高15%~30%。</p>
+<h2 id="为什么要多线程"><a href="#为什么要多线程" class="headerlink" title="为什么要多线程"></a>为什么要多线程</h2><p>这个问题也许是面试中问的最多的一个经典问题了，<strong>一个进程里多线程之间可以共享变量，线程间通信开销也较小，可以更好的利用多核CPU的性能，多核CPU上跑多线程程序往往会比单线程更快</strong>，有的时候甚至在单核CPU上多线程程序也会有更好的性能，<strong>因为虽然多线程会有上下文切换和线程创建销毁开销，但是单线程程序会被IO阻塞无法充分利用CPU资源，加上线程的上下文开销较低以及线程池的大量应用，多线程在很多场景下都会有更高的效率</strong>。</p>
+<h2 id="线程与进程"><a href="#线程与进程" class="headerlink" title="线程与进程"></a>线程与进程</h2><p><strong>进程是操作系统的管理单位，而线程则是进程的管理单位</strong>；一个进程至少包含一个执行线程。不管是在单线程还是多线程中，<strong>每个线程都有一个程序计数器（记录要执行的下一条指令），一组寄存器（保存当前线程的工作变量），堆栈（记录执行历史，其中每一帧保存了一个已经调用但未返回的过程）</strong>。虽然线程寄生在进程中，但与他的进程是不同的概念，并且可以分别处理：<strong>进程是系统分配资源的基本单位，线程是调度CPU的基本单位</strong>。</p>
 <p>一个线程指的是进程中一个单一顺序的控制流，一个进程中可以并行多个线程，每条线程并行执行不同的任务。<strong>每个线程共享堆空间，拥有自己独立的栈空间</strong>。</p>
 <blockquote>
 <ol>
@@ -233,11 +233,11 @@
 <li><strong>进程在执行过程中</strong>，包含：<strong>固定的入口、执行顺序和出口</strong>，<strong>而进程的这些过程会被应用程序控制</strong>；</li>
 </ol>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105114" alt="进程&amp;线程表项"></p>
-<h1 id="2-上下文切换"><a href="#2-上下文切换" class="headerlink" title="2 上下文切换"></a>2 上下文切换</h1><p>支持多任务处理是CPU设计史上最大的跨越之一。<strong>在计算机中，多任务处理是指同时运行两个或多个程序</strong>。从使用者的角度来看，这看起来并不复杂或者难以实现，但是它确实是计算机设计史上一次大的飞跃。<strong>在多任务处理系统中，CPU需要处理所有程序的操作，当用户来回切换它们时，需要记录这些程序执行到哪里</strong>。上下文切换就是这样一个过程，允许CPU记录并恢复各种正在运行程序的状态，使它能够完成切换操作。</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105114" alt="进程&amp;线程表项" title="进程和线程表项"></p>
+<h1 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h1><p>支持多任务处理是CPU设计史上最大的跨越之一。<strong>在计算机中，多任务处理是指同时运行两个或多个程序</strong>。从使用者的角度来看，这看起来并不复杂或者难以实现，但是它确实是计算机设计史上一次大的飞跃。<strong>在多任务处理系统中，CPU需要处理所有程序的操作，当用户来回切换它们时，需要记录这些程序执行到哪里</strong>。上下文切换就是这样一个过程，允许CPU记录并恢复各种正在运行程序的状态，使它能够完成切换操作。</p>
 <p>多任务系统往往需要同时执行多道作业。作业数往往大于机器的CPU数，然而一颗CPU同时只能执行一项任务，如何让用户感觉这些任务正在同时进行呢? 操作系统的设计者 <strong>巧妙地利用了时间片轮转的方式, CPU给每个任务都服务一定的时间，然后把当前任务的状态保存下来，在加载下一任务的状态后，继续服务下一任务</strong>。<strong>任务的状态保存及再加载, 这段过程就叫做上下文切换</strong>。时间片轮转的方式使多个任务在同一颗CPU上执行变成了可能。</p>
-<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105122" alt="任务的状态保存及再加载, 这段过程就叫做上下文切换"></p>
-<h2 id="2-1-基本概念"><a href="#2-1-基本概念" class="headerlink" title="2.1 基本概念"></a>2.1 基本概念</h2><p>上下文切换（有时也称做进程切换或任务切换）是指CPU从一个进程或线程切换到另一个进程或线程。</p>
+<p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105122" alt="任务的状态保存及再加载, 这段过程就叫做上下文切换" title="任务的状态保存及再加载"></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>上下文切换（有时也称做进程切换或任务切换）是指CPU从一个进程或线程切换到另一个进程或线程。</p>
 <blockquote>
 <ol>
 <li><strong>进程</strong>（有时候也称做任务）是指一个程序运行的实例。</li>
@@ -255,7 +255,7 @@
 <li><strong>跳转到程序计数器所指向的位置</strong>（即跳转到进程被中断时的代码行），以恢复该进程。</li>
 </ol>
 </blockquote>
-<h2 id="2-2-切换种类"><a href="#2-2-切换种类" class="headerlink" title="2.2 切换种类"></a>2.2 切换种类</h2><p>上下文切换在不同的场合有不同的含义，在下表中列出：</p>
+<h2 id="切换种类"><a href="#切换种类" class="headerlink" title="切换种类"></a>切换种类</h2><p>上下文切换在不同的场合有不同的含义，在下表中列出：</p>
 <table>
 <thead>
 <tr>
@@ -280,7 +280,7 @@
 <td>将虚拟内存切换到物理内存</td>
 </tr>
 </tbody></table>
-<h2 id="2-3-切换步骤"><a href="#2-3-切换步骤" class="headerlink" title="2.3 切换步骤"></a>2.3 切换步骤</h2><p>在上下文切换过程中，CPU会停止处理当前运行的程序，并保存当前程序运行的具体位置以便之后继续运行。从这个角度来看，上下文切换有点像我们同时阅读几本书，在来回切换书本的同时我们需要记住每本书当前读到的页码。<strong>在程序中，上下文切换过程中的“页码”信息是保存在进程控制块（PCB, process control block）中的。PCB还经常被称作“切换桢”（switchframe）。“页码”信息会一直保存到CPU的内存中，直到他们被再次使用</strong>。</p>
+<h2 id="切换步骤"><a href="#切换步骤" class="headerlink" title="切换步骤"></a>切换步骤</h2><p>在上下文切换过程中，CPU会停止处理当前运行的程序，并保存当前程序运行的具体位置以便之后继续运行。从这个角度来看，上下文切换有点像我们同时阅读几本书，在来回切换书本的同时我们需要记住每本书当前读到的页码。<strong>在程序中，上下文切换过程中的“页码”信息是保存在进程控制块（PCB, process control block）中的。PCB还经常被称作“切换桢”（switchframe）。“页码”信息会一直保存到CPU的内存中，直到他们被再次使用</strong>。</p>
 <p><strong>PCB通常是系统内存占用区中的一个连续存区，它存放着操作系统用于描述进程情况及控制进程运行所需的全部信息</strong>，它使一个在多道程序环境下不能独立运行的程序成为一个能独立运行的基本单位或一个能与其他进程并发执行的进程。</p>
 <blockquote>
 <ol>
