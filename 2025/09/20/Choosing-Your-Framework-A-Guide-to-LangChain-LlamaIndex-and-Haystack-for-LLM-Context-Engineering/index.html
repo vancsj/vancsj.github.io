@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Large language models (LLMs) know a ton of stuff, but they have zero clue about your specific project, your company’s internal data, or what happened in the world five minutes ago. To build actually u">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Choosing Your Framework: A Guide to LangChain, LlamaIndex, and Haystack for LLM Context Engineering">
+<meta property="og:url" content="https://vancsj.github.io/2025/09/20/Choosing-Your-Framework-A-Guide-to-LangChain-LlamaIndex-and-Haystack-for-LLM-Context-Engineering/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="Large language models (LLMs) know a ton of stuff, but they have zero clue about your specific project, your company’s internal data, or what happened in the world five minutes ago. To build actually u">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-20T10:16:10.000Z">
+<meta property="article:modified_time" content="2025-09-30T22:08:53.138Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://vancsj.github.io/2025/09/20/Choosing-Your-Framework-A-Guide-to-LangChain-LlamaIndex-and-Haystack-for-LLM-Context-Engineering/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Choosing Your Framework: A Guide to LangChain, LlamaIndex, and Haystack for LLM Context Engineering | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vancsj.github.io/2025/09/20/Choosing-Your-Framework-A-Guide-to-LangChain-LlamaIndex-and-Haystack-for-LLM-Context-Engineering/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Choosing Your Framework: A Guide to LangChain, LlamaIndex, and Haystack for LLM Context Engineering
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-09-20 18:16:10" itemprop="dateCreated datePublished" datetime="2025-09-20T18:16:10+08:00">2025-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-10-01 06:08:53" itemprop="dateModified" datetime="2025-10-01T06:08:53+08:00">2025-10-01</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Large language models (LLMs) know a ton of stuff, but they have zero clue about your specific project, your company’s internal data, or what happened in the world five minutes ago. To build actually useful AI apps, you need to feed them the right “private” info at the right time—that’s what we call <strong>context engineering</strong>.</p>
+<p>In plain terms, it’s about loading your data, breaking it into chunks, turning it into vectors, and then quickly grabbing the most relevant bits to feed to your LLM when needed. Picking the right tool for this job matters a lot. Right now, the three hottest options are: LangChain, LlamaIndex, and Haystack.</p>
+<span id="more"></span>
+
+<h3 id="LangChain-The-Swiss-Army-Knife"><a href="#LangChain-The-Swiss-Army-Knife" class="headerlink" title="LangChain: The Swiss Army Knife"></a>LangChain: The Swiss Army Knife</h3><p>LangChain is like that friend who can do a bit of everything. It’s super flexible and modular, letting you mix and match different pieces—LLMs, data sources, tools—to build all kinds of LLM-powered apps.</p>
+<p>Where it really shines is with <strong>agents</strong>—smart systems that use an LLM to figure out what to do next. Think of an agent that can decide on its own to call an API, check a database, or pull up a document when it needs info.</p>
+<p><strong>When to grab LangChain:</strong></p>
+<ul>
+<li>  You’re building something complex that needs <strong>multiple agents working together</strong></li>
+<li>  You want a chatbot that remembers past conversations and can use external tools  </li>
+<li>  Your app needs to chain together several LLM calls and actions</li>
+</ul>
+<p>With tools like <strong>LangSmith</strong> for debugging and <strong>LangServe</strong> for easy deployment, LangChain has really stepped up its game for production use. If your app is more than just simple Q&amp;A, LangChain gives you the muscle to build it.</p>
+<h3 id="LlamaIndex-The-RAG-Expert"><a href="#LlamaIndex-The-RAG-Expert" class="headerlink" title="LlamaIndex: The RAG Expert"></a>LlamaIndex: The RAG Expert</h3><p>LlamaIndex is that specialist who’s obsessed with one thing: connecting LLMs to your own data. It’s built from the ground up to make building Retrieval-Augmented Generation (RAG) apps dead simple—where your LLM answers questions based on your private docs.</p>
+<p>Its sweet spot is <strong>data ingestion</strong> and <strong>retrieval</strong>. LlamaIndex has connectors for pretty much everything—APIs, PDFs, databases—you name it. It then uses smart indexing tricks to organize your data so you can find exactly what you need, fast, when someone asks a question.</p>
+<p><strong>When LlamaIndex is your go-to:</strong></p>
+<ul>
+<li>  You’re laser-focused on building a <strong>kick-ass RAG system</strong></li>
+<li>  You’re dealing with messy, <strong>complex documents</strong> (like PDFs full of tables and images)</li>
+<li>  Your whole app revolves around quickly finding the right info from your private data</li>
+</ul>
+<p>With tools like <strong>LlamaParse</strong> for wrestling complex documents into shape and <strong>LlamaCloud</strong> for enterprise deployments, LlamaIndex gets you to a solid, production-ready RAG setup faster than you’d think.</p>
+<h3 id="Haystack-The-Enterprise-Search-Powerhouse"><a href="#Haystack-The-Enterprise-Search-Powerhouse" class="headerlink" title="Haystack: The Enterprise Search Powerhouse"></a>Haystack: The Enterprise Search Powerhouse</h3><p>Haystack is the open-source framework built for serious, production-ready search systems. Think of it as the reliable workhorse that enterprises trust when they need search that won’t break under pressure.</p>
+<p>It uses a <strong>pipeline setup</strong> where different pieces handle different jobs—like a Retriever that finds relevant docs and a Reader that pulls out the exact answer. It plays nice with pretty much any AI model you throw at it, and it’s got your back whether you want to use modern vector search or old-school keyword matching.</p>
+<p>What really sets it apart is its <strong>hybrid search</strong> superpower (mixing keyword and vector search) and solid <strong>evaluation tools</strong>—perfect for when you need to prove your system actually works and keep it running smoothly.</p>
+<p><strong>Haystack’s your best bet when:</strong></p>
+<ul>
+<li>  You’re building a serious semantic search engine that needs <strong>hybrid search</strong></li>
+<li>  You need to <strong>test and measure</strong> your RAG pipeline’s performance like a pro</li>
+<li>  <strong>Scaling up reliably</strong> in production is your top concern</li>
+</ul>
+<p>If you’re building a search app that needs to be rock-solid and ready for real users, Haystack’s got your back.</p>
+<h3 id="How-to-pick-the-right-one"><a href="#How-to-pick-the-right-one" class="headerlink" title="How to pick the right one?"></a>How to pick the right one?</h3><p>Honestly, it all comes down to what you’re actually trying to build:</p>
+<ul>
+<li>  <strong>Go with LangChain</strong> if you need to <strong>orchestrate</strong> complex workflows with multiple agents and moving parts</li>
+<li>  <strong>Grab LlamaIndex</strong> if you’re all about building the best possible <strong>RAG system</strong> for your private data  </li>
+<li>  <strong>Choose Haystack</strong> if you need to build and <strong>measure</strong> enterprise-grade search that scales</li>
+</ul>
+<h3 id="Real-world-performance-insights-2025-benchmarks"><a href="#Real-world-performance-insights-2025-benchmarks" class="headerlink" title="Real-world performance insights (2025 benchmarks)"></a>Real-world performance insights (2025 benchmarks)</h3><p>Recent benchmarks show some clear differences in how these frameworks perform in production:</p>
+<ul>
+<li><strong>Speed</strong>: LlamaIndex is the fastest (0.8-2.0s response time) - perfect when you need quick answers</li>
+<li><strong>Accuracy</strong>: LangChain leads with 92% accuracy for complex, multi-step queries</li>
+<li><strong>Scale</strong>: LlamaIndex handles the highest throughput (700 QPS) and is most resource-efficient</li>
+<li><strong>Resource usage</strong>: Haystack tends to be heavier on CPU, while LlamaIndex is the lightest</li>
+</ul>
+<h3 id="Learning-curve-amp-community-support"><a href="#Learning-curve-amp-community-support" class="headerlink" title="Learning curve &amp; community support"></a>Learning curve &amp; community support</h3><ul>
+<li><strong>LangChain</strong>: Huge community (92k+ GitHub stars) but steeper learning curve due to its many abstractions</li>
+<li><strong>LlamaIndex</strong>: Much easier to get started - just three steps: load → index → query (35k+ stars)</li>
+<li><strong>Haystack</strong>: Great documentation and beginner-friendly, though smaller community (16k+ stars)</li>
+</ul>
+<h3 id="Practical-examples"><a href="#Practical-examples" class="headerlink" title="Practical examples"></a>Practical examples</h3><p>Here’s what each framework looks like in action:</p>
+<p><strong>LlamaIndex</strong> (super simple for RAG):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> VectorStoreIndex, SimpleDirectoryReader</span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&#x27;data&#x27;</span>).load_data()</span><br><span class="line">index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">response = index.as_query_engine().query(<span class="string">&quot;What&#x27;s in my docs?&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>When to actually use each one</strong>:</p>
+<ul>
+<li><strong>Customer support bot with memory</strong>: LangChain (handles complex conversations beautifully)</li>
+<li><strong>Internal company document Q&amp;A</strong>: LlamaIndex (fast, lightweight, gets the job done)</li>
+<li><strong>Enterprise search with hybrid retrieval</strong>: Haystack (built for production-grade search)</li>
+</ul>
+<h3 id="What-if-you-mix-and-match"><a href="#What-if-you-mix-and-match" class="headerlink" title="What if you mix and match?"></a>What if you mix and match?</h3><p>Here’s a pro tip: you don’t have to pick just one. Smart teams are already combining these tools. For example, use LlamaIndex to handle the heavy lifting of data ingestion and indexing (it’s really good at this), then pipe that retrieved context into a LangChain agent for more complex reasoning and task execution. Think of them as different tools in your toolbox—use the right one for the right job.</p>
+<p>Each framework brings something unique to the table for context engineering. Once you understand what each one does best, you can pick the perfect tool—or combination—that fits your project like a glove and start building smarter, context-aware AI apps.</p>
+<p><strong>Quick decision guide</strong>: Need complex workflows? LangChain. Building a document Q&amp;A? LlamaIndex. Enterprise search with strict requirements? Haystack. And remember—you can always mix them up!</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/08/a-comparative-analysis-of-ai-coding-assistants/" rel="prev" title="A Comparative Analysis of AI Coding Assistants Aider vs. Gemini CLI vs. Claude Code">
+      <i class="fa fa-chevron-left"></i> A Comparative Analysis of AI Coding Assistants Aider vs. Gemini CLI vs. Claude Code
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/18/Magnificent-Seven-Historical-Parallels/" rel="next" title="The Magnificent Seven and the Echoes of History">
+      The Magnificent Seven and the Echoes of History <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
