@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Ask anyone who has the “best” AI, and you’ll probably get a simple answer. For a while, it was OpenAI. Then maybe Google or Anthropic. But here’s the thing: asking who’s “best” is starting to feel lik">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The AI Decathlon Why Theres No Single Champion in the Tech Race of the Century">
+<meta property="og:url" content="https://zjuer.net/2025/10/19/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="Ask anyone who has the “best” AI, and you’ll probably get a simple answer. For a while, it was OpenAI. Then maybe Google or Anthropic. But here’s the thing: asking who’s “best” is starting to feel lik">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-19T12:46:17.000Z">
+<meta property="article:modified_time" content="2025-10-19T21:36:23.790Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Benchmarks">
+<meta property="article:tag" content="LLMs">
+<meta property="article:tag" content="Strategy">
+<meta property="article:tag" content="Technology">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2025/10/19/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>The AI Decathlon Why Theres No Single Champion in the Tech Race of the Century | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/10/19/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The AI Decathlon Why Theres No Single Champion in the Tech Race of the Century
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-19 20:46:17" itemprop="dateCreated datePublished" datetime="2025-10-19T20:46:17+08:00">2025-10-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-10-20 05:36:23" itemprop="dateModified" datetime="2025-10-20T05:36:23+08:00">2025-10-20</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Ask anyone who has the “best” AI, and you’ll probably get a simple answer. For a while, it was OpenAI. Then maybe Google or Anthropic. But here’s the thing: asking who’s “best” is starting to feel like asking who’s the “best” athlete in the world. Is it the marathon runner, the powerlifter, or the gymnast? The truth is, the AI landscape has stopped being a simple 100-meter dash and has turned into a full-blown decathlon.</p>
+<p>In this decathlon, we have a handful of world-class athletes. You know the big names from the US: OpenAI with its heavyweight <strong>GPT-5</strong>, Google with the nimble <strong>Gemini 2.5 Pro</strong>, and Anthropic with its strategic <strong>Claude 4 series</strong>. But there’s another titan in the ring, one that often gets overlooked in the Western press: Alibaba, with its powerhouse <strong>Qwen3 series</strong>.</p>
+<p>So today, we’re going to be your data-driven sports commentator. We’ll look at the official scores—the hard numbers from the latest industry benchmarks—but we’ll also go deeper, analyzing the training regimes and game-day strategies to figure out who’s <em>really</em> winning, and in which events.</p>
+<span id="more"></span>
+
+<h3 id="A-Quick-Timeout-The-Truth-About-AI-Benchmarks"><a href="#A-Quick-Timeout-The-Truth-About-AI-Benchmarks" class="headerlink" title="A Quick Timeout: The Truth About AI Benchmarks"></a>A Quick Timeout: The Truth About AI Benchmarks</h3><p>Before we dive into the numbers, we need to have a quick chat. You’re going to see a lot of charts and scores, but it’s crucial to know that they’re not the whole story. There are two big “gotchas” with AI benchmarks that you have to keep in mind.</p>
+<p>First, there’s something called <strong>data contamination</strong>. Imagine you’re studying for a big exam, but you accidentally get a copy of the answer key and memorize it. You’d ace the test, but did you actually learn the material? That’s data contamination. Sometimes, the questions from the benchmarks end up in the AI’s training data, so the model isn’t solving the problem—it’s just remembering the answer.</p>
+<p>Second, there’s <strong>teaching to the test</strong>. An AI company can train a model to be amazing at one specific benchmark, even if it doesn’t make the model smarter or more useful in a general sense. It’s a bit like an athlete who only practices the high jump but can’t run or throw to save their life.</p>
+<p>So, our approach here is to use the benchmarks as a guide, not as gospel. They tell us what a model is capable of in a controlled environment, but the real test is always how it performs in the wild.</p>
+<h3 id="The-Main-Event-A-Head-to-Head-Breakdown"><a href="#The-Main-Event-A-Head-to-Head-Breakdown" class="headerlink" title="The Main Event: A Head-to-Head Breakdown"></a>The Main Event: A Head-to-Head Breakdown</h3><p>With that out of the way, let’s get to the main event. We’ve broken down the decathlon into three key events that show where each of these AI athletes shines.</p>
+<h4 id="Event-1-The-All-Rounder-General-Reasoning"><a href="#Event-1-The-All-Rounder-General-Reasoning" class="headerlink" title="Event 1: The All-Rounder (General Reasoning)"></a>Event 1: The All-Rounder (General Reasoning)</h4><p>This is the classic triathlon of AI: raw intelligence, broad knowledge, and the ability to solve complex, tricky problems. We’re looking at benchmarks like MMLU-Pro for deep academic knowledge, GPQA for graduate-level reasoning, and Arena-Hard, which is basically a cage match where humans vote on which AI gives the best answers to tough questions.</p>
+<p>The results here show an incredibly tight race at the top. On the MMLU-Pro benchmark, a brutal test of expert-level knowledge, <strong>Anthropic’s Claude 4</strong> leads the pack with a stunning <strong>87.8%</strong>, narrowly beating <strong>OpenAI’s GPT-5 (87.3%)</strong> and <strong>Google’s Gemini 2.5 (84.1%)</strong>.</p>
+<p><code>★ Insight ─────────────────────────────────────</code><br>What does a high MMLU score actually get you? Think of it as having an expert on call for any subject. A fantastic real-world example is Khan Academy’s <strong>Khanmigo</strong> tutor. It uses this kind of deep knowledge not to give students the answers, but to guide them with Socratic questions, acting like a personal tutor that helps them figure out the solution on their own. It’s a game-changer for democratizing education.<br><code>─────────────────────────────────────────────────</code></p>
+<p>When the problems get even harder and can’t be solved with a quick Google search, we look at the GPQA benchmark. Here, <strong>Google’s Gemini 2.5</strong> pulls ahead with an impressive <strong>86.4%</strong>. This kind of graduate-level reasoning is what allows AI to tackle complex professional tasks. For example, top-tier law firms are now using these models to analyze thousands of contracts during mergers, a process that used to take weeks. The AI can identify key clauses and risks with 98% accuracy, freeing up the human lawyers to focus on strategy instead of mind-numbing review work.</p>
+<p>But what about when the questions are just plain <em>hard</em> and creative? That’s where the Arena-Hard benchmark comes in, and here we have a dead heat: <strong>OpenAI’s GPT-5</strong> and <strong>Google’s Gemini 2.5</strong> are tied with a sky-high Elo rating of <strong>1443</strong>. This rating translates directly to a better, more collaborative user experience. A real case of this in action is L’Oréal’s product innovation lab. They use this level of AI for advanced creative brainstorming, feeding it scientific research and consumer data to generate novel ideas for new beauty products.</p>
+<p>And where does <strong>Alibaba’s Qwen3</strong> land in all of this? Right in the middle of the pack with the elites, scoring a very strong <strong>83.66%</strong> on MMLU-Pro and an Elo of <strong>1440</strong> on Arena-Hard. The takeaway is clear: when it comes to raw brainpower, there’s no single champion. We have a pack of elite all-rounders, and Qwen3 has firmly earned its spot among them.</p>
+<h4 id="Event-2-The-Eagle-Eye-Multimodal-Vision"><a href="#Event-2-The-Eagle-Eye-Multimodal-Vision" class="headerlink" title="Event 2: The Eagle Eye (Multimodal Vision)"></a>Event 2: The Eagle Eye (Multimodal Vision)</h4><p>This event tests how well the models can “see” and understand the world through images, charts, and—most importantly for business—messy documents. This is where the story takes a fascinating turn, because it’s where <strong>Alibaba’s Qwen3</strong> doesn’t just compete; it establishes itself as a dominant force.</p>
+<p>On benchmarks like MMBench for general visual understanding and DocVQA for pulling information from documents, Qwen3 posts staggering scores of <strong>90.6%</strong> and <strong>95.7%</strong>, respectively, putting it at the top of the leaderboard.</p>
+<p><code>★ Insight ─────────────────────────────────────</code><br>What does a 95.7% on DocVQA mean in the real world? It represents a fundamental shift in how businesses can handle their back-office operations. For decades, companies have spent billions on manually processing invoices, purchase orders, and forms. This technology allows a machine to “read” a scanned document with near-human accuracy, instantly turning unstructured PDFs and images into clean, structured data. It’s the end of manual data entry as we know it.<br><code>─────────────────────────────────────────────────</code></p>
+<p>For a real-world case, look at the insurance industry. A major insurer is now using this kind of document-understanding technology to process thousands of claim forms a day. The AI can read a scanned form, understand the handwritten notes from an adjuster, cross-reference it with photos of the damage, and flag it for approval in seconds. This has cut their claim processing time from days to minutes.</p>
+<p>But the vision event has a specialist champion, too. On the MathVista benchmark, which tests a model’s ability to reason mathematically about charts and diagrams, <strong>Google’s Gemini 2.5</strong> is the undisputed king with a score of <strong>84.6%</strong>. This is a superpower for technical fields. Imagine an engineer pointing their tablet at a complex schematic and asking, “Based on this diagram, what’s the maximum thermal tolerance?” or a scientist having the AI analyze a scatter plot from a research paper and explain the statistical significance.</p>
+<p>So, in the vision event, <strong>Qwen3</strong> takes the gold medal for all-around visual comprehension and document processing, making it a powerhouse for business automation. But <strong>Gemini 2.5</strong> wins the specialist prize for its ability to understand the numbers and physics behind the pictures. It’s another clear example of different champions for different events.</p>
+<h4 id="Event-3-The-Final-Frontier-The-AI-Junior-Developer-Agentic-Coding"><a href="#Event-3-The-Final-Frontier-The-AI-Junior-Developer-Agentic-Coding" class="headerlink" title="Event 3: The Final Frontier - The AI Junior Developer (Agentic Coding)"></a>Event 3: The Final Frontier - The AI Junior Developer (Agentic Coding)</h4><p>This is the most advanced and, frankly, the most exciting event in the decathlon. We’re moving beyond simple code generation to what we call “agentic coding”—the ability for an AI to act like an autonomous junior developer. It can read a bug report, navigate a complex codebase, write the code, run the tests, and even debug its own mistakes.</p>
+<p>Our research shows two different kinds of agents emerging from the pack:</p>
+<ul>
+<li><p><strong>The Specialist Coder:</strong> These are the focused, hardcore software engineers. On the SWE-bench, a benchmark that involves fixing real bugs from GitHub, <strong>OpenAI’s GPT-5</strong> is a top performer with an incredible <strong>71.8%</strong> of issues resolved. This has led to glowing endorsements, with the frontend platform <strong>Vercel</strong> calling it “the best frontend AI model.” For a user, this means you can point it at your bug backlog and watch it autonomously write production-ready fixes. Similarly, <strong>Alibaba’s Qwen3-Coder</strong> shines here with its massive context window, allowing it to understand an entire codebase to perform complex, repository-scale refactoring tasks.</p>
+</li>
+<li><p><strong>The Versatile Teammate:</strong> This is a different breed of agent. On the GAIA benchmark, which tests an AI’s ability to handle complex goals that require research, planning, <em>and</em> tool use, <strong>Anthropic’s Claude Sonnet 4.5</strong> is the clear leader with a score of <strong>74.42%</strong>. This is more than just a coder; it’s an all-around digital colleague. Developers have reported it can handle “months of complex architectural work” on its own. The “Imagine with Claude” tool is a perfect example: a user can describe a piece of software in plain English, and the agent builds a working prototype on the fly.</p>
+</li>
+</ul>
+<p><code>★ Insight ─────────────────────────────────────</code><br>The era of the AI Junior Developer is no longer a sci-fi dream. It’s here. With agents reliably fixing over 70% of common bugs, the real shift for developers is moving from writing code line-by-line to delegating entire features and bug reports to their AI teammates. The new skill is not just coding, but effectively managing and directing AI agents.<br><code>─────────────────────────────────────────────────</code></p>
+<h3 id="The-Game-Plan-How-They-Plan-to-Win"><a href="#The-Game-Plan-How-They-Plan-to-Win" class="headerlink" title="The Game Plan: How They Plan to Win"></a>The Game Plan: How They Plan to Win</h3><p>So if the performance is so close, how will a winner be decided? It all comes down to the business model—the grand strategy for taking over the world. And here, the two sides couldn’t be more different.</p>
+<h4 id="Strategy-1-The-Walled-Garden-OpenAI-Anthropic-Google"><a href="#Strategy-1-The-Walled-Garden-OpenAI-Anthropic-Google" class="headerlink" title="Strategy 1: The Walled Garden (OpenAI, Anthropic, Google)"></a>Strategy 1: The Walled Garden (OpenAI, Anthropic, Google)</h4><p>The Western giants are all running the same playbook. They build the most powerful model they can, keep its inner workings a closely guarded secret, and then sell access to it through an API. They form massive, exclusive partnerships with the biggest cloud providers (Microsoft for OpenAI, Google and Amazon for Anthropic) to get their tech into the hands of big companies. It’s a premium, high-margin strategy where they control the entire experience.</p>
+<h4 id="Strategy-2-The-Open-Source-Tsunami-Alibaba"><a href="#Strategy-2-The-Open-Source-Tsunami-Alibaba" class="headerlink" title="Strategy 2: The Open-Source Tsunami (Alibaba)"></a>Strategy 2: The Open-Source Tsunami (Alibaba)</h4><p>Alibaba is playing a completely different game. They build a model that’s just as good as the competition’s, and then they give a huge part of it away for free under an open-source license.</p>
+<p>Their goal is to fuel a tsunami of global adoption. They want every developer, startup, and tinkerer in the world building on Qwen. This creates a massive community and a huge funnel of users who, once they’re ready to scale up, will be steered toward Alibaba’s own cloud platform for the enterprise-grade features and support they need. It’s a brilliant strategy that leverages their existing ecosystem of e-commerce and logistics for an unmatched source of data and real-world testing.</p>
+<h3 id="The-Final-Scorecard"><a href="#The-Final-Scorecard" class="headerlink" title="The Final Scorecard"></a>The Final Scorecard</h3><p>So, after all the events, who’s on the podium?</p>
+<p>The big myth we need to debunk is that there’s a single “best” AI. That question is officially outdated. The real question you should be asking is: “Who is the best <em>for my specific task?</em>“</p>
+<p>Based on the data, here’s our practical verdict:</p>
+<ul>
+<li>Need a hardcore coding agent to crush your bug backlog? <strong>GPT-5</strong> has the edge.</li>
+<li>Need a versatile AI teammate to handle complex, multi-step tasks? <strong>Claude 4.5</strong> is the current leader.</li>
+<li>Working with complex documents and images? <strong>Qwen3</strong> is an absolute powerhouse.</li>
+</ul>
+<p>The ultimate winner of this decathlon won’t be decided by today’s benchmarks. It will be a war of business models. Will the controlled, premium experience of the Walled Garden win, or will the explosive, community-driven growth of the Open-Source Tsunami conquer the world? We’re about to find out.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Technology/" rel="tag"># Technology</a>
+              <a href="/tags/Benchmarks/" rel="tag"># Benchmarks</a>
+              <a href="/tags/Strategy/" rel="tag"># Strategy</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/19/Mapping-the-AI-Revolution-A-Guide-to-the-New-Titans-of-Tech/" rel="prev" title="Mapping the AI Revolution: A Guide to the New Titans of Tech">
+      <i class="fa fa-chevron-left"></i> Mapping the AI Revolution: A Guide to the New Titans of Tech
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
