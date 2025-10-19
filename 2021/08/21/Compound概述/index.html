@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -36,11 +36,11 @@
 <meta property="article:published_time" content="2021-08-21T09:34:47.000Z">
 <meta property="article:modified_time" content="2021-08-22T03:26:44.000Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="以太坊">
-<meta property="article:tag" content="ERC20">
 <meta property="article:tag" content="Compound">
 <meta property="article:tag" content="DeFi">
 <meta property="article:tag" content="DeFi Lending">
+<meta property="article:tag" content="ERC20">
+<meta property="article:tag" content="以太坊">
 <meta property="article:tag" content="去中心化借贷">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210821224642.png">
@@ -222,10 +222,10 @@
 <span id="more"></span>
 <p>Compound的基本架构如下。cDAI是放贷人的放贷凭证和结算依据；放贷与借贷行为异步发生，不需要进行撮合；放贷利率和贷款利率均由系统自动计算得来。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821224642.png" alt="Compound基本架构"><br>其中放贷人的利息来自于<strong>兑换率</strong>（cDAI与DAI)的增加。兑换率公式如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082102.png" alt="img" style="zoom:50%;" /><br>其中：</p>
 <ul>
-<li>totalCash        = 放入智能合約，但还没被借走 DAI 的总数量</li>
-<li>totalBorrows   = 所有借款人，所应偿还 DAI 的总数量 (含本金利息)</li>
-<li>totalReserves = 保留金总数量 (借款人所应支付的利息，部分被视为保留金)</li>
-<li>totalSupply     = 所有放贷人所得到 cDAI 的总数量</li>
+<li>totalCash        &#x3D; 放入智能合約，但还没被借走 DAI 的总数量</li>
+<li>totalBorrows   &#x3D; 所有借款人，所应偿还 DAI 的总数量 (含本金利息)</li>
+<li>totalReserves &#x3D; 保留金总数量 (借款人所应支付的利息，部分被视为保留金)</li>
+<li>totalSupply     &#x3D; 所有放贷人所得到 cDAI 的总数量</li>
 </ul>
 <p>totalBorrows 跟 totalReserves 又受到放贷年利率和借款年利率的影响。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2021082116.png" alt="img" style="zoom:50%;" /></p>
 <h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
@@ -241,7 +241,7 @@
 <h2 id="存量"><a href="#存量" class="headerlink" title="存量"></a>存量</h2><p>COMP总量1000万枚。<br>其中423万枚将免费发放给其用户，4年发完。其中50%给放贷人，50%给借款人。每个以太坊区块转出0.5个COMP。<br>总体的分配方案如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210821223941.jpg-article" alt="Compound「借贷即挖矿」治理代币分配方案" style="zoom:50%;" /></p>
 <h2 id="关联方"><a href="#关联方" class="headerlink" title="关联方"></a>关联方</h2><p>创始人 Robert Leshner<br>开发商 Compound Labs</p>
 <h2 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h2><p>2018年9月27日 以太坊主网启动。<br>2019年5月23日 V2启动。<br>2020年6月15日 发布治理代币COMP，开启流动性挖矿。</p>
-<h2 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>官网 <a target="_blank" rel="noopener" href="https://compound.finance/">https://compound.finance/</a><br>治理 <a target="_blank" rel="noopener" href="https://compound.finance/governance">https://compound.finance/governance</a><br>治理提案 <a target="_blank" rel="noopener" href="https://compound.finance/governance/proposals">https://compound.finance/governance/proposals</a><br>文档 <a target="_blank" rel="noopener" href="https://compound.finance/docs">https://compound.finance/docs</a></p>
+<h2 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>官网 <a href="https://compound.finance/">https://compound.finance/</a><br>治理 <a href="https://compound.finance/governance">https://compound.finance/governance</a><br>治理提案 <a href="https://compound.finance/governance/proposals">https://compound.finance/governance/proposals</a><br>文档 <a href="https://compound.finance/docs">https://compound.finance/docs</a></p>
 
     </div>
 

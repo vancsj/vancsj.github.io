@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -220,13 +220,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>转载自: <a target="_blank" rel="noopener" href="https://houbb.github.io/2020/01/07/regex-and-dfa-02">https://houbb.github.io/2020/01/07/regex-and-dfa-02</a></p>
+        <p>转载自: <a href="https://houbb.github.io/2020/01/07/regex-and-dfa-02">https://houbb.github.io/2020/01/07/regex-and-dfa-02</a></p>
 <span id="more"></span>
 
 <h1 id="有限状态机"><a href="#有限状态机" class="headerlink" title="有限状态机"></a>有限状态机</h1><p>有限状态机(Finite-state machine)，也被称为有限状态自动机(finite-state automation)，是表示<strong>有限个状态以及在这些状态之间的转移和动作等行为</strong>的数学计算模型(From 维基百科 状态机) 。<br>听起来晦涩难懂，我用大白话描述一遍，状态机其实就是用图把状态和状态之间的关系描述出来，状态机中的一个状态可以在某些给定条件下变成另外一种状态。<br>举个很简单的例子你就懂了。比如我今年18岁，我现在就是处于18岁的状态，如果时间过了一年，我就变成19岁的状态了，再过一年就20了。当然我20岁时时光倒流2年我又可以回到18岁的状态。<br>这里我们就可以把我的年龄状态和时间流逝之间的关系用一个自动机表示出来，如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161552.png"><br>每个圈代表一个节点表示一种状态，每条有向边表示一个状态到另一个状态的转移条件。<br>上图中状态是我的年龄，边表示时间正向或者逆向流逝。<br>有了状态机之后，我们就可以用状态机来描述特定的模式，比如上图就是年龄随时间增长的模式。如果有人说我今年18岁，1年后就20岁了。照着上面的状态机我们来算下，1年后你才19岁，你这不是瞎说吗！ 没错，状态机可以来判定某些内容是否符合你状态机描述的模式了。哟，一不小心就快扯到正则表达式上了。</p>
-<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>我们这里再引入两种特殊的状态：**起始态和接受态(终止态)**，见名知意，不用我过多介绍了吧，起始态和终止态的符号如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161628.png"></p>
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>我们这里再引入两种特殊的状态：<strong>起始态和接受态(终止态)</strong>，见名知意，不用我过多介绍了吧，起始态和终止态的符号如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161628.png"></p>
 <h2 id="字符串匹配"><a href="#字符串匹配" class="headerlink" title="字符串匹配"></a>字符串匹配</h2><p>我们拿状态机来做个简单的字符串匹配。<br>比如我们有个字符串“zsx”，要判断其他字符串是否和”zxs”是一致的，我们可以为”zxs”先建立一个自动机，如下。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161700.png"><br>对于任意一个其他的字符串，我们从起始态0开始，如果下一个字符能匹配到0后边的边上就往后走，匹配不上就停止，一直重复，如果走到终止态3说明这个字符串和”zxs“一样。<br>任意字符串都可以转化成上述的状态机，其实到这里你就知道如何实现一个只支持字符串匹配的正则表达式引擎了，如果想支持更多的正则语义，我们要做的更多。</p>
-<h1 id="状态机下的正则表达式"><a href="#状态机下的正则表达式" class="headerlink" title="状态机下的正则表达式"></a>状态机下的正则表达式</h1><p>我们再来引入一条特殊的边，学名叫 __<strong>ϵ 闭包</strong>__，其实就是一条不需要任何条件就能转移状态的边。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161742.png"><br>没错，就只这条红边本边了，它在正则表达式状态机中起着非常重要的连接作用，可以不依赖其他条件直接跳转状态，也就是说在上图中你可以直接从1到2。<br>有了 ϵ 闭包的加持，我们就可以开始学如何画正则表达式文法对应的状态机了。</p>
+<h1 id="状态机下的正则表达式"><a href="#状态机下的正则表达式" class="headerlink" title="状态机下的正则表达式"></a>状态机下的正则表达式</h1><p>我们再来引入一条特殊的边，学名叫 <strong><strong>ϵ 闭包</strong></strong>，其实就是一条不需要任何条件就能转移状态的边。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161742.png"><br>没错，就只这条红边本边了，它在正则表达式状态机中起着非常重要的连接作用，可以不依赖其他条件直接跳转状态，也就是说在上图中你可以直接从1到2。<br>有了 ϵ 闭包的加持，我们就可以开始学如何画正则表达式文法对应的状态机了。</p>
 <h2 id="串联匹配"><a href="#串联匹配" class="headerlink" title="串联匹配"></a>串联匹配</h2><p>首先来看下纯字符匹配的自动机，其实上面已经给过一个”zxs”的例子了，这里再贴一下，其实就是简单地用字符串在一起而已，如果还有其他字符，就继续往后串。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161809.png"><br>两个表达式如何串在一起，也很简单，假如我们已经有两个表达式A B对应的状态机，我们只需要将其用 ϵ 串一起就行了。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161823.png"></p>
 <h2 id="并联匹配"><a href="#并联匹配" class="headerlink" title="并联匹配"></a>并联匹配</h2><p>正则表达式中的 | 标识二选一都可以，比如 A|B A能匹配 B也能匹配，那么 A|B 就可以表示为下面这样的状态图。<br><img src="https://raw.githubusercontent.com/vancsj/images/master/2022/10/23/20221023161850.png"><br>从0状态走A或B都可以到1状态，完美的诠释了A|B语义。<br>ps: 这里将表达式和图联系起来。一个或，就是两条路径都可以走通的意思。</p>
 <h2 id="重复匹配-正则表达式中的"><a href="#重复匹配-正则表达式中的" class="headerlink" title="重复匹配(正则表达式中的 ? + *)"></a>重复匹配(正则表达式中的 ? + *)</h2><p>正则表达式里有4种表示重复的方式，分别是：</p>

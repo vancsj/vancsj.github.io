@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -34,10 +34,10 @@
 <meta property="article:published_time" content="2019-06-17T08:48:37.000Z">
 <meta property="article:modified_time" content="2025-06-28T14:59:05.654Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="并发">
 <meta property="article:tag" content="AQS">
-<meta property="article:tag" content="多线程">
 <meta property="article:tag" content="LockSupport">
+<meta property="article:tag" content="多线程">
+<meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328104848">
 
@@ -213,7 +213,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://juejin.im/user/5adc84c1f265da0b8d41840a">来源</a></p>
+        <p><a href="https://juejin.im/user/5adc84c1f265da0b8d41840a">来源</a></p>
 <p>LockSupport是用来创建locks的基本线程阻塞基元，比如AQS中实现线程挂起的方法，就是park,对应唤醒就是unpark。</p>
 <span id="more"></span>
 
@@ -282,9 +282,9 @@
 
 <p>从源码可知unpark本身就是发放许可，并通知等待的线程，已经可以结束等待了</p>
 <p>总结</p>
-<p>==</p>
+<p>&#x3D;&#x3D;</p>
 <ul>
-<li>park/unpark能够精准的对线程进行唤醒和等待。</li>
+<li>park&#x2F;unpark能够精准的对线程进行唤醒和等待。</li>
 <li>linux上的实现是通过POSIX的线程API的等待、唤醒、互斥、条件来进行实现的</li>
 <li>park在执行过程中首选看是否有许可，有许可就立马返回，而每次unpark都会给许可设置成有，这意味着，可以先执行unpark，给予许可，再执行park立马自行，适用于producer快，而consumer还未完成的场景<a href="https://link.juejin.im/?target=http://www.cnblogs.com/zhizhizhiyuan/p/4966827.html">参考地址</a></li>
 </ul>

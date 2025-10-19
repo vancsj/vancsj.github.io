@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -220,7 +220,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
+        <p><a href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
 <h1 id="MQ消息最终一致性事务"><a href="#MQ消息最终一致性事务" class="headerlink" title="MQ消息最终一致性事务"></a>MQ消息最终一致性事务</h1><p>本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。</p>
 <p>对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。</p>
 <p>但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：RocketMQ、RabbitMQ、Kafka、ActiveMQ等），被动方服务从MQ中消费该消息并进行业务处理，从而形成业务上的闭环。</p>
@@ -230,7 +230,7 @@
 <h2 id="实现可靠消息服务"><a href="#实现可靠消息服务" class="headerlink" title="实现可靠消息服务"></a>实现可靠消息服务</h2><p>首先按照惯例我们先看一下该方案的简略的结构图，如下</p>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328104737" alt="img"></p>
 <h3 id="核心流程1：上游投递消息"><a href="#核心流程1：上游投递消息" class="headerlink" title="核心流程1：上游投递消息"></a><strong>核心流程1：上游投递消息</strong></h3><p>基于上图，我们分析一下如果要实现一个可靠消息一致性的服务，需要实现哪些功能，要走哪些流程。</p>
-<p>调用开始，业务主动方（之后称为主动方）预先发送一条消息到消息服务（图中中间的部分）中，消息中包含后续的业务操作所必须的业务参数，消息服务接收到该消息后存储消息到消息存储中，并设置消息状态为 **”待确认”**。</p>
+<p>调用开始，业务主动方（之后称为主动方）预先发送一条消息到消息服务（图中中间的部分）中，消息中包含后续的业务操作所必须的业务参数，消息服务接收到该消息后存储消息到消息存储中，并设置消息状态为 <strong>“待确认”</strong>。</p>
 <p>如果消息存储失败则直接返回消息持久化失败，本次业务操作结束。</p>
 <p>当主动方接收到消息存储结果后，开始执行本地的业务操作，根据本地事务提交的结果，调用消息服务的接口。这里分为两种状态：</p>
 <ol>
@@ -240,7 +240,7 @@
 </li>
 </ol>
 <blockquote>
-<p>当状态为第1种，消息服务就将该消息发送到MQ中，并更新消息状态为 **”已发送”**。</p>
+<p>当状态为第1种，消息服务就将该消息发送到MQ中，并更新消息状态为 <strong>“已发送”</strong>。</p>
 </blockquote>
 <p><strong>注意</strong>：对于消息状态的更新和投递消息到MQ中间件的操作应在同一个方法中，并开启本地事务。为什么要这么做呢？</p>
 <p>因为我们的目的是：保证消息发送和本地事务同时成功同时失败。</p>
@@ -268,13 +268,13 @@
 <p>这类情况即出现业务卡在中间态，其实没关系，因为此时消息持久化状态会一直处于 <strong>“待确认”</strong> 状态。</p>
 </blockquote>
 <p>对于这种情况，我们只需要在可靠消息服务后台开启一个定时任务，定时扫描 <strong>“待确认”</strong> 状态的中间状态消息，当消息处于 **”待确认”**状态，表明主动方应用已经开始执行本地业务操作，但业务状态未知，因此我们需要对主动方本地业务执行进行回查操作。</p>
-<p>这个阶段我们要在主动方应用中暴露一个回调查询接口，可靠消息服务会调用该接口，根据消息中的业务参数回查本地事务执行状态。如果主动方业务返回执行成功，则表明当前消息可以投递，此时可靠消息服务更新消息状态为 **”待发送”**，同时投递消息到MQ，并更新消息状态为 <strong>已发送</strong>。</p>
+<p>这个阶段我们要在主动方应用中暴露一个回调查询接口，可靠消息服务会调用该接口，根据消息中的业务参数回查本地事务执行状态。如果主动方业务返回执行成功，则表明当前消息可以投递，此时可靠消息服务更新消息状态为 <strong>“待发送”</strong>，同时投递消息到MQ，并更新消息状态为 <strong>已发送</strong>。</p>
 <p>如果，可靠消息服务（通过回查接口）询问主动方业务执行结果，返回执行失败，那么可靠消息服务需要删除该消息（逻辑删除，设置消息状态为<strong>已回滚</strong>）。</p>
 <p>通过上述的流程，我们可以保证可靠消息服务一定会努力尝试完成消息到MQ的投递过程，即主动方业务执行与消息发送一定同时成功，同时失败。</p>
 <h3 id="2-如何保证消息不丢失–业务被动方对消息100-接收成功"><a href="#2-如何保证消息不丢失–业务被动方对消息100-接收成功" class="headerlink" title="2.如何保证消息不丢失–业务被动方对消息100%接收成功"></a><strong>2.如何保证消息不丢失–业务被动方对消息100%接收成功</strong></h3><p>如果消息投递成功，但业务被动方消费消息出现问题，如：消费失败、未收到消息投递（传说中的丢消息）等，该如何处理呢？</p>
 <p>因为”未收到消息投递”的情况在消息服务高可用的情况下机会不会出现，而消费失败是业务级别的异常，因此我们同样可以采用在可靠消息服务后台起定时任务的方式，检查消息状态。</p>
 <p>对长时间处于 <strong>“已发送”</strong> 未变更状态为 <strong>“已完成”</strong> 的消息进行重新投递操作，这个扫描的时间我们要根据业务执行时间自行调整，比如：1min。</p>
-<p>对这类型消息重新投递到MQ之后，MQ会推送消息给消费方重新进行业务的处理操作。这个过程要在业务层实现消费的 <strong>幂等性</strong>，保证同一条消息在多次投递之后，只会进行一次完整的业务逻辑处理。关于幂等性，可以参考这篇文章 <a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzAxODcyNjEzNQ==&mid=2247486580&idx=1&sn=7b97af5b67ae020ef285be3b76c630a3&chksm=9bd0a1ecaca728facb97015874ee4f4b34303545870eed544ad29caa6dde9b2acb17ce8baa5d&scene=21#wechat_redirect">**幂等的实现方案</a>**, 后续我也会针对业务层的幂等性写一篇文章出来。</p>
+<p>对这类型消息重新投递到MQ之后，MQ会推送消息给消费方重新进行业务的处理操作。这个过程要在业务层实现消费的 <strong>幂等性</strong>，保证同一条消息在多次投递之后，只会进行一次完整的业务逻辑处理。关于幂等性，可以参考这篇文章 <a href="http://mp.weixin.qq.com/s?__biz=MzAxODcyNjEzNQ==&mid=2247486580&idx=1&sn=7b97af5b67ae020ef285be3b76c630a3&chksm=9bd0a1ecaca728facb97015874ee4f4b34303545870eed544ad29caa6dde9b2acb17ce8baa5d&scene=21#wechat_redirect">**幂等的实现方案</a>**, 后续我也会针对业务层的幂等性写一篇文章出来。</p>
 <blockquote>
 <p>整个流程中，从消息的发送，到消息的消费阶段都能保证消息与本地事务执行状态一致，即使上下游会有短暂的状态不一致，在经过一个处理的时间窗口之后，在全局上，数据能够实现最终一致性。</p>
 </blockquote>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -222,7 +222,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://juejin.im/post/5a7a9e0af265da4e914b46f1">Source</a></p>
+        <p><a href="https://juejin.im/post/5a7a9e0af265da4e914b46f1">Source</a></p>
 <h1 id="0-问题背景"><a href="#0-问题背景" class="headerlink" title="0 问题背景"></a>0 问题背景</h1><p>随着微服务架构的流行，<strong>服务按照不同的维度进行拆分</strong>，一次请求往往需要涉及到多个服务。<strong>互联网应用构建在不同的软件模块集上</strong>，这些软件模块，<strong>有可能是由不同的团队开发、可能使用不同的编程语言来实现、有可能布在了几千台服务器，横跨多个不同的数据中心</strong>。因此，就需要一些可以帮助理解系统行为、用于分析性能问题的工具，以便发生故障的时候，能够快速定位和解决问题。</p>
 <p>全链路监控组件就在这样的问题背景下产生了。最出名的是谷歌公开的论文提到的 <a href="https://link.juejin.im/?target=http://bigbully.github.io/Dapper-translation">Google Dapper</a>。<strong>想要在这个上下文中理解分布式系统的行为，就需要监控那些横跨了不同的应用、不同的服务器之间的关联动作</strong>。</p>
 <span id="more"></span>
@@ -286,7 +286,7 @@
 <blockquote>
 <ol>
 <li>每个机器上有一个 <strong>deamon</strong> 做日志收集，业务进程把自己的Trace发到daemon，daemon把收集Trace往上一级发送；</li>
-<li><strong>多级的collector</strong>，类似pub/sub架构，可以负载均衡；</li>
+<li><strong>多级的collector</strong>，类似pub&#x2F;sub架构，可以负载均衡；</li>
 <li>对聚合的数据进行 <strong>实时分析和离线存储</strong>；</li>
 <li><strong>离线分析</strong> 需要将同一条调用链的日志汇总在一起；</li>
 </ol>
@@ -313,14 +313,14 @@
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105519" alt="Span"></p>
 <p>上图说明了span在一次大的跟踪过程中是什么样的。<strong>Dapper记录了span名称，以及每个span的ID和父ID，以重建在一次追踪过程中不同span之间的关系</strong>。如果一个span没有父ID被称为root span。<strong>所有span都挂在一个特定的跟踪上，也共用一个跟踪id</strong>。</p>
 <p><strong>Span数据结构</strong>：</p>
-<pre><code>type Span struct &#123;
+<pre><code>type Span struct {
     TraceID    int64 // 用于标示一次完整的请求id
     Name       string
     ID         int64 // 当前这次调用span_id
     ParentID   int64 // 上层服务的调用span_id  最上层服务parent_id为null
     Annotation []Annotation // 用于标记的时间戳
     Debug      bool
-&#125;
+}
 复制代码
 </code></pre>
 <h2 id="3-2-Trace"><a href="#3-2-Trace" class="headerlink" title="3.2 Trace"></a>3.2 Trace</h2><p>类似于 <strong>树结构的Span集合</strong>，表示一次完整的跟踪，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时，存在唯一标识trace_id。比如：你运行的分布式大数据存储一次Trace就由你的一次请求组成。</p>
@@ -331,12 +331,12 @@
 <p>(1) <strong>cs</strong>：Client Start，表示客户端发起请求 (2) <strong>sr</strong>：Server Receive，表示服务端收到请求 (3) <strong>ss</strong>：Server Send，表示服务端完成处理，并将结果发送给客户端 (4) <strong>cr</strong>：Client Received，表示客户端获取到服务端返回信息</p>
 </blockquote>
 <p><strong>Annotation数据结构</strong>：</p>
-<pre><code>type Annotation struct &#123;
+<pre><code>type Annotation struct {
     Timestamp int64
     Value     string
     Host      Endpoint
     Duration  int32
-&#125;
+}
 复制代码
 </code></pre>
 <h2 id="3-4-调用示例"><a href="#3-4-调用示例" class="headerlink" title="3.4 调用示例"></a>3.4 调用示例</h2><ol>
@@ -420,9 +420,9 @@
 <h1 id="4-方案比较"><a href="#4-方案比较" class="headerlink" title="4 方案比较"></a>4 方案比较</h1><p>市面上的全链路监控理论模型大多都是借鉴Google Dapper论文，本文重点关注以下三种APM组件：</p>
 <blockquote>
 <ol>
-<li>**<a href="https://link.juejin.im/?target=http://zipkin.io/">Zipkin</a>**：由Twitter公司开源，开放源代码分布式的跟踪系统，用于收集服务的定时数据，以解决微服务架构中的延迟问题，包括：数据的收集、存储、查找和展现。</li>
-<li>**<a href="https://link.juejin.im/?target=https://github.com/naver/pinpoint">Pinpoint</a>**：一款对Java编写的大规模分布式系统的APM工具，由韩国人开源的分布式跟踪组件。</li>
-<li>**<a href="https://link.juejin.im/?target=http://skywalking.org/">Skywalking</a>**：国产的优秀APM组件，是一个对JAVA分布式应用程序集群的业务运行情况进行追踪、告警和分析的系统。</li>
+<li><strong><a href="https://link.juejin.im/?target=http://zipkin.io/">Zipkin</a></strong>：由Twitter公司开源，开放源代码分布式的跟踪系统，用于收集服务的定时数据，以解决微服务架构中的延迟问题，包括：数据的收集、存储、查找和展现。</li>
+<li><strong><a href="https://link.juejin.im/?target=https://github.com/naver/pinpoint">Pinpoint</a></strong>：一款对Java编写的大规模分布式系统的APM工具，由韩国人开源的分布式跟踪组件。</li>
+<li><strong><a href="https://link.juejin.im/?target=http://skywalking.org/">Skywalking</a></strong>：国产的优秀APM组件，是一个对JAVA分布式应用程序集群的业务运行情况进行追踪、告警和分析的系统。</li>
 </ol>
 </blockquote>
 <p><strong>以上三种全链路监控方案需要对比的项提炼出来</strong>：</p>
@@ -487,7 +487,7 @@
 <li><strong>Pinpoint 是一个完整的性能监控解决方案</strong>：有从探针、收集器、存储到 Web 界面等全套体系；<strong>而 Zipkin 只侧重收集器和存储服务</strong>，虽然也有用户界面，但其功能与 Pinpoint 不可同日而语。<strong>反而 Zipkin 提供有 Query 接口</strong>，更强大的用户界面和系统集成能力，可以基于该接口二次开发实现。</li>
 <li><strong>Zipkin 官方提供有基于 Finagle 框架（Scala 语言）的接口</strong>，而其他框架的接口由社区贡献，目前可以支持 Java、Scala、Node、Go、Python、Ruby 和 C# 等主流开发语言和框架；但是 <strong>Pinpoint 目前只有官方提供的 Java Agent 探针</strong>，其他的都在请求社区支援中（请参见 <a href="https://link.juejin.im/?target=https://github.com/naver/pinpoint/issues/1759">#1759</a> 和 <a href="https://link.juejin.im/?target=https://github.com/naver/pinpoint/issues/1760">#1760</a>）。</li>
 <li>Pinpoint 提供有 Java Agent 探针，通过字节码注入的方式实现调用拦截和数据收集，<strong>可以做到真正的代码无侵入，只需要在启动服务器的时候添加一些参数，就可以完成探针的部署</strong>；而 <strong>Zipkin 的 Java 接口实现 Brave</strong>，只提供了基本的操作 API，如果需要与框架或者项目集成的话，<strong>就需要手动添加配置文件或增加代码</strong>。</li>
-<li>**Pinpoint 的后端存储基于 HBase，而 Zipkin 基于 <a href="https://link.juejin.im/?target=https://www.w3cschool.cn/cassandra/">Cassandra</a>**。</li>
+<li><strong>Pinpoint 的后端存储基于 HBase，而 Zipkin 基于 <a href="https://link.juejin.im/?target=https://www.w3cschool.cn/cassandra/">Cassandra</a></strong>。</li>
 </ol>
 <h3 id="4-6-2-Pinpoint与Zipkin相似性"><a href="#4-6-2-Pinpoint与Zipkin相似性" class="headerlink" title="4.6.2 Pinpoint与Zipkin相似性"></a>4.6.2 Pinpoint与Zipkin相似性</h3><p>Pinpoint 与 Zipkin 都是基于 Google Dapper 的那篇论文，因此理论基础大致相同。<strong>两者都是将服务调用拆分成若干有级联关系的 Span，通过 SpanId 和 ParentSpanId 来进行调用关系的级联；最后再将整个调用链流经的所有的 Span 汇聚成一个 Trace，报告给服务端的 collector 进行收集和存储</strong>。</p>
 <p>即便在这一点上，Pinpoint 所采用的概念也不完全与那篇论文一致。比如他采用 <strong>TransactionId 来取代 TraceId，而真正的 TraceId 是一个结构，里面包含了 TransactionId, SpanId 和 ParentSpanId</strong>。而且 Pinpoint 在 Span 下面又增加了一个 SpanEvent 结构，用来记录一个 Span 内部的调用细节（比如具体的方法调用等等），因此 <strong>Pinpoint 默认会比 Zipkin 记录更多的跟踪数据</strong>。但是理论上并没有限定 Span 的粒度大小，所以一个服务调用可以是一个 Span，那么每个服务中的方法调用也可以是个 Span，这样的话，<strong>其实 Brave 也可以跟踪到方法调用级别，只是具体实现并没有这样做而已</strong>。</p>
@@ -497,13 +497,13 @@
 <p>Pinpoint 的代码封装也是非常好的，尤其是针对字节码注入的上层 API 的封装非常出色，但是这依然要求阅读人员对字节码注入多少有一些了解，虽然其用于注入代码的核心 API 并不多，但要想了解透彻，恐怕还得深入 Agent 的相关代码，比如很难一目了然的理解 addInterceptor 和 addScopedInterceptor 的区别，而这两个方法就是位于 Agent 的有关类型中。</p>
 <p><strong>因为 Brave 的注入需要依赖底层框架提供相关接口，因此并不需要对框架有一个全面的了解，只需要知道能在什么地方注入，能够在注入的时候取得什么数据就可以了</strong>。就像上面的例子，我们根本不需要知道 MySQL 的 JDBC Driver 是如何实现的也可以做到拦截 SQL 的能力。但是 Pinpoint 就不然，因为 Pinpoint 几乎可以在任何地方注入任何代码，这需要开发人员对所需注入的库的代码实现有非常深入的了解，通过查看其 MySQL 和 Http Client 插件的实现就可以洞察这一点，当然这也从另外一个层面说明 Pinpoint 的能力确实可以非常强大，而且其默认实现的很多插件已经做到了非常细粒度的拦截。</p>
 <p><strong>针对底层框架没有公开 API 的时候，其实 Brave 也并不完全无计可施，我们可以采取 AOP 的方式，一样能够将相关拦截注入到指定的代码中，而且显然 AOP 的应用要比字节码注入简单很多</strong>。</p>
-<p>以上这些直接关系到实现一个监控的成本，在 Pinpoint 的官方技术文档中，给出了一个参考数据。<strong>如果对一个系统集成的话，那么用于开发 Pinpoint 插件的成本是 100，将此插件集成入系统的成本是 0；但对于 Brave，插件开发的成本只有 20，而集成成本是 10</strong>。从这一点上可以看出官方给出的成本参考数据是 5:1。但是官方又强调了，如果有 10 个系统需要集成的话，那么总成本就是 10 * 10 + 20 = 120，就超出了 Pinpoint 的开发成本 100，而且需要集成的服务越多，这个差距就越大。</p>
+<p>以上这些直接关系到实现一个监控的成本，在 Pinpoint 的官方技术文档中，给出了一个参考数据。<strong>如果对一个系统集成的话，那么用于开发 Pinpoint 插件的成本是 100，将此插件集成入系统的成本是 0；但对于 Brave，插件开发的成本只有 20，而集成成本是 10</strong>。从这一点上可以看出官方给出的成本参考数据是 5:1。但是官方又强调了，如果有 10 个系统需要集成的话，那么总成本就是 10 * 10 + 20 &#x3D; 120，就超出了 Pinpoint 的开发成本 100，而且需要集成的服务越多，这个差距就越大。</p>
 <h3 id="4-6-5-通用性和扩展性"><a href="#4-6-5-通用性和扩展性" class="headerlink" title="4.6.5 通用性和扩展性"></a>4.6.5 通用性和扩展性</h3><p>很显然，这一点上 Pinpoint 完全处于劣势，从社区所开发出来的集成接口就可见一斑。</p>
 <p>Pinpoint 的数据接口缺乏文档，而且也不太标准（参考论坛讨论帖），需要阅读很多代码才可能实现一个自己的探针（比如 Node 的或者 PHP 的）。而且团队为了性能考虑使用了 Thrift 作为数据传输协议标准，比起 HTTP 和 JSON 而言难度增加了不少。</p>
 <h3 id="4-6-6-社区支持"><a href="#4-6-6-社区支持" class="headerlink" title="4.6.6 社区支持"></a>4.6.6 社区支持</h3><p>这一点也不必多说，Zipkin 由 Twitter 开发，可以算得上是明星团队，而 Naver 的团队只是一个默默无闻的小团队（从 <a href="https://link.juejin.im/?target=https://github.com/naver/pinpoint/issues/1759">#1759</a> 的讨论中可以看出）。虽然说这个项目在短期内不太可能消失或停止更新，但毕竟不如前者用起来更加放心。而且没有更多社区开发出来的插件，<strong>让 Pinpoint 只依靠团队自身的力量完成诸多框架的集成实属困难，而且他们目前的工作重点依然是在提升性能和稳定性上</strong>。</p>
-<h3 id="4-6-7-其他"><a href="#4-6-7-其他" class="headerlink" title="4.6.7 其他"></a>4.6.7 其他</h3><p>Pinpoint 在实现之初就考虑到了性能问题，<a target="_blank" rel="noopener" href="http://www.naver.com/">www.naver.com</a> 网站的后端某些服务每天要处理超过 200 亿次的请求，因此他们会选择 Thrift 的二进制变长编码格式、而且使用 UDP 作为传输链路，同时在传递常量的时候也尽量使用数据参考字典，传递一个数字而不是直接传递字符串等等。这些优化也增加了系统的复杂度：包括使用 Thrift 接口的难度、UDP 数据传输的问题、以及数据常量字典的注册问题等等。</p>
+<h3 id="4-6-7-其他"><a href="#4-6-7-其他" class="headerlink" title="4.6.7 其他"></a>4.6.7 其他</h3><p>Pinpoint 在实现之初就考虑到了性能问题，<a href="http://www.naver.com/">www.naver.com</a> 网站的后端某些服务每天要处理超过 200 亿次的请求，因此他们会选择 Thrift 的二进制变长编码格式、而且使用 UDP 作为传输链路，同时在传递常量的时候也尽量使用数据参考字典，传递一个数字而不是直接传递字符串等等。这些优化也增加了系统的复杂度：包括使用 Thrift 接口的难度、UDP 数据传输的问题、以及数据常量字典的注册问题等等。</p>
 <p>相比之下，Zipkin 使用熟悉的 Restful 接口加 JSON，几乎没有任何学习成本和集成难度，只要知道数据传输结构，就可以轻易的为一个新的框架开发出相应的接口。</p>
-<p>另外 <strong>Pinpoint 缺乏针对请求的采样能力，显然在大流量的生产环境下，不太可能将所有的请求全部记录，这就要求对请求进行采样，以决定什么样的请求是我需要记录的</strong>。Pinpoint 和 Brave 都支持采样百分比，也就是百分之多少的请求会被记录下来。但是，除此之外 <strong>Brave 还提供了 Sampler 接口，可以自定义采样策略</strong>，尤其是当进行 A/B 测试的时候，这样的功能就非常有意义了。</p>
+<p>另外 <strong>Pinpoint 缺乏针对请求的采样能力，显然在大流量的生产环境下，不太可能将所有的请求全部记录，这就要求对请求进行采样，以决定什么样的请求是我需要记录的</strong>。Pinpoint 和 Brave 都支持采样百分比，也就是百分之多少的请求会被记录下来。但是，除此之外 <strong>Brave 还提供了 Sampler 接口，可以自定义采样策略</strong>，尤其是当进行 A&#x2F;B 测试的时候，这样的功能就非常有意义了。</p>
 <h3 id="4-6-8-总结"><a href="#4-6-8-总结" class="headerlink" title="4.6.8 总结"></a>4.6.8 总结</h3><p>从短期目标来看，Pinpoint 确实具有压倒性的优势：<strong>无需对项目代码进行任何改动就可以部署探针、追踪数据细粒化到方法调用级别、功能强大的用户界面以及几乎比较全面的 Java 框架支持</strong>。但是长远来看，学习 Pinpoint 的开发接口，以及未来为不同的框架实现接口的成本都还是个未知数。相反，<strong>掌握 Brave 就相对容易，而且 Zipkin 的社区更加强大，更有可能在未来开发出更多的接口</strong>。在最坏的情况下，我们也可以自己通过 AOP 的方式添加适合于我们自己的监控代码，而并不需要引入太多的新技术和新概念。而且在未来业务发生变化的时候，Pinpoint 官方提供的报表是否能满足要求也不好说，增加新的报表也会带来不可以预测的工作难度和工作量。</p>
 <h1 id="5-Tracing和Monitor区别"><a href="#5-Tracing和Monitor区别" class="headerlink" title="5 Tracing和Monitor区别"></a>5 Tracing和Monitor区别</h1><p><strong>Monitor可分为系统监控和应用监控</strong>。系统监控比如CPU，内存，网络，磁盘等等整体的系统负载的数据，细化可具体到各进程的相关数据。这一类信息是直接可以从系统中得到的。<strong>应用监控需要应用提供支持，暴露了相应的数据</strong>。比如应用内部请求的QPS，请求处理的延时，请求处理的error数，消息队列的队列长度，崩溃情况，进程垃圾回收信息等等。<strong>Monitor主要目标是发现异常，及时报警</strong>。</p>
 <p><strong>Tracing的基础和核心都是调用链</strong>。相关的metric大多都是围绕调用链分析得到的。<strong>Tracing主要目标是系统分析。提前找到问题比出现问题后再去解决更好</strong>。</p>

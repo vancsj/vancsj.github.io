@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -44,8 +44,8 @@
 <meta property="article:published_time" content="2019-06-17T11:44:04.000Z">
 <meta property="article:modified_time" content="2025-08-04T22:06:48.076Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="算法">
 <meta property="article:tag" content="TopK">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://www.zhihu.com/equation?tex=O(NlogM)">
 
@@ -228,7 +228,7 @@
 <ol>
 <li>首先将这些数据随机分成K堆，不妨假设正好平均分配，时间复杂度为<img src="https://www.zhihu.com/equation?tex=O(N)+" alt="O(N) ">。  </li>
 <li>使用K个任务并行的选出每一堆的前M大的数，这一步的时间复杂度为<img src="https://www.zhihu.com/equation?tex=O(%5Cfrac%7BN%7D%7BK%7DlogM)+" alt="O(\frac{N}{K}logM) ">，此时生成了K组长度为M的有序序列。  </li>
-<li>使用多路归并排序选出这K组序列的前M大的数，这一步的时间复杂度为<img src="https://www.zhihu.com/equation?tex=O(MlogK)+" alt="O(MlogK) "><br>因此假设第2步并行完成，那么总体的时间复杂度就是<img src="https://www.zhihu.com/equation?tex=O(N+%5Cfrac%7BN%7D%7BM%7DlogM+MlogK)" alt="O(N+\frac{N}{M}logM+MlogK)">。至此算法得到了常数级别的优化。<br>但是还没完，注意到2)中每个序列都选了前M大的数，这个是可以继续改进的。<br>我们可以想象一种场景：2个桶里总共有10个球，球是随机分布的，规定一种操作可以从这2个桶里拿至多L个球，这时我们怎么确定这个L使得我们能够以一个我们能接受的概率拿到所有的球？<br>显然当L=10的时候，我们当然可以100%的拿到这全部球，但是开销太大了。由于球是随机分布的，可以知道10个球全部落入落入一个盒子里的概率非常的小，是<img src="https://www.zhihu.com/equation?tex=%5Cfrac%7B1%7D%7B2%5E9%7D+" alt="\frac{1}{2^9} ">。因此我们可以先把这种请当当成一个中彩票的事件，先不管他，直接把L设成9。<br>既然我们牺牲了一部分可靠性降低了开销，那么为什么不能把L设的在低一点？究竟应该设多低？<br>这其实是另外的一个问题了，我认为为了解决这个问题不应该从L入手，而是我们设定一个最低能接受的可靠性概率P，找到最小的L满足我们要求的P即可。<br>因此我们可以使用如上方法优化2)。设我们要求的最低可靠性为P, 优化函数为<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(K,M,P)" alt="\varphi (K,M,P)">  </li>
+<li>使用多路归并排序选出这K组序列的前M大的数，这一步的时间复杂度为<img src="https://www.zhihu.com/equation?tex=O(MlogK)+" alt="O(MlogK) "><br>因此假设第2步并行完成，那么总体的时间复杂度就是<img src="https://www.zhihu.com/equation?tex=O(N+%5Cfrac%7BN%7D%7BM%7DlogM+MlogK)" alt="O(N+\frac{N}{M}logM+MlogK)">。至此算法得到了常数级别的优化。<br>但是还没完，注意到2)中每个序列都选了前M大的数，这个是可以继续改进的。<br>我们可以想象一种场景：2个桶里总共有10个球，球是随机分布的，规定一种操作可以从这2个桶里拿至多L个球，这时我们怎么确定这个L使得我们能够以一个我们能接受的概率拿到所有的球？<br>显然当L&#x3D;10的时候，我们当然可以100%的拿到这全部球，但是开销太大了。由于球是随机分布的，可以知道10个球全部落入落入一个盒子里的概率非常的小，是<img src="https://www.zhihu.com/equation?tex=%5Cfrac%7B1%7D%7B2%5E9%7D+" alt="\frac{1}{2^9} ">。因此我们可以先把这种请当当成一个中彩票的事件，先不管他，直接把L设成9。<br>既然我们牺牲了一部分可靠性降低了开销，那么为什么不能把L设的在低一点？究竟应该设多低？<br>这其实是另外的一个问题了，我认为为了解决这个问题不应该从L入手，而是我们设定一个最低能接受的可靠性概率P，找到最小的L满足我们要求的P即可。<br>因此我们可以使用如上方法优化2)。设我们要求的最低可靠性为P, 优化函数为<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(K,M,P)" alt="\varphi (K,M,P)">  </li>
 <li>使用K个任务并行的选出每一堆的前<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(K,M,P)" alt="\varphi (K,M,P)">大的数，这一步的时间复杂度为<img src="https://www.zhihu.com/equation?tex=O(%5Cfrac%7BN%7D%7BK%7D+log%5Cvarphi+(K,M,P))" alt="O(\frac{N}{K} log\varphi (K,M,P))">, 此时生成了K组长度为<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(K,M,P)" alt="\varphi (K,M,P)">的有序序列。<br>我可以给出一个数<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(16,1000,0.999)%5Cleq+94" alt="\varphi (16,1000,0.999)\leq 94">, 可以看出这个函数的威力。所以用这种方法，可以在实际中获得很多倍的速度提升。<br>但是必须解决的问题是可靠性问题，但这个问题其实很好办，只需要验证一下在3)时有没有把一个序列用尽，如果用尽了并且最后一个数不是这个序列里的最后一个数，那么说明这个序列的第<img src="https://www.zhihu.com/equation?tex=%5Cvarphi+(K,M,P)+1" alt="\varphi (K,M,P)+1">个数也可能出现在最坏的结果。那么最简单的做法就是再从这个序列中补上一部分数据，使得最后的答案时正确的。<br>所以这时我们得到了一个以P为成功率的算法，这个算法可能比未优化前快好多倍，但是有(1-P)的中奖概率。欣慰的是我们可以判断中没中奖，再不济就是抛弃这次的结果再跑一次未优化前的算法呗。</li>
 </ol>
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -271,7 +271,7 @@
 <li>!</li>
 </ul>
 <p>为简单起见，每个表达式仅按其最长提示进行索引。在上面的例子中，提示将是｛｛提升｝｝。</p>
-<p>一些正则表达式没有任何提示。例如，\d+[-/]\d++[-]\d+没有必须作为匹配字符串一部分的子字符串。提示计算器（目前）也相当幼稚，遗漏了一些可能被提取的提示。没有提示的表达式必须单独处理。</p>
+<p>一些正则表达式没有任何提示。例如，\d+[-&#x2F;]\d++[-]\d+没有必须作为匹配字符串一部分的子字符串。提示计算器（目前）也相当幼稚，遗漏了一些可能被提取的提示。没有提示的表达式必须单独处理。</p>
 <p>当尝试匹配字符串时，将查询索引中的一组正则表达式，其提示显示为所匹配字符串的子字符串。一旦建立，索引可以非常快地执行此查询。这个集合与一组没有提示的表达式组合在一起，形成了所有可能与字符串匹配的正则表达式的集合。尝试依次将字符串与每个表达式匹配，直到找到一个表达式或没有表达式，这意味着字符串不匹配。</p>
 <h2 id="试着给点提示"><a href="#试着给点提示" class="headerlink" title="试着给点提示"></a>试着给点提示</h2><p>必须对给定给索引的每个字符串运行没有提示的正则表达式。因此，尝试使用可以计算提示的正则表达式是很重要的。</p>
 <p>索引的提示提取算法无法处理以下类型的子表达式，将使用它们来划分提示：</p>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -37,9 +37,9 @@
 <meta property="article:published_time" content="2019-06-17T06:06:20.000Z">
 <meta property="article:modified_time" content="2025-06-29T22:33:06.934Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="架构">
-<meta property="article:tag" content="微服务">
 <meta property="article:tag" content="中台">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115160630.png">
 
@@ -233,7 +233,7 @@
 <p>　　在此时脱颖而出的微服务技术，面对上述困惑几乎浑身优点：独立开发、独立部署、独立发布，去中心化管理，支持高并发高可用，支持丰富技术栈，企业可以根据需要灵活技术选型。</p>
 <h2 id="实践微服务架构的选择"><a href="#实践微服务架构的选择" class="headerlink" title="实践微服务架构的选择"></a>实践微服务架构的选择</h2><p>微服务架构中所包含的内容：</p>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160705.png"></p>
-<p> 　　微服务是将企业通用服务按业务化分成一个个单体服务，增强可用性、服务易扩展、减少开发成本、减少服务发布对整个平台的影响。微服务是一种思想，实现有很多方式，企业转由单个系统转向微服务就要考虑很多问题，比如**<u>技术选型、业务拆分问题、高可用、服务通信、服务发现和治理、集群容错、配置管理、数据一致性问题、康威定律、分布式调用跟踪、CI/CD、微服务测试，以及调度和部署</u>**等等，这并非一些简单招数能够化解。</p>
+<p> 　　微服务是将企业通用服务按业务化分成一个个单体服务，增强可用性、服务易扩展、减少开发成本、减少服务发布对整个平台的影响。微服务是一种思想，实现有很多方式，企业转由单个系统转向微服务就要考虑很多问题，比如**<u>技术选型、业务拆分问题、高可用、服务通信、服务发现和治理、集群容错、配置管理、数据一致性问题、康威定律、分布式调用跟踪、CI&#x2F;CD、微服务测试，以及调度和部署</u>**等等，这并非一些简单招数能够化解。</p>
 <p>　　微服务框架必须能够达到借助虚拟化平台，能够按需创建机器并调整大小，借助基础设施的自动化从一台机器扩展到多台，拥有业务监控预警、异常熔断等等功能，现有框架有Dubbo和SpringCloud，Dubbo是RPC服务治理框架，和SpringCloud一样具备服务注册、发现、路由、负载均衡等能力。</p>
 <h2 id="Dubbo和Spring-Cloud有何不同？"><a href="#Dubbo和Spring-Cloud有何不同？" class="headerlink" title=" Dubbo和Spring Cloud有何不同？"></a> Dubbo和Spring Cloud有何不同？</h2><p>首先做一个简单的功能对比：_<br><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115160714.png">_</p>
 <p>　　从上图可以看出Dubbo的功能只是Spring Cloud体系的一部分，Dubbo已停更了几年，虽然最近宣布加强了开源支持，但对于其它框架来说已经非常滞后了。<br>　　需要说明的是 Dubbo 是 SOA 时代的产物，它的关注点主要在于服务的调用，流量分发、流量监控和熔断。而 Spring Cloud 诞生于微服务架构时代，考虑的是微服务治理的方方面面，另外由于依托了 Spirng、Spirng Boot 的优势之上，两个框架在开始目标就不一致，Dubbo 定位服务治理、Spirng Cloud 是一个生态。</p>
@@ -247,7 +247,7 @@
 </ol>
 <p>4）从技术发展的角度来讲，Dubbo刚出来的那会技术理念还是非常先进，解决了各大互联网公司服务治理的问题，中国的各中小公司也从中受益不少。经过了这么多年的发展，互联网行业也是涌现了更多先进的技术和理念，Dubbo一直停滞不前，自然有些掉队，有时候我个人也会感到有点可惜，如果Dubbo一直沿着当初的那个路线发展，并且延伸到周边，今天可能又是另一番景象了。</p>
 </blockquote>
-<p>　　Spring 推出Spring Boot/Cloud也是因为自身的很多原因。Spring最初推崇的轻量级框架，随着不断的发展也越来越庞大，随着集成项目越来越多，配置文件也越来越混乱，慢慢的背离最初的理念。随着这么多年的发展，微服务、分布式链路跟踪等更多新的技术理念的出现，Spring急需一款框架来改善以前的开发模式，因此才会出现Spring Boot/Cloud项目，我们现在访问Spring官网，会发现Spring Boot和Spring Cloud已经放到首页最重点突出的三个项目中的前两个，可见Spring对这两个框架的重视程度。</p>
+<p>　　Spring 推出Spring Boot&#x2F;Cloud也是因为自身的很多原因。Spring最初推崇的轻量级框架，随着不断的发展也越来越庞大，随着集成项目越来越多，配置文件也越来越混乱，慢慢的背离最初的理念。随着这么多年的发展，微服务、分布式链路跟踪等更多新的技术理念的出现，Spring急需一款框架来改善以前的开发模式，因此才会出现Spring Boot&#x2F;Cloud项目，我们现在访问Spring官网，会发现Spring Boot和Spring Cloud已经放到首页最重点突出的三个项目中的前两个，可见Spring对这两个框架的重视程度。</p>
 <p>　　因此可以看到SpringCloud良好的生态是非常重要的，这里只讲到至SpringCloud实现微服务，具体SpringCloud微服务的详情后面再介绍不做多讲，还有与微服务紧密相关的容器技术也是相当重要的，还有微服务的DevOps自动化运维到智能化运维后面再作主题介绍。</p>
 <p> 　　最后要说的是由于服务能力的集中管控，很大程度会促进我们一体化运维的能力，但在“大中台、小前台”的模式下，每一个服务都负责对N多个前端业务应用提供支持，这就要求运维在信息安全、备份、监控等方面要有更强的能力，这也将改变企业的组织架构调整。</p>
 <p> 　　以上是每一位架构师都需要不断学习的内容，相关衍生出来的内容更多，这里只作抛砖引玉，文中部分引用了圈内大咖的内容 ，在此感谢他们的付出。</p>

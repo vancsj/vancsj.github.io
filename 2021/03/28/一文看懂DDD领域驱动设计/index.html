@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -49,8 +49,8 @@
 <meta property="article:published_time" content="2021-03-28T06:43:25.000Z">
 <meta property="article:modified_time" content="2025-06-28T14:59:18.839Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="架构">
 <meta property="article:tag" content="DDD">
+<meta property="article:tag" content="架构">
 <meta property="article:tag" content="领域驱动设计">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210328145713.jpg">
@@ -227,7 +227,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>来源: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347603268">https://zhuanlan.zhihu.com/p/347603268</a></p>
+        <p>来源: <a href="https://zhuanlan.zhihu.com/p/347603268">https://zhuanlan.zhihu.com/p/347603268</a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>什么是领域，我习惯描述的是制药领域、环境领域、建筑领域、金融领域等，而在领域内，各种业务规则、业务知识盛行，如何有效的把控规则的变化，应对复杂知识，有一个很关键的四字词语，分而治之。分治法在很多场景下体现了其强大的作用力。领域本身很大，那就拆分，得到更小的领域，也即子域，如同递归调用一般，将一个复杂问题拆分单独求解，而最终将解汇总得到复杂问题解。</p>
 <p>怎么拆，拆成怎么样合适，依据什么拆，这些在领域驱动设计中有了一套答案，虽然领域驱动设计不是银弹，但可以说的上是一套极好的系统方法论或称为架构设计的方法论。</p>
 <p>领域驱动设计常以战略设计与战术设计来将整个领域展现的淋漓尽致，其作用范围既面向业务也面向技术。从战略角度(个人更喜欢称其为上帝视角)去规划系统、划分领域。而从战术角度则从技术层面来指导我们该如何去设计。</p>
@@ -252,7 +252,7 @@
 </ul>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328144550.jpg" alt="子域划分"></p>
 <p><strong>4.限界上下文</strong></p>
-<p>深入到一个子域中，又是一片小天地，在这天地中，却又还是存在着因语义与语境上的差异，让一些概念在这子域中显得额外尴尬。在一个领域 / 子域中，我们会创建一个概念上的领域边界，在这个边界中，任何领域对象都只表示特定于该边界内部的确切含义。这样边界便称为限界上下文。</p>
+<p>深入到一个子域中，又是一片小天地，在这天地中，却又还是存在着因语义与语境上的差异，让一些概念在这子域中显得额外尴尬。在一个领域 &#x2F; 子域中，我们会创建一个概念上的领域边界，在这个边界中，任何领域对象都只表示特定于该边界内部的确切含义。这样边界便称为限界上下文。</p>
 <p>其本质上是限界+上下文，引用到张逸老师的一句话！</p>
 <p><strong>上下文（Context）其实是动态的业务流程被边界（Bounded）静态切分的产物</strong>。</p>
 <p>对于子域与上下文间的关系，看到很多书籍或是文章中所描述的都不一样，这块的争论也没有一个最终答案，个人更倾向于子域中划分上下文，从拆分角度来讲，这样理解更加简单。</p>

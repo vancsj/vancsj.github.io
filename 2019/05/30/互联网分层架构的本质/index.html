@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"vancsj.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="作者： 58沈剑 如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个“数据移动”，然后“被处理”和“被呈现”的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中数据移动是整个过程的核心。">
+  <meta name="description" content="作者： 58沈剑 如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个**“数据移动”，然后“被处理”和“被呈现”的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中数据移动是整个过程的核心**。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="互联网分层架构的本质">
 <meta property="og:url" content="https://vancsj.github.io/2019/05/30/%E4%BA%92%E8%81%94%E7%BD%91%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E7%9A%84%E6%9C%AC%E8%B4%A8/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
-<meta property="og:description" content="作者： 58沈剑 如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个“数据移动”，然后“被处理”和“被呈现”的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中数据移动是整个过程的核心。">
+<meta property="og:description" content="作者： 58沈剑 如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个**“数据移动”，然后“被处理”和“被呈现”的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中数据移动是整个过程的核心**。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115161004.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115161010.png">
@@ -36,8 +36,8 @@
 <meta property="article:published_time" content="2019-05-30T07:43:06.000Z">
 <meta property="article:modified_time" content="2025-08-04T22:27:29.521Z">
 <meta property="article:author" content="vancsj">
-<meta property="article:tag" content="架构">
 <meta property="article:tag" content="微服务">
+<meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/vancsj/images/master/20210115161004.webp">
 
@@ -214,7 +214,7 @@
 
       
         <p>作者： 58沈剑</p>
-<p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个<strong>“数据移动”</strong>，然后<strong>“被处理”</strong>和<strong>“被呈现”</strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中<strong>数据移动是整个过程的核心</strong>。</p>
+<p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个**“数据移动”<strong>，然后</strong>“被处理”<strong>和</strong>“被呈现”<strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中</strong>数据移动是整个过程的核心**。</p>
 <span id="more"></span>
 
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210115161004.webp" alt="典型的互联网分层架构"></p>
@@ -237,12 +237,12 @@
 </ul>
 <p>可以看到，每个工程师骨子里，都潜移默化的实施着分层架构。</p>
 <p><strong>那么，互联网分层架构的本质究竟是什么呢？</strong></p>
-<p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个<strong>“数据移动”</strong>，然后<strong>“被处理”</strong>和<strong>“被呈现”</strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中<strong>数据移动是整个过程的核心</strong>。</p>
+<p>如果我们仔细思考会发现，不管是跨进程的分层架构，还是进程内的MVC分层，都是一个**“数据移动”<strong>，然后</strong>“被处理”<strong>和</strong>“被呈现”<strong>的过程，归根结底一句话：互联网分层架构，是一个数据移动，处理，呈现的过程，其中</strong>数据移动是整个过程的核心**。</p>
 <p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="数据移动示意图"></p>
 <p>如上图所示：</p>
 <p>数据处理和呈现要CPU计算，<strong>CPU是固定不动的</strong>：</p>
 <ul>
-<li>db/service/web-server都部署在固定的集群上</li>
+<li>db&#x2F;service&#x2F;web-server都部署在固定的集群上</li>
 <li>端上，不管是browser还是APP，也有固定的CPU处理</li>
 </ul>
 <p><strong>数据是移动的</strong>：</p>
@@ -258,7 +258,7 @@
 </ul>
 <p>先看<strong>数据传输的格式</strong>，即协议很重要：</p>
 <ul>
-<li>service与db/cache之间，二进制协议/文本协议是数据传输的载体</li>
+<li>service与db&#x2F;cache之间，二进制协议&#x2F;文本协议是数据传输的载体</li>
 <li>web-server与service之间，RPC的二进制协议是数据传输的载体</li>
 <li>client和web-server之间，http协议是数据传输的载体</li>
 </ul>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -265,11 +265,11 @@
 <p>于是我们的类图就可以变得完整一些：</p>
 <p><img src="https://raw.githubusercontent.com/vancsj/images/master/20210328105328" alt="ForkJoinPool线程池"></p>
 <blockquote>
-<p>JDK1.7中新增的一个线程池，与ThreadPoolExecutor一样，同样继承了AbstractExecutorService。ForkJoinPool是Fork/Join框架的两大核心类之一。与其它类型的ExecutorService相比，<strong>其主要的不同在于采用了工作窃取算法(work-stealing)<strong>：所有池中线程会尝试找到并执行已被提交到池中的或由其他线程创建的任务。这样很少有线程会处于空闲状态，非常高效。这使得能够有效地处理以下情景：</strong>大多数由任务产生大量子任务的情况</strong>；从外部客户端大量提交小任务到池中的情况。</p>
+<p>JDK1.7中新增的一个线程池，与ThreadPoolExecutor一样，同样继承了AbstractExecutorService。ForkJoinPool是Fork&#x2F;Join框架的两大核心类之一。与其它类型的ExecutorService相比，<strong>其主要的不同在于采用了工作窃取算法(work-stealing)</strong>：所有池中线程会尝试找到并执行已被提交到池中的或由其他线程创建的任务。这样很少有线程会处于空闲状态，非常高效。这使得能够有效地处理以下情景：<strong>大多数由任务产生大量子任务的情况</strong>；从外部客户端大量提交小任务到池中的情况。</p>
 </blockquote>
 <p>来源：</p>
 <ul>
-<li><a href="https://link.juejin.im/?target=https://blog.csdn.net/panweiwei1994/article/details/78969238">blog.csdn.net/panweiwei19…</a></li>
+<li><a href="https://link.juejin.im/?target=https://blog.csdn.net/panweiwei1994/article/details/78969238">blog.csdn.net&#x2F;panweiwei19…</a></li>
 </ul>
 <h2 id="2-2-补充：Callable和Future"><a href="#2-2-补充：Callable和Future" class="headerlink" title="2.2 补充：Callable和Future"></a>2.2 补充：Callable和Future</h2><p>学到了线程池，我们可以很容易地发现：很多的API都有Callable和Future这么两个东西。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;?&gt; submit(Runnable task)</span><br><span class="line">&lt;T&gt; Future&lt;T&gt; <span class="title function_">submit</span><span class="params">(Callable&lt;T&gt; task)</span></span><br></pre></td></tr></table></figure>
