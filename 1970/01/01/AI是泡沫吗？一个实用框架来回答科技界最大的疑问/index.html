@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="神译局是36氪旗下编译团队，关注科技、商业、职场、生活等领域，重点介绍国外的新技术、新观点、新风向。 编者按：人人都在谈AI泡沫，但没人说得清楚。本文用包含5个指标的框架告诉你：现在不是泡沫，但真正的危险信号是什么呢？文章来自编译。 一个月前，我开始着手回答一个看似简单的问题：人工智能是泡沫吗？ 自2024年以来，当我在世界各地的活动中发表演讲时，人们一直在问我这个问题。 尽管华尔街的银行家们普遍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="已所欲，己所从">
+<meta property="og:url" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="神译局是36氪旗下编译团队，关注科技、商业、职场、生活等领域，重点介绍国外的新技术、新观点、新风向。 编者按：人人都在谈AI泡沫，但没人说得清楚。本文用包含5个指标的框架告诉你：现在不是泡沫，但真正的危险信号是什么呢？文章来自编译。 一个月前，我开始着手回答一个看似简单的问题：人工智能是泡沫吗？ 自2024年以来，当我在世界各地的活动中发表演讲时，人们一直在问我这个问题。 尽管华尔街的银行家们普遍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_2f3132f0e0a0431abb2195b4739bc231.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_94e05efcf97a4e65a12ca8d8ba0f2cef.jpg">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_061d784003954a57972d83ce2590ef9e.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_22e93d3d49a246b082997b0f8259226a.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_7faff77e1c8c4f89901447545f74301c.jpg">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_e33422cae795455d9ebbceb0d48d61e8.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_97995c51ee7943f1999cb9db1cc07c3c.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_42458edf70ea4bdfa02bce934dde9063.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_9fda2596877b485b887a8889b70079c8.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_e18b082149b24bbc9682515d22a79604.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_7aea6a0868b24daeb9b7e58677d5efb2.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_069cd13bd4984b75a1dca80c75e8e929.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_1ade774a905f45e183e8d92db49b5729.png">
+<meta property="og:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_a9106d80fbce4de98def0169a44b0faa.png">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-20T17:18:02.124Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Java, 后端开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_2f3132f0e0a0431abb2195b4739bc231.png">
+
+<link rel="canonical" href="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：1970-01-01 08:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T08:00:00+08:00">1970-01-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-10-21 01:18:02" itemprop="dateModified" datetime="2025-10-21T01:18:02+08:00">2025-10-21</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>神译局是36氪旗下编译团队，关注科技、商业、职场、生活等领域，重点介绍国外的新技术、新观点、新风向。</p>
+<p>编者按：人人都在谈AI泡沫，但没人说得清楚。本文用包含5个指标的框架告诉你：现在不是泡沫，但真正的危险信号是什么呢？文章来自编译。</p>
+<p>一个月前，我开始着手回答一个看似简单的问题：人工智能是泡沫吗？</p>
+<p>自2024年以来，当我在世界各地的活动中发表演讲时，人们一直在问我这个问题。</p>
+<p>尽管华尔街的银行家们普遍认为这是一场投资热潮，但在欧洲和美国的会议室与大会堂里，越来越多的人开始提出这个问题。</p>
+<p>有些人已经下定了决心。加里·马库斯（Gary Marcus）称其为“泡沫顶峰”。《大西洋月刊》警告说，“我们目前可能正在经历一场人工智能泡沫，投资者的兴奋情绪已经远远超出了该技术近期的生产力效益。如果这个泡沫破裂，其后果可能让互联网泡沫的崩溃都相形见绌——而且遭受损失的将不仅仅是科技巨头和他们的硅谷支持者。”《经济学人》则表示，“潜在的代价已经高得惊人。”</p>
+<p>理解这类问题的最佳方式是建立一框架，一个可以随着新证据的出现而不断更新的框架。构建这个框架花费了我数十个小时进行数据分析、建模，并与投资者和高管进行了大量对话。</p>
+<p>本文就是那个框架：衡量生成-式AI与历史上那些泡沫的5个指标。</p>
+<span id="more"></span>
+
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_2f3132f0e0a0431abb2195b4739bc231.png" class="" title="有2个指标进入红区即为泡沫">
+
+<p>有2个指标进入红区即为泡沫</p>
+<p>我曾研究并亲身经历过互联网泡沫。作为一名投资者，我亲身感受到了它的影响。跟你们当中的许多人一样，在全球金融危机期间我也很活跃。因此，我投入了大量的思考和分析，构建了一个稳健的框架来理解当前正在发生的事情。今天，我将与各位分享。</p>
+<p>我的思考基于卡洛塔·佩redos（Carlota Perez）、比尔·詹韦（Bill Janeway）等领域巨擘的研究，以及各大银行和分析师的金融分析。但我还没在别处见过一个能将这些理论转化为当今人工智能实用仪表盘的框架：一组可阅读、可与过往泡沫进行比较并用以指导决策的参数。</p>
+<h2 id="泡沫的含义"><a href="#泡沫的含义" class="headerlink" title="泡沫的含义"></a>泡沫的含义</h2><p>泡沫是资本主义最古老的故事之一。泡沫是与无度、信念与崩溃有关的寓言。但泡沫不只是金融现象，还是文化产物。作为讲述贪婪与愚蠢的道德故事，它们总是一而再，再而三地反复出现。郁金香狂热常被错误地记述为一场让织工破产、商人沉沦的疯狂，但其灾难性远不及传说。其所造成的伤害仅限于富有的商人之间，对荷兰经济基本没有什么影响。但这个神话却流传了下来，而这正是关键所在：泡沫成了我们用来警示自己过于乐观存在危险的故事。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_94e05efcf97a4e65a12ca8d8ba0f2cef.jpg" class="" title="小扬·勃鲁盖尔，《郁金香狂热的寓言》，1640年">
+
+<p>小扬·勃鲁盖尔，《郁金香狂热的寓言》，1640年</p>
+<p>有些泡沫是金融性的：18世纪20年代的南海狂潮、20世纪20年代的咆哮股市、80年代日本的房地产热以及2008年的房市崩盘。</p>
+<p>有些则是技术性的。19世纪40年代，铁路被誉为新工业躯体的血脉。它们确实是。但一个躯体只需要那么多血脉，很快铁轨就铺到了商业无法支撑的地方。20世纪90年代的电信业承诺要打造一个网络乌topia，结果却是7000万英里多余的光纤闲置在地下。互联网热给了我们一个新经济的愿景，其中大部分最终确实实现了，但那是在2000年估值蒸发之后。</p>
+<p>有趣的是，学术界似乎对什么是投资泡沫并没有共识。诺贝尔经济学奖得主尤金·法马（Eugene Fama）甚至说泡沫根本就不存在。</p>
+<p>我希望能超越“泡沫只有在看到时才知道”的看法。这里面有两个相互关联的系统在起作用。第一个，也是最明显的，是当股票市场被荒谬地高估然后崩溃。第二个是生产性资本（投入资本支出或风险投资）的部署量是否崩溃。当然，这两者是相关的。股价暴跌会令投资流动成本更高。而生产性资本投资的长期下降，可能被股市解读为经济放缓的预兆。</p>
+<p>但为了给这个问题定个框架：可定义泡沫为指<strong>股票价值从峰值下跌50%，且持续至少五年</strong>。在美国房地产泡沫和互联网泡沫的案例中，低谷期大约持续了<strong>五年</strong>。美国房地产市场花了<strong>10年</strong>才完全恢复到泡沫前的峰值，而互联网则花了<strong>15年</strong>。与此同时，我们预计生产性资本的部署率也会大幅下降，同样是从<strong>峰值下降50%</strong>。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_061d784003954a57972d83ce2590ef9e.png" class="" title="泡沫破裂后美国房地产用了10年时间才得以恢复">
+
+<p>泡沫破裂后美国房地产用了10年时间才得以恢复</p>
+<p>在本次分析中，我将用“泡沫”一词来涵盖这两个具备相关性的方面。最终，它指的是一个价格和投资迅速飙升的阶段，在此期间，估值严重偏离了相关资产的潜在可能与实际盈利能力。泡沫在资本充裕以及诱人的叙事当中茁壮成长，并往往以剧烈而持续的逆转告终，抹去了上涨过程中创造的大部分纸面财富。</p>
+<p>相比之下，“繁荣”在早期阶段可能看起来跟泡沫非常相似，估值上升，投资加速。但关键的区别在于，在繁荣期间，基本面最终会跟上。潜在的现金流、生产率的提升或真实的需求增长会上升到与乐观情绪相匹配的水平。繁荣期也可能出现过度投资，但最终会整合为持久的产业与长远的经济价值。</p>
+<p>不过，在这两者之间还存在着一个灰色地带：在这些热情高涨的时期，人们确实很难分辨资本是在为新经济奠定基础，还是仅仅在吹高无法持续的价格。这就像身处风暴眼：你能感受到风、雨和压力，但你还不知道风暴是会扫清阴霾还是会夷平房屋。</p>
+<p>这就引出了我们当前的问题：人工智能是又一个泡沫吗？让许多观察者不安的是那些数字。自2022年底ChatGPT发布以来，超大规模云服务商的年度数据中心资本支出增加了一倍多，他们重金押注于训练和运行日益庞大模型所需的基础设施。去年，当山姆·阿尔特曼（Sam Altman）提出7万亿美元的投资需求时，这听起来像是狂妄自大。如今，投资者不再一笑了之，他们开始思考这种支出规模是否可持续。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_22e93d3d49a246b082997b0f8259226a.png" class="" title="ChatGPT推出以来，超大规模基础设施供应商的资本性支出已经翻番">
+
+<p>ChatGPT推出以来，超大规模基础设施供应商的资本性支出已经翻番</p>
+<p>泡沫没法实时诊断。当初的狂热是合理还是妄想我们只能当事后诸葛亮。与其做出一个明确的判断——近乎于无益的猜测——不如将今天的热潮与历史进行对标，以发现类似泡沫的迹象可能在何处会悄然出现。</p>
+<p>我们可以把这想象成驾驶飞机。飞行员不会只靠一个仪表，他们会监控一组仪表来了解飞行状况。我们将使用五个这样的指标：</p>
+<ul>
+<li><strong>指标1 - 经济压力</strong>：目前的投资规模是否大到足以扭曲经济？</li>
+<li><strong>指标2 - 行业压力</strong>：行业收入是否与已部署的资本支出相称？</li>
+<li><strong>指标3 - 收入增长</strong>：收入增长&#x2F;扩大的速度是否足够快以迎头赶上？</li>
+<li><strong>指标4 - 估值热度</strong>：估值有多高？与历史相比，股票是否被过度高估？</li>
+<li><strong>指标5 - 资金质量</strong>：是哪种资金在支持这一切？是稳健的资产负债表，还是脆弱、易变的资本？</li>
+</ul>
+<p>接下来，我将逐一审视每个指标，解释为什么其可能是绿色、黄色或红色，并在最后将它们整合到一个完整的仪表盘视图里。</p>
+<h2 id="指标1：经济压力"><a href="#指标1：经济压力" class="headerlink" title="指标1：经济压力"></a>指标1：经济压力</h2><p>正在进行的投资规模是巨大的，摩根士丹利预计到2029年人工智能基础设施的支出将达到<strong>3万亿美元</strong>。但它尚未达到历史上那些大泡沫破裂前的失控极端。令这个维度变得棘手的是其依赖性。在美国，<strong>超过三分之一的GDP增长</strong>可追溯到数据中心的建设。</p>
+<p>这本身并非坏事，但如果势头减弱，可能会变得危险。一个如此严重依赖单一行业增长的经济体，可能会发现地基崩塌得预期要快。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_7faff77e1c8c4f89901447545f74301c.jpg" class="" title="AI, Telecom, and Railroad Capex as a Percentage of GDP">
+
+<p>资本支出（capex）的激增，即投入到AI所需的物理基础设施中，是一种乐观主义的行为。这就是资本支出的本质。今天花钱是相信明天它会成为收入的来源。如果今天的投资是明智的，最终将带来生产力的提升和经济的扩张。</p>
+<p>如果你想用促进健康和快乐来兜售呼啦圈，你先得买进呼啦圈。而在供应链的某个环节，需要有一家工厂来制造它们。为那家工厂提供资金就是资本支出。你部署资本支出去建造一个可以出售的有用之物。资本支出投资通常，但并非总是，是业务增长的前兆。</p>
+<p>AI数据中心具有类似的性质，甚至更甚。它们不仅仅是生产单一产品的工厂，它们是基础设施。微软、OpenAI和美国政府都持此观点。他们将计算能力视为21世纪的基础设施，其重要性不亚于早期的高速公路、铁路、电网或电信网络。我在上一本书中也提出了同样的论点，所以你可以猜到我的立场。除美国外，各国主权政府已承诺到2030年为作为基础设施的AI投入超过1万亿美元。</p>
+<p>建设这样的基础设施不可避免地需要历史性的巨额资金，与过去的铁路和电力建设规模相当。麦肯锡预测，到2030年，为满足AI驱动的需求，将需要约156吉瓦的新增电力容量——这相当于西班牙和葡萄牙电网的总和。该公司估计，这将耗资5万亿至7.9万亿美元的资本支出。作为参考，这大约是阿波罗计划成本的二十倍，从而让AI数据中心成为现代历史上规模最大的基础设施建设项目之一。</p>
+<p>不过，尽管基础设施挺有用，但当私人资本介入时，事情就可能脱离现实。融资结构与技术本身同样重要。美国的铁路主要由私人资助，并经历了多次投资泡沫。相比之下，电力和公路系统得益于更多的公共投资和协调，较少出现投机过度。当繁荣所需求的资源开始扭曲整个经济时，它就会变得危险。工资被吸入一个行业，供应链为之重新调整，资本市场也对其产生依赖。当预期破灭时，反弹将十分猛烈。</p>
+<p>衡量经济压力的一种方法是看投资占GDP的比重，即国民产出中投入到单一技术前沿的部分。这是一个比较粗略但能说明问题的比率。它显示了经济在多大程度上依赖于某一个技术赌注。</p>
+<p>就AI基础设施而言，大部分支出以资本开支的形式出现：服务器、冷却系统、网络设备、钢筋混凝土外壳以及维持其运行所需的电力基础设施。</p>
+<p>按照这个标准，铁路泡沫是负担最重的。在美国，1872年铁路支出达到顶峰，约占GDP的<strong>4%</strong>，就在第一次大崩盘之前。相比之下，20世纪90年代末的电信热潮顶峰时接近GDP的<strong>1%</strong>，这个水平在今天看来有些熟悉。</p>
+<p>AI建设正处于这个中间地带。预计2025年全球将有约<strong>3700亿美元</strong>流入数据中心，其中约<strong>70%<strong>指定用于美国，这大约占美国GDP的</strong>0.9%</strong>。高盛预计2026年支出将再增长<strong>17%</strong>。我自己的预测与此观点一致：到2030年，年度资本支出将达到<strong>8000亿美元</strong>，其中约<strong>60%<strong>发生在美国，这将令美国的占比达到2025年GDP的</strong>1.6%</strong>。</p>
+<p>经济压力指标分为三个区间：绿色（1%以下），黄色（1%至2%），红色（2%以上）。所以就目前而言，生成式AI刚好处在绿色区域。当然，考虑到已公布的投资承诺，似乎很快就会进入黄色区域。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_e33422cae795455d9ebbceb0d48d61e8.png" class="" title="Economic Pressure Indicator">
+
+<p>但这里有一个历史上的泡沫未曾面临的变数：快速折旧。一条铁轨一旦铺设，可以使用几十年。美国直到20世纪仍在使用19世纪的铁轨运输货物。20世纪90年代铺设的电信光纤35年后仍在传输数据。</p>
+<p>相比之下，GPU的更新换代速度极快。它们用于模型训练等前沿应用的有效寿命可能只有三年，之后便被降级用于强度较低的任务。超大规模云服务商约三分之一的资本支出都投向了这类短寿命资产。理论上，这些资产在第五年和第六年仍然可以变现。其余的资金则用于可以使用二三十年的外壳、电力和冷却系统。考虑到资产寿命，AI建设显得更加苛刻：跟铁路或光纤不一样，这个系统必须在短短几年内收回成本，而不是几代的时间。</p>
+<p>这种情况会让财务状况变得更糟还是更好，目前还是个未知数。悲观的看法是，一箱熟透的香蕉比同等价值的巴西坚果价值更低，因为它必须被迅速消耗掉。但乐观的看法很有趣：更短的折旧周期可能会迫使新进投资者考虑财务约束问题。在铁路热时期，长达数十年的资产寿命掩盖了许多商业模式的弱点；公司可以在破产前苟延残喘多年。而在AI领域，缺陷可能会迅速暴露，迫使企业要么快速适应，要么早点失败。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_97995c51ee7943f1999cb9db1cc07c3c.png" class="" title="Depreciation Schedules for Different Asset Classes">
+
+<p>压力显而易见，但尚未到无法承受的地步。AI应用层的风投虽然声势浩大，但与1990年代的电信狂热相比仍算温和。这表明在这轮周期过热之前可能还有发展空间。投入服务器、冷却系统和电力线的数万亿美元可能是必不可少的，但历史表明，持久的利润不是在这些地方积累出来的。在铁路时代，许多铁轨公司破产，但利用这些线路的物流公司和商品大亨却 prospered (原文如此，可译为“蓬勃发展”)。在电信时代，抓住增长机遇的不是光纤建设者，而是使用带宽的平台和服务提供商。同样的逻辑可能也适用于AI：超大规模云服务商承担了资本支出的重担，但持久的价值可能会归于那些控制模型、数据和建立在其上的生态系统的人。</p>
+<p>这就引出了我们仪表盘上的第二个指标：行业压力。</p>
+<h2 id="指标2：行业压力"><a href="#指标2：行业压力" class="headerlink" title="指标2：行业压力"></a>指标2：行业压力</h2><p>每一次繁荣都需要证明，投入新设备的资金政治开始产生回报。在任何增长阶段，收入都不太可能覆盖投资，但收入不应为零。这个指标关注的是资本支出与收入的比率。</p>
+<p>我们估计，生成式AI的收入今年有望超过<strong>600亿美元</strong>，而五年前几乎为零。</p>
+<p>这个数字很可能低估了生成式AI正在创造的价值。比方说，Meta曾表示该技术令自家平台的转化率提高了约3-5%。这类间接效应可能有助于解释为什么像摩根士丹利这样的一些分析师将2025年的收入预测定得远高于我们的估计，达到了1530亿美元。</p>
+<p>像谷歌、微软和亚马逊这样的大型超大规模云服务商无疑正在进入一个资本支出强度更高的阶段。2021年，在ChatGPT出现之前，这些公司将约44%的运营现金流用于资本支出。到2024年，这一比例已上升至68%。2025年，这个数字还会更高。但是，正如New Street Research的皮埃尔·费拉古（Pierre Ferragu）所指出那样，这些公司可以通过平台重构来吸收这种变化，通过结构性更高的资本密集度来驱动增长和效率提升。这种情况已经存在了十年之久：在2015年至2018年间，微软Azure的资本支出占其收入的70%到90%。这是一种对未来的投资。</p>
+<p>这与早前的繁荣周期形成了有趣的对比。铁路行业尤其具有参考价值。铁路的直接收入贡献与铁路为美国经济创造的价值相比微不足道。铁路泡沫总是与现金流的现实紧密相连。为资助新铁轨和机车车辆而发行的债券必须用客运票价和货运收入来偿还。每当资本支出超过收益时，压力就会显现。1873年、1883年和1887年的狂热都遵循了同样的模式：年收入与资本支出比率急剧下降，在某些情况下，收入甚至直接萎缩。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_42458edf70ea4bdfa02bce934dde9063.png" class="" title="Capex to Revenue Ratio for AI, Telecom, and Railroads">
+
+<p>在1872年美国铁路扩张的高峰期，资本支出约为收入的<strong>两倍</strong>。1990年代末爆发电信泡沫时，资本支出略低于收入的<strong>四倍</strong>。相比之下，当今的生成式AI热潮，收入约为<strong>600亿美元</strong>，而全球数据中心资本支出约为<strong>3700亿美元</strong>——资本支出与收入之比为<strong>六倍</strong>，是最为紧张的一次。</p>
+<p>从行业压力指标上，铁路处在绿色区域，比较健康。生成式AI则处在黄色区域，接近红色。</p>
+<p>这还算不上警示信号，一个重要原因是人们正争先恐后地想要使用AI数据中心。一份报告指出，企业客户甚至在数据中心建成之前就已经承诺要购买算力了。驱动这一切的是使用量，而随之而来的是惊人的收入增长。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_9fda2596877b485b887a8889b70079c8.png" class="" title="Industry Pressure Indicator">
+
+<h2 id="指标3：收入增长"><a href="#指标3：收入增长" class="headerlink" title="指标3：收入增长"></a>指标3：收入增长</h2><p>铁路与电信热的问题不在于行业压力本身，而在于收入增长失去了动力。投资期望回报。1873年铁路泡沫破裂后，收入同比下降了3%。电信行业表现稍好，只下降了0.5%。</p>
+<p>在崩盘之前，收入增长并非爆炸性的。1873年的铁路行业增长了22%——足以在三年内翻一番。20世纪90年代末的电信行业仅增长了16%，翻倍时间超过四年。</p>
+<p>相比之下，生成式AI的收入仍在加速增长。根据我们的估计，今年生成式AI的收入将增长约<strong>一倍</strong>。</p>
+<p>这很可能还是个保守的预测。花旗银行估计，模型制造商的收入2025年将增长<strong>483%</strong>。OpenAI预测到2030年的年化增长率约为<strong>73%</strong>，而类似摩根士丹利的分析师估计，到2028年这个市场规模可能高达<strong>1万亿美元</strong>，相当于在此期间年复合增长率约达<strong>122%</strong>。</p>
+<p>我们的收入增长指标是指数性的。它衡量的是收入翻倍所需的时间（以年为单位）；也就是说，在当前的增长率下，行业收入翻倍需要多长时间？在这方面，生成式AI稳稳地处于绿色区域，每年都在翻倍。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_e18b082149b24bbc9682515d22a79604.png" class="" title="Revenue Growth Indicator">
+
+<p>这些支出大部分流向了运营基础设施的超大规模云服务商和新兴云服务商。超大规模云服务商赚取了巨额利润，因此他们有能力进行投资，如果认为此举能为未来奠定良好基础，他们愿意削减几个百分点的收益。甲骨文预测，到2030年，其云业务的累计收入可能达到约3800亿美元。</p>
+<p>在与大公司的交流当中，我强烈感觉到他们目前对这项技术的需求是无止境的。这很可能支撑了强劲的增长率。IBM的CEO调查显示，生成式AI已经在扩大IT预算，62%的受访者表示他们将在2025年增加AI投资。需求如此之高，以至于新的数据中心一上线就达到满负荷运行，亚马逊CEO安迪·贾西（Andy Jassy）指出，“我们投入容量的速度有多快，它被消耗的速度就有多快”，而山姆·阿尔特曼则评论说，算力短缺正影响着模型的升级。黄仁勋在2024年初就预见到了这一点，他预测对Hopper和Blackwell芯片的需求将在明年很长一段时间内都供不应求。</p>
+<p>约9%的美国公司拥有一个有用的生成式AI用例。粗略估算表明，这个数字将在五年内从9%增长到75%，而用例数量将从一个增加到数百个。</p>
+<p>这本身就预示着某方面的千倍增长。我之所以说某方面，是因为目前按token计费的模式可能会改变。</p>
+<p>即使不变，我们也将目睹token单价的大幅下降，很可能是数量级的下降。根本问题在于，我们仍处于企业应用的初级阶段。目前，公司几乎无法获得足够的token来满足他们的需求。</p>
+<p>消费端的情况也类似。美国消费者每年在网上的花费已达约1.4万亿美元。如果以每年15-17%的速度增长（自2013年以来，年增长率已超过14%），到2030年，这个数字完全有可能翻倍至3万亿美元。在这样的背景下，一个生成式AI应用领域在五年内从今天的100亿美元增长到5000亿美元，看起来也并非遥不可及。在中型初创公司和大型模型提供商当过中，已经可以看到300-500%的指数级增长率，这表明即使只是消费者数字支出的一小部分重新分配，也可能将收入推向数千亿美元的规模。</p>
+<p>总而言之，这些信号都指向一个仍在强劲上升的行业，这与铁路和电信泡沫破裂前相对微薄的收入增长截然不同。如果生成式AI的收入能以去年一半的速度增长，那么根据我的保守预测，到2026年，其收入将达到1000亿美元，覆盖当年资本支出的约25%。</p>
+<h2 id="指标4：估值热度"><a href="#指标4：估值热度" class="headerlink" title="指标4：估值热度"></a>指标4：估值热度</h2><p>如果说经济和行业压力展示了繁荣的分量，收入增长展示了其轨迹，那么估值热度展现的就是市场的气氛。这往往是泡沫暴露得最清楚的地方：投资者无论基本面如何，都热情高涨地为该行业定价。正如卡洛塔·佩雷斯几十年来所论证的，在每次技术革命的早期“安装阶段”，金融市场往往会过度投资，投入的资本远远超出了近期收入所能支撑的水平。这种狂热在当下看起来非理性，但这正是社会铺设新基础设施的机制。挑战在于，这种狂热能否演变到“部署阶段”，即基础设施普及并带来真正的生产力提升。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_7aea6a0868b24daeb9b7e58677d5efb2.png" class="" title="P&#x2F;E Ratios for Nasdaq and Railroads">
+
+<p>互联网泡沫是典型案例。毫无盈利的公司以三位数的市盈率上市，有些公司在IPO当天筹集的资金比它们后来能创造出来的总收入还要多。Boo.com从包括LVMH集团的伯纳德·阿尔诺在内的投资者那里筹集了1.35亿美元，并将自己定位为“时尚界的亚马逊”。该网站在18个国家推出，提供本地化语言和配送服务，还有一个虚拟形象“Boo小姐”在3D模型上提供购物建议。</p>
+<p>它在上线前就花费了2500万美元做广告，员工从40人激增到400人，并在纽约和欧洲各地开设了豪华办公室。那个大量使用JavaScript和Flash的网站在拨号上网连接下几乎无法使用，与Mac电脑不兼容，而且漏洞百出。四分之一的购买尝试都失败了。尽管极尽奢华——举办盛大派对、乘坐协和飞机、为Boo小姐聘请名人造型师——但民调显示，只有13%的互联网用户知道这个品牌的存在。18个月内，钱就烧光了。2000年5月，Boo.com关门大吉。</p>
+<p>当前生成式AI领域的情况与此无法相提并论。这里的关键指标是市盈率（P&#x2F;E），这个指标是股价与每股收益之比。如果一家公司年收益为1美元，市盈率为20，则意味着股票买家为每1美元的当前利润支付了20美元，并假设未来的增长会让这笔投资物有所值。高市盈率意味着公司在押注未来的快速增长，但如果过高且持续时间过长，投资者买的可能就是一个幻想。互联网时代就是如此。在顶峰时期，纳斯达克的市盈率约为<strong>72</strong>。一项详细研究估计，仅互联网股票的隐含市盈率就高达<strong>605</strong>。换句话说，投资者愿意为超过六个世纪的当前收益买单。问题不在于需求消失了——亚马逊的收入从2000年的<strong>27.6亿美元</strong>增长到2001年的<strong>31.2亿美元</strong>——而在于没有一家公司的增长速度能得快到可支撑那些奇高的期望。基本面改善了，但预期崩溃了。</p>
+<p>如今，情况要平静得多。纳斯达克的市盈率约为<strong>32</strong>，是互联网时代的一半。更广泛的科技市场估值高于长期平均水平，但远未达到互联网泡沫的程度。与铁路泡沫时期估计约<strong>20</strong>的市盈率相比，现在的估值偏高。但铁路泡沫的结局很糟，不是因为估值本身极端，而是因为收入增长停滞。相比之下，生成式AI的收入仍在快速加速增长。</p>
+<p>还有一个估值过高的指标受到了许多投资者的关注，那就是所谓的“巴菲特指标”，它衡量的是股票市场估值超出GDP的程度。毫无疑问，这个指标正处于高位，远高于通常预示市场回调的两个标准差的异常水平。但我们目前更为乐观。历史会押韵，但不会重演。巴菲特指标依赖GDP，而众所周知，GDP在捕捉技术生产力收益方面表现不佳。此外，大型科技公司收入的很大一部分来自美国以外，令其盈利与国内GDP脱钩。最后，基于AI的生产力可能会影响利润率——在保持产出（和GDP不变）的同时增加公司利润。因此，尽管我们关注巴菲特指标（及其远亲，席勒市盈率），但我们认为它们未能很好地捕捉到一个加速发展的数字经济的不同情况。</p>
+<p>那么这个指标有多热呢？我的结论是绿色。价格还没有像互联网泡沫时期的估值那样摆脱地心引力。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_069cd13bd4984b75a1dca80c75e8e929.png" class="" title="Valuation Heat Indicator">
+
+<h2 id="指标5：资金质量"><a href="#指标5：资金质量" class="headerlink" title="指标5：资金质量"></a>指标5：资金质量</h2><p>资金质量不是一个标准指标，而是一个综合判断。它关注资金的来源、结构，以及资本是愿意等待多年回报还是追逐季度性暴涨。简而言之，低质量资本是短视、无纪律、负债累累的；它来得快，去得也快。高质量资本则更有耐心，承销更佳，并能承受波动。</p>
+<p>每个泡沫都有其标志性的弱点，这无一例外地根植于其融资方式。铁路热是由背后资本薄弱的投机性散户投资者推动的。到19世纪70年代初，美国铁路公司的有息债务平均占总资产的46%；当过度建设遭遇信贷紧缩时，融资便枯竭了。1873年的恐慌导致铁路线路进入破产管理。</p>
+<p>一个世纪后，互联网公司的身板稍微结实一点。1995年，风投还是一个小众行业，资金部署量只有53亿美元。到2001年，已有超过2370亿美元注入通常是由缺乏经验的新晋经理人主导的初创公司。这股狂热蔓延到公开市场：1999年至2000年间的IPO数量是历史平均水平的六倍。那些公司在几乎没有收入的情况下就上市了。1998年，我的两位朋友把theGlobe.com给弄上市了，当天股价就飙升了606%。</p>
+<p>20世纪90年代末的电信业则有赖于大量廉价债务。美国和欧洲的运营商在短短几年内将杠杆率翻了两番甚至四番。德国电信和法国电信在1998年至2001年间共增加了780亿美元的净债务。当收入未能跟上时，违约潮席卷了整个行业。</p>
+<p>在这当中的每个案例里面，助长繁荣的资本都被证明是昙花一现。但它们的脆弱程度各不相同。铁路和电信业最易受到信贷紧缩的影响，其债务比率急剧膨胀。互联网公司则受制于市场情绪，其股权价值随之蒸发。</p>
+<p>在这方面，今天的人工智能热潮看起来更为稳固。微软、亚马逊、Alphabet、Meta和英伟达正在创造惊人的现金流，足以轻松资助自身的建设。但目前只是如此。投资需求正在飞速增长。摩根士丹利估计，2025年至2028年间，全球数据中心总资本支出将达到2.9万亿美元。超大规模云服务商或许能用内部现金覆盖其中的一半。其余的必须来自私人信贷、证券化融资和新的运营商。各国政府也已承诺进行1.6万亿美元的主权AI投资，海湾资本也正在寻找新的机会。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_1ade774a905f45e183e8d92db49b5729.png" class="" title="资金质量计算方法：按1-3分制评分；权重：资金组合35%，期限匹配30%，中介约束20%，系统性损失吸收10%">
+
+<p>资金质量计算方法：按1-3分制评分；权重：资金组合35%，期限匹配30%，中介约束20%，系统性损失吸收10%。</p>
+<p>风险会在这里悄然滋生。摩根士丹利自己也指出，存在一个<strong>1.5万亿美元</strong>的资金缺口，需要通过债务市场和资产支持证券来填补。这些数额十分巨大：<strong>8000亿美元</strong>来自私人信贷，<strong>1500亿美元</strong>来自数据中心资产支持证券（ABS），还有数千亿美元来自原始设备制造商（OEM）贷款和供应商融资。</p>
+<p>光是这1500亿美元就足以让数据中心证券化市场的规模几乎在一夜之间扩大三倍。而且并非每个借款人都像微软那么稳健。</p>
+<p>以CoreWeave为例，这家由英伟达支持的新贵公司，身负着80亿美元的债务准备上市。它已经因违反贷款契约而陷入技术性违约（但并未破产），其收入依赖于仅仅两个客户。它的经济模式建立在租赁每年折旧20-30%的GPU上，这更像是WeWork的租赁模式，而非超大规模云服务商那种稳健的资产负债表。</p>
+<img src="/1970/01/01/AI%E6%98%AF%E6%B3%A1%E6%B2%AB%E5%90%97%EF%BC%9F%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%86%E6%9E%B6%E6%9D%A5%E5%9B%9E%E7%AD%94%E7%A7%91%E6%8A%80%E7%95%8C%E6%9C%80%E5%A4%A7%E7%9A%84%E7%96%91%E9%97%AE/v2_a9106d80fbce4de98def0169a44b0faa.png" class="" title="Capital Quality Indicator">
+
+<p>目前AI的资本质量还算稳健，但由于预计未来只有大约一半的支出能由超大规模云服务商的现金流覆盖，其根基可能会被削弱。</p>
+<p>换句话说，基础比过去的泡沫更坚固，但上层建筑开始呈现出旧的模式。难以弄清楚的债务结构、集中的交易对手以及可能无法保值的硬件正在重新出现。如果生成式AI的收入增长十倍，债权人将安然无恙。如果不然，他们可能会发现，一仓库过时的GPU很难作为抵押的资产。</p>
+<p>目前来看，我认为指标偏绿色。我们尚未进入泡沫区域，但如果明年融资继续朝这个方向发展，而收入增长却不如2025年那般强劲，这个指标可能会转为黄色。</p>
+<h2 id="那么，我们现在处于什么位置？"><a href="#那么，我们现在处于什么位置？" class="headerlink" title="那么，我们现在处于什么位置？"></a>那么，我们现在处于什么位置？</h2><p>根据这些指标，生成式AI仍处由需求驱动、资本密集的繁荣期，而非泡沫。但繁荣可能很快变质，有几个值得关注的压力点：</p>
+<p>如果投资攀升至GDP的2%，这可能表明经济对AI的投入相对于其生产力回报而言过重；同样地，如果未来三到五年内，一个或多个超大规模云服务商将资本支出削减超过五分之一，这将标志着市场情绪的急剧转变，可能引发其他玩家的迅速衰退。</p>
+<p>当前企业和消费者支出水平的持续下降将是另一个警示信号，特别是如果英伟达订单积压的减少是这一点的预示的话。与此同时，经济效益需要改善：每美元资本产生的收入应向0.5-1.0的范围靠拢。如果这个差距无法缩小，将意味着规模化并未带来预期的效率提升。</p>
+<p>如果估值开始接近50-60的市盈率，那看起来就会有泡沫，因为一个真正的增长阶段应该看到盈利追上价格，而不是进一步落后。</p>
+<p>如果内部现金覆盖的资本支出不足25%，数据中心投资的稳定性将面临压力。目前，稳定性来自于超大规模云服务商强劲的现金流。如果他们不再能覆盖大部分资本支出，那么更多的债务和证券化就会悄然进入。考虑到GPU的折旧周期，这并非好事。如果内部资金滑落到新资本支出的四分之一以下，并且依赖转向债务和证券化，那么该行业对短寿命GPU的依赖及其对更高利率的敞口可能很快变得不稳定。</p>
+<p>我目前的经验法则是，如果五个指标有<strong>两个进入红色区域</strong>，就算进入泡沫。是时候卖掉股票，买入VIX指数，然后深呼吸一口气了。</p>
+<p>在1873年恐慌前的一年，铁路行业的经济压力变为红色，同时资金质量也在下降。疲软的收入增长更是雪上加霜。在2001年的电信业崩盘中，收入增长和资金质量都亮起了红灯。而在互联网时代，则是行业投资压力和估值出了问题。</p>
+<p>生成式AI还没到那个地步。它在飞速发展，引擎在呼啸，但尚未过热。需要多久才会有两个指标进入红色区域？我推演过各种组合，大多数可怕的情景都需要几年时间才会发生。（而且并非所有情景都那么可怕。）话虽如此，从美国的经济衰退，到通胀上升，到充满挑战的利率环境，再到国内或国际政治，许多宏观因素都可能打击市场情绪。虽说陷入泡沫可能还不算板上钉钉，但如果认为AI投资周期就能对那些过热免疫的话，那就太傲慢了。</p>
+<p>就目前而言，还可以继续往前走。</p>
+<p>译者：boxi。</p>
+<p>本文来自翻译, 如若转载请注明出处。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/1970/01/01/Exploring-Claude-Code-Features/" rel="prev" title="Claude Code: What It's Really Like to Use It">
+      <i class="fa fa-chevron-left"></i> Claude Code: What It's Really Like to Use It
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" rel="next" title="幂等的实现方案">
+      幂等的实现方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
