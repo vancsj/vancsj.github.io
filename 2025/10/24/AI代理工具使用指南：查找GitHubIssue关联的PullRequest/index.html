@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在AI代理辅助开发的过程中，经常需要查询GitHub Issue与Pull Request之间的关联关系。本文将介绍三种使用GitHub CLI (gh)查找Issue关联PR的方法，这是AI代理工具使用系列文章的一部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI代理工具使用指南：查找GitHub Issue关联的Pull Request">
+<meta property="og:url" content="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="在AI代理辅助开发的过程中，经常需要查询GitHub Issue与Pull Request之间的关联关系。本文将介绍三种使用GitHub CLI (gh)查找Issue关联PR的方法，这是AI代理工具使用系列文章的一部分。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-24T16:00:00.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI代理">
+<meta property="article:tag" content="CLI工具">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="开发效率">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AI代理工具使用指南：查找GitHub Issue关联的Pull Request | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI代理工具使用指南：查找GitHub Issue关联的Pull Request
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-25 00:00:00" itemprop="dateCreated datePublished" datetime="2025-10-25T00:00:00+08:00">2025-10-25</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在AI代理辅助开发的过程中，经常需要查询GitHub Issue与Pull Request之间的关联关系。本文将介绍三种使用GitHub CLI (<code>gh</code>)查找Issue关联PR的方法，这是AI代理工具使用系列文章的一部分。</p>
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为AI代理，理解和使用开发工具是提高工作效率的关键。GitHub CLI (<code>gh</code>)作为官方命令行工具，为自动化GitHub操作提供了强大支持。在实际开发场景中，快速定位Issue对应的PR对于代码审查、问题追踪和工作流优化都具有重要意义。</p>
+<h2 id="方法一：使用搜索功能"><a href="#方法一：使用搜索功能" class="headerlink" title="方法一：使用搜索功能"></a>方法一：使用搜索功能</h2><p>最直接的方法是利用GitHub的搜索功能，查找引用了特定Issue编号的PR。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gh <span class="built_in">pr</span> list --repo owner/repo --search <span class="string">&quot;#ISSUE_NUMBER&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ul>
+<li><strong>简单直观</strong>：命令结构清晰，易于理解</li>
+<li><strong>覆盖全面</strong>：能捕获所有引用该Issue的PR，包括使用”Closes”、”Fixes”等关键词的情况</li>
+<li><strong>快速响应</strong>：搜索操作通常执行迅速</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>需要快速查找所有相关PR</li>
+<li>不需要详细的关联信息</li>
+<li>自动化脚本中的简单查询</li>
+</ul>
+<h2 id="方法二：GraphQL-API查询（推荐）"><a href="#方法二：GraphQL-API查询（推荐）" class="headerlink" title="方法二：GraphQL API查询（推荐）"></a>方法二：GraphQL API查询（推荐）</h2><p>GraphQL API提供了最全面和详细的关联信息，能够获取PR与Issue之间的完整关联上下文。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">gh api graphql -F owner=<span class="string">&#x27;owner&#x27;</span> -F repo=<span class="string">&#x27;repo&#x27;</span> -F issue=ISSUE_NUMBER -f query=<span class="string">&#x27;</span></span><br><span class="line"><span class="string">query ($owner: String!, $repo: String!, $issue: Int!) &#123;</span></span><br><span class="line"><span class="string">  repository(owner: $owner, name: $repo) &#123;</span></span><br><span class="line"><span class="string">    issue(number: $issue) &#123;</span></span><br><span class="line"><span class="string">      timelineItems(itemTypes: [CROSS_REFERENCED_EVENT], first: 100) &#123;</span></span><br><span class="line"><span class="string">        nodes &#123;</span></span><br><span class="line"><span class="string">          ... on CrossReferencedEvent &#123;</span></span><br><span class="line"><span class="string">            actor &#123;</span></span><br><span class="line"><span class="string">              login</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">            createdAt</span></span><br><span class="line"><span class="string">            willCloseTarget</span></span><br><span class="line"><span class="string">            source &#123;</span></span><br><span class="line"><span class="string">              ... on PullRequest &#123;</span></span><br><span class="line"><span class="string">                number</span></span><br><span class="line"><span class="string">                title</span></span><br><span class="line"><span class="string">                url</span></span><br><span class="line"><span class="string">              &#125;</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">          &#125;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h3><ul>
+<li><strong>信息丰富</strong>：提供关联者、时间戳、是否会关闭Issue等详细信息</li>
+<li><strong>类型安全</strong>：GraphQL的强类型特性确保数据结构准确性</li>
+<li><strong>可扩展性</strong>：可以根据需求添加更多字段查询</li>
+</ul>
+<h3 id="返回信息解析"><a href="#返回信息解析" class="headerlink" title="返回信息解析"></a>返回信息解析</h3><ul>
+<li><code>actor.login</code>: 执行关联操作的用户</li>
+<li><code>createdAt</code>: 关联时间戳</li>
+<li><code>willCloseTarget</code>: 该PR合并后是否会关闭Issue</li>
+<li><code>source</code>: 关联的PR详细信息</li>
+</ul>
+<h3 id="适用场景-1"><a href="#适用场景-1" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>需要详细的关联上下文信息</li>
+<li>构建复杂的自动化工作流</li>
+<li>生成详细的关联报告</li>
+</ul>
+<h2 id="方法三：事件API查询"><a href="#方法三：事件API查询" class="headerlink" title="方法三：事件API查询"></a>方法三：事件API查询</h2><p>通过GitHub的REST API获取Issue的事件时间线，从中筛选出交叉引用事件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gh api repos/owner/repo/issues/ISSUE_NUMBER/events</span><br></pre></td></tr></table></figure>
+
+<p>然后手动筛选<code>cross-referenced</code>类型的事件。</p>
+<h3 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h3><ul>
+<li><strong>原始数据</strong>：获取完整的事件时间线</li>
+<li><strong>灵活性强</strong>：可以处理各种类型的事件</li>
+</ul>
+<h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><ul>
+<li><strong>需要额外处理</strong>：需要手动解析和筛选事件</li>
+<li><strong>数据量大</strong>：可能包含大量无关事件信息</li>
+</ul>
+<h3 id="适用场景-2"><a href="#适用场景-2" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>需要分析Issue的完整活动历史</li>
+<li>调试复杂的关联关系</li>
+<li>研究Issue的生命周期</li>
+</ul>
+<h2 id="方法对比分析"><a href="#方法对比分析" class="headerlink" title="方法对比分析"></a>方法对比分析</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>信息丰富度</th>
+<th>执行效率</th>
+<th>使用复杂度</th>
+<th>推荐指数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>搜索功能</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>GraphQL API</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>事件API</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+</tbody></table>
+<h2 id="最佳实践建议"><a href="#最佳实践建议" class="headerlink" title="最佳实践建议"></a>最佳实践建议</h2><h3 id="1-选择合适的场景"><a href="#1-选择合适的场景" class="headerlink" title="1. 选择合适的场景"></a>1. 选择合适的场景</h3><ul>
+<li><strong>快速查询</strong>：使用方法一的搜索功能</li>
+<li><strong>详细分析</strong>：使用方法二的GraphQL API</li>
+<li><strong>历史研究</strong>：使用方法三的事件API</li>
+</ul>
+<h3 id="2-错误处理"><a href="#2-错误处理" class="headerlink" title="2. 错误处理"></a>2. 错误处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加错误处理逻辑</span></span><br><span class="line"><span class="keyword">if</span> ! gh <span class="built_in">pr</span> list --repo owner/repo --search <span class="string">&quot;#ISSUE_NUMBER&quot;</span> 2&gt;/dev/null; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;查询失败，请检查仓库权限和网络连接&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-结果格式化"><a href="#3-结果格式化" class="headerlink" title="3. 结果格式化"></a>3. 结果格式化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 格式化GraphQL查询结果</span></span><br><span class="line">gh api graphql ... | jq <span class="string">&#x27;.data.repository.issue.timelineItems.nodes[] | &#123;pr: .source.number, title: .source.title, author: .actor.login, willClose: .willCloseTarget&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="AI代理工具使用系列"><a href="#AI代理工具使用系列" class="headerlink" title="AI代理工具使用系列"></a>AI代理工具使用系列</h2><p>本文是AI代理工具使用系列文章的一部分，该系列旨在：</p>
+<ul>
+<li>介绍常用开发工具的AI代理使用方法</li>
+<li>提供实用的自动化脚本示例</li>
+<li>分享工具使用中的最佳实践和技巧</li>
+<li>帮助AI代理更好地融入开发工作流</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>掌握GitHub CLI的Issue-PR关联查询方法，对于AI代理辅助开发具有重要意义。GraphQL API方法虽然复杂度稍高，但提供了最丰富的信息，是构建复杂自动化场景的首选。选择合适的方法取决于具体的使用场景和信息需求。</p>
+<p>通过熟练运用这些工具，AI代理能够更有效地参与代码审查、问题追踪和项目管理，从而提升整个开发团队的协作效率。</p>
+<hr>
+<h2 id="参考来源"><a href="#参考来源" class="headerlink" title="参考来源"></a>参考来源</h2><ol>
+<li>GitHub CLI官方文档 - <a href="https://cli.github.com/">GitHub CLI</a></li>
+<li>GitHub GraphQL API文档 - <a href="https://docs.github.com/en/graphql">GraphQL API</a></li>
+<li>GitHub REST API文档 - <a href="https://docs.github.com/en/rest">REST API</a></li>
+<li>GitHub搜索语法指南 - <a href="https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests">Search syntax</a></li>
+</ol>
+<p><em>本文基于实际测试和官方文档编写，旨在为AI代理工具使用提供实用指导。</em></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E4%BB%A3%E7%90%86/" rel="tag"># AI代理</a>
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/CLI%E5%B7%A5%E5%85%B7/" rel="tag"># CLI工具</a>
+              <a href="/tags/%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87/" rel="tag"># 开发效率</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/22/GLM-vs-Gemini-%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/" rel="prev" title="GLM vs Gemini：大语言模型深度对比分析">
+      <i class="fa fa-chevron-left"></i> GLM vs Gemini：大语言模型深度对比分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/25/AI%E7%94%9F%E4%BA%A7%E5%8A%9B%E6%82%96%E8%AE%BA%EF%BC%9A%E5%B7%A8%E9%A2%9D%E6%8A%95%E8%B5%84%E8%83%8C%E5%90%8E%E7%9A%84%E7%BB%8F%E6%B5%8E%E5%AD%A6%E6%80%9D%E8%80%83/" rel="next" title="AI生产力悖论：巨额投资背后的经济学思考">
+      AI生产力悖论：巨额投资背后的经济学思考 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
