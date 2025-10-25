@@ -153,6 +153,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">偏向锁-轻量级锁-重量级锁解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-10 20:07:48" itemprop="dateCreated datePublished" datetime="2019-06-10T20:07:48+08:00">2019-06-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-27 19:02:55" itemprop="dateModified" datetime="2025-07-27T19:02:55+08:00">2025-07-27</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言<a href="#"></a></h2><p>在学习<code>sychronized</code>关键字及其实现细节的时候，发现java中的三种锁，偏向锁，轻量级锁，重量级锁，引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次<code>CAS</code>原子指令，而偏向锁只需要在置换<code>ThreadID</code>的时候依赖一次<code>CAS</code>原子指令，代价就是一旦出现多线程竞争的情况就必须撤销偏向锁。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/10/%E5%81%8F%E5%90%91%E9%94%81-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E8%A7%A3%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/06/10/AQS%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -800,80 +872,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/06/04/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%A6%81%E7%82%B9%E6%A6%82%E6%8B%AC/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/06/03/%E5%85%A8%E9%93%BE%E8%B7%AF%E7%9B%91%E6%8E%A7%E6%96%B9%E6%A1%88%E6%AF%94%E8%BE%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/03/%E5%85%A8%E9%93%BE%E8%B7%AF%E7%9B%91%E6%8E%A7%E6%96%B9%E6%A1%88%E6%AF%94%E8%BE%83/" class="post-title-link" itemprop="url">全链路监控方案比较</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-06-03 10:47:01" itemprop="dateCreated datePublished" datetime="2019-06-03T10:47:01+08:00">2019-06-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-28 22:58:45" itemprop="dateModified" datetime="2025-06-28T22:58:45+08:00">2025-06-28</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://juejin.im/post/5a7a9e0af265da4e914b46f1">Source</a></p>
-<h1 id="0-问题背景"><a href="#0-问题背景" class="headerlink" title="0 问题背景"></a>0 问题背景</h1><p>随着微服务架构的流行，<strong>服务按照不同的维度进行拆分</strong>，一次请求往往需要涉及到多个服务。<strong>互联网应用构建在不同的软件模块集上</strong>，这些软件模块，<strong>有可能是由不同的团队开发、可能使用不同的编程语言来实现、有可能布在了几千台服务器，横跨多个不同的数据中心</strong>。因此，就需要一些可以帮助理解系统行为、用于分析性能问题的工具，以便发生故障的时候，能够快速定位和解决问题。</p>
-<p>全链路监控组件就在这样的问题背景下产生了。最出名的是谷歌公开的论文提到的 <a href="https://link.juejin.im/?target=http://bigbully.github.io/Dapper-translation">Google Dapper</a>。<strong>想要在这个上下文中理解分布式系统的行为，就需要监控那些横跨了不同的应用、不同的服务器之间的关联动作</strong>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/03/%E5%85%A8%E9%93%BE%E8%B7%AF%E7%9B%91%E6%8E%A7%E6%96%B9%E6%A1%88%E6%AF%94%E8%BE%83/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

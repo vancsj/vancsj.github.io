@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在现代软件开发中，Gradle构建系统生成的测试报告往往包含数千行XML数据，传统的人工分析方法效率低下且容易遗漏关键信息。本文介绍了一套结合结构化代理设计和智能关键词筛选的LLM测试报告分析方法，实现从海量测试数据中快速定位问题根因。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM智能测试报告分析：从海量数据到精准根因定位">
+<meta property="og:url" content="https://zjuer.net/2025/10/24/LLM%E6%99%BA%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E5%88%86%E6%9E%90%EF%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%B0%E7%B2%BE%E5%87%86%E6%A0%B9%E5%9B%A0%E5%AE%9A%E4%BD%8D/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="在现代软件开发中，Gradle构建系统生成的测试报告往往包含数千行XML数据，传统的人工分析方法效率低下且容易遗漏关键信息。本文介绍了一套结合结构化代理设计和智能关键词筛选的LLM测试报告分析方法，实现从海量测试数据中快速定位问题根因。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-24T16:00:00.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="Gradle">
+<meta property="article:tag" content="JUnit">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="根因分析">
+<meta property="article:tag" content="测试报告">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2025/10/24/LLM%E6%99%BA%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E5%88%86%E6%9E%90%EF%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%B0%E7%B2%BE%E5%87%86%E6%A0%B9%E5%9B%A0%E5%AE%9A%E4%BD%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LLM智能测试报告分析：从海量数据到精准根因定位 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-mumbler">
+
+    <a href="/mumbler/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>mumbler</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/10/24/LLM%E6%99%BA%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E5%88%86%E6%9E%90%EF%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%B0%E7%B2%BE%E5%87%86%E6%A0%B9%E5%9B%A0%E5%AE%9A%E4%BD%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LLM智能测试报告分析：从海量数据到精准根因定位
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-25 00:00:00" itemprop="dateCreated datePublished" datetime="2025-10-25T00:00:00+08:00">2025-10-25</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在现代软件开发中，Gradle构建系统生成的测试报告往往包含数千行XML数据，传统的人工分析方法效率低下且容易遗漏关键信息。本文介绍了一套结合结构化代理设计和智能关键词筛选的LLM测试报告分析方法，实现从海量测试数据中快速定位问题根因。</p>
+<span id="more"></span>
+
+<h2 id="挑战：测试报告的信息过载问题"><a href="#挑战：测试报告的信息过载问题" class="headerlink" title="挑战：测试报告的信息过载问题"></a>挑战：测试报告的信息过载问题</h2><p>典型的Gradle项目在运行完整测试套件后，会产生大量的XML报告文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 单个项目可能产生的报告量</span></span><br><span class="line">find build/test-results -name <span class="string">&quot;TEST-*.xml&quot;</span> | <span class="built_in">wc</span> -l</span><br><span class="line"><span class="comment"># 输出：47个XML文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单个文件的大小</span></span><br><span class="line"><span class="built_in">du</span> -h build/test-results/test/TEST-com.example.LargeServiceTest.xml</span><br><span class="line"><span class="comment"># 输出：2.3M</span></span><br></pre></td></tr></table></figure>
+
+<p>这些报告包含：</p>
+<ul>
+<li>测试执行统计（通过、失败、跳过的数量）</li>
+<li>详细的堆栈跟踪信息</li>
+<li>系统输出和错误日志</li>
+<li>性能数据（执行时间）</li>
+</ul>
+<p>对于LLM而言，直接处理这些数据会导致上下文窗口溢出，且大量无关信息会干扰分析准确性。</p>
+<h2 id="解决方案：动态LLM分析指南"><a href="#解决方案：动态LLM分析指南" class="headerlink" title="解决方案：动态LLM分析指南"></a>解决方案：动态LLM分析指南</h2><h3 id="核心设计理念"><a href="#核心设计理念" class="headerlink" title="核心设计理念"></a>核心设计理念</h3><p><code>★ Insight ─────────────────────────────────────</code><br>关键在于为LLM提供一个灵活的、逐步的分析框架，而不是固定的脚本。这样可以让LLM根据具体的测试报告内容和失败模式动态调整分析策略，确保在复杂场景下仍能准确定位根因。<br><code>─────────────────────────────────────────────────</code></p>
+<h2 id="LLM测试报告分析逐步指南"><a href="#LLM测试报告分析逐步指南" class="headerlink" title="LLM测试报告分析逐步指南"></a>LLM测试报告分析逐步指南</h2><h3 id="第一阶段：信息定位与初步评估"><a href="#第一阶段：信息定位与初步评估" class="headerlink" title="第一阶段：信息定位与初步评估"></a>第一阶段：信息定位与初步评估</h3><h4 id="步骤1：定位测试报告文件"><a href="#步骤1：定位测试报告文件" class="headerlink" title="步骤1：定位测试报告文件"></a>步骤1：定位测试报告文件</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. 构建标准路径：[module_path]/build/<span class="keyword">test</span>-results/<span class="keyword">test</span>/</span><br><span class="line"><span class="number">2</span>. 尝试精确匹配：<span class="keyword">TEST</span>-[test_class_name].xml</span><br><span class="line"><span class="number">3</span>. 如果精确匹配失败，扫描目录中的第一个XML文件</span><br><span class="line"><span class="number">4</span>. 验证文件存在性和可读性</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤2：快速评估测试结果"><a href="#步骤2：快速评估测试结果" class="headerlink" title="步骤2：快速评估测试结果"></a>步骤2：快速评估测试结果</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 检查<span class="language-xml">&lt;testsuite标签的统计属性（注意：必须使用&#x27;&lt;testsuite&#x27;而非&#x27;<span class="tag">&lt;<span class="name">testsuite</span>&gt;</span></span>&#x27;）：</span><br><span class="line"><span class="bullet">   -</span> tests: 总测试数量</span><br><span class="line"><span class="bullet">   -</span> failures: 失败测试数量</span><br><span class="line"><span class="bullet">   -</span> errors: 错误测试数量</span><br><span class="line"><span class="bullet">   -</span> skipped: 跳过测试数量</span><br><span class="line"><span class="bullet">2.</span> 如果failures=0且errors=0，直接返回成功信息</span><br><span class="line"><span class="bullet">3.</span> 如果存在失败，继续深入分析</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键搜索技巧</strong>：</p>
+<ul>
+<li>✅ 正确：<code>grep &#39;&lt;testsuite&#39;</code> 或搜索 <code>&#39;&lt;testsuite&#39;</code></li>
+<li>❌ 错误：<code>grep &#39;&lt;testsuite&gt;&#39;</code> - XML标签总是包含属性，不会以<code>&gt;</code>结尾</li>
+<li>原因：XML格式为 <code>&lt;testsuite name=&quot;...&quot; tests=&quot;...&quot; failures=&quot;...&quot;&gt;</code>，必须使用开放标签搜索</li>
+</ul>
+<h3 id="第二阶段：失败信息提取与分类"><a href="#第二阶段：失败信息提取与分类" class="headerlink" title="第二阶段：失败信息提取与分类"></a>第二阶段：失败信息提取与分类</h3><h4 id="步骤3：识别失败测试用例"><a href="#步骤3：识别失败测试用例" class="headerlink" title="步骤3：识别失败测试用例"></a>步骤3：识别失败测试用例</h4><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>. 遍历所有&lt;testcase元素（注意：必须使用<span class="string">&#x27;&lt;testcase&#x27;</span>而非<span class="string">&#x27;&lt;testcase&gt;&#x27;</span>）</span><br><span class="line"><span class="number">2</span>. 查找包含&lt;failure或&lt;error子元素的测试用例（注意：使用<span class="string">&#x27;&lt;failure&#x27;</span>和<span class="string">&#x27;&lt;error&#x27;</span>）</span><br><span class="line"><span class="number">3</span>. 记录每个失败用例的基本信息：</span><br><span class="line">   - <span class="built_in">name</span>: 测试方法名</span><br><span class="line">   - <span class="built_in">classname</span>: 测试类名</span><br><span class="line">   - <span class="built_in">time</span>: 执行时间</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键搜索技巧</strong>：</p>
+<ul>
+<li>✅ 正确：<code>grep &#39;&lt;testcase&#39;</code>, <code>grep &#39;&lt;failure&#39;</code>, <code>grep &#39;&lt;error&#39;</code></li>
+<li>❌ 错误：<code>grep &#39;&lt;testcase&gt;&#39;</code>, <code>grep &#39;&lt;failure&gt;&#39;</code>, <code>grep &#39;&lt;error&gt;&#39;</code></li>
+<li>原因：所有XML标签都包含属性，必须使用开放标签格式进行搜索</li>
+<li>示例格式：<code>&lt;testcase name=&quot;testMethod&quot; classname=&quot;TestClass&quot; time=&quot;0.123&quot;&gt;</code></li>
+</ul>
+<h4 id="步骤4：动态关键词识别"><a href="#步骤4：动态关键词识别" class="headerlink" title="步骤4：动态关键词识别"></a>步骤4：动态关键词识别</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 分析失败消息中的关键词模式：</span><br><span class="line"><span class="bullet">   -</span> 异常类型：NullPointerException, SQLException, TimeoutException等</span><br><span class="line"><span class="bullet">   -</span> 技术领域：database, network, concurrency, memory等</span><br><span class="line"><span class="bullet">   -</span> 具体症状：connection, timeout, deadlock, constraint等</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 根据识别的模式调整搜索策略：</span><br><span class="line"><span class="bullet">   -</span> 数据库问题：搜索sql, connection, transaction, constraint</span><br><span class="line"><span class="bullet">   -</span> 网络问题：搜索timeout, connection, socket, network</span><br><span class="line"><span class="bullet">   -</span> 并发问题：搜索deadlock, race, lock, thread</span><br><span class="line"><span class="bullet">   -</span> 断言问题：搜索expected, actual, assert, equals</span><br><span class="line"></span><br><span class="line">⚠️ <span class="strong">**重要提醒**</span>：所有XML标签搜索必须使用开放标签格式！</span><br><span class="line"><span class="bullet">-</span> ✅ 正确：<span class="code">`grep &#x27;&lt;tagname&#x27;`</span> </span><br><span class="line"><span class="bullet">-</span> ❌ 错误：<span class="code">`grep &#x27;&lt;tagname&gt;&#x27;`</span> - 永远匹配不到！</span><br></pre></td></tr></table></figure>
+
+<h3 id="第三阶段：上下文信息收集"><a href="#第三阶段：上下文信息收集" class="headerlink" title="第三阶段：上下文信息收集"></a>第三阶段：上下文信息收集</h3><h4 id="步骤5：智能堆栈跟踪分析"><a href="#步骤5：智能堆栈跟踪分析" class="headerlink" title="步骤5：智能堆栈跟踪分析"></a>步骤5：智能堆栈跟踪分析</h4><figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 提取&lt;failure&gt;或&lt;error&gt;标签内的完整堆栈跟踪（⚠️ 使用&#x27;&lt;failure&#x27;和&#x27;&lt;error&#x27;搜索）</span><br><span class="line">2. 应用动态关键词过滤：</span><br><span class="line">   <span class="bullet">-</span> <span class="string">优先保留包含异常类型关键词的行</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">保留项目代码路径（如com.yourcompany包下的代码）</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">保留测试框架相关的重要行</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">过滤掉不相关的第三方库堆栈</span></span><br><span class="line"></span><br><span class="line">3. 识别根因位置：</span><br><span class="line">   <span class="bullet">-</span> <span class="string">找到第一个项目代码行（通常是最直接的失败原因）</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">注意&quot;Caused by&quot;链式异常（深层原因）</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">记录具体的类名和方法名及行号</span></span><br><span class="line"></span><br><span class="line">⚠️ **再次强调**：XML标签搜索永远不要使用闭合标签格式！</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤6：系统日志上下文提取"><a href="#步骤6：系统日志上下文提取" class="headerlink" title="步骤6：系统日志上下文提取"></a>步骤6：系统日志上下文提取</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 检查&lt;<span class="keyword">system</span>-<span class="keyword">out</span>&gt;和&lt;<span class="keyword">system</span>-err&gt;标签内容（⚠️ 使用<span class="string">&#x27;&lt;system-out&#x27;</span>和<span class="string">&#x27;&lt;system-err&#x27;</span>搜索）</span><br><span class="line"><span class="number">2.</span> 使用动态关键词搜索相关日志行：</span><br><span class="line">   - 默认关键词：error, <span class="keyword">exception</span>, failed, timeout</span><br><span class="line">   - 根据步骤<span class="number">4</span>识别的模式添加特定关键词</span><br><span class="line">   - 考虑用户提供的自定义关键词</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 提取时间上下文：</span><br><span class="line">   - 保留失败时间点前后的日志</span><br><span class="line">   - 注意初始化错误和配置问题</span><br><span class="line">   - 寻找警告信息（可能预示潜在问题）</span><br><span class="line"></span><br><span class="line">⚠️ **关键规则**：所有<span class="type">XML</span>元素搜索使用<span class="string">&#x27;&lt;element&#x27;</span>格式，永远不要用<span class="string">&#x27;&lt;element&gt;&#x27;</span>！</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四阶段：根因分析与诊断"><a href="#第四阶段：根因分析与诊断" class="headerlink" title="第四阶段：根因分析与诊断"></a>第四阶段：根因分析与诊断</h3><h4 id="步骤7：失败模式分类"><a href="#步骤7：失败模式分类" class="headerlink" title="步骤7：失败模式分类"></a>步骤7：失败模式分类</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 基于收集的信息对失败进行分类：</span><br><span class="line"><span class="bullet">   -</span> 配置问题：环境设置、依赖缺失、配置错误</span><br><span class="line"><span class="bullet">   -</span> 逻辑错误：业务逻辑错误、算法问题</span><br><span class="line"><span class="bullet">   -</span> 资源问题：数据库连接、内存不足、网络不可达</span><br><span class="line"><span class="bullet">   -</span> 时序问题：超时、竞态条件、异步处理异常</span><br><span class="line"><span class="bullet">   -</span> 测试问题：测试数据问题、Mock配置错误</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 识别失败间的关联性：</span><br><span class="line"><span class="bullet">   -</span> 多个测试是否因相同原因失败</span><br><span class="line"><span class="bullet">   -</span> 是否存在依赖关系导致的连锁失败</span><br><span class="line"><span class="bullet">   -</span> 测试执行顺序是否影响结果</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤8：根因定位策略"><a href="#步骤8：根因定位策略" class="headerlink" title="步骤8：根因定位策略"></a>步骤8：根因定位策略</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 直接原因分析：</span><br><span class="line"><span class="bullet">   -</span> 查看堆栈跟踪中的第一个项目代码行</span><br><span class="line"><span class="bullet">   -</span> 分析异常消息的具体含义</span><br><span class="line"><span class="bullet">   -</span> 结合上下文日志寻找触发条件</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 深层原因挖掘：</span><br><span class="line"><span class="bullet">   -</span> 检查&quot;Caused by&quot;链式异常</span><br><span class="line"><span class="bullet">   -</span> 分析系统环境状态</span><br><span class="line"><span class="bullet">   -</span> 评估测试数据和配置的正确性</span><br><span class="line"></span><br><span class="line"><span class="bullet">3.</span> 影响范围评估：</span><br><span class="line"><span class="bullet">   -</span> 确定是单个测试问题还是系统性问题</span><br><span class="line"><span class="bullet">   -</span> 评估对其他测试的潜在影响</span><br><span class="line"><span class="bullet">   -</span> 判断问题的紧急程度和修复优先级</span><br></pre></td></tr></table></figure>
+
+<h3 id="第五阶段：结构化报告生成"><a href="#第五阶段：结构化报告生成" class="headerlink" title="第五阶段：结构化报告生成"></a>第五阶段：结构化报告生成</h3><h4 id="步骤9：分析结果组织"><a href="#步骤9：分析结果组织" class="headerlink" title="步骤9：分析结果组织"></a>步骤9：分析结果组织</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 执行摘要：</span><br><span class="line"><span class="bullet">   -</span> 总体测试统计</span><br><span class="line"><span class="bullet">   -</span> 失败数量和类型分布</span><br><span class="line"><span class="bullet">   -</span> 最关键的根因总结</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 详细失败分析：</span><br><span class="line"><span class="bullet">   -</span> 按失败类型分组</span><br><span class="line"><span class="bullet">   -</span> 每个失败的详细分析</span><br><span class="line"><span class="bullet">   -</span> 相关上下文信息</span><br><span class="line"></span><br><span class="line"><span class="bullet">3.</span> 根因诊断：</span><br><span class="line"><span class="bullet">   -</span> 最可能的根本原因</span><br><span class="line"><span class="bullet">   -</span> 支撑证据和推理过程</span><br><span class="line"><span class="bullet">   -</span> 建议的修复方向</span><br><span class="line"></span><br><span class="line"><span class="bullet">4.</span> 修复建议：</span><br><span class="line"><span class="bullet">   -</span> 具体的修复步骤</span><br><span class="line"><span class="bullet">   -</span> 预防措施建议</span><br><span class="line"><span class="bullet">   -</span> 相关测试改进建议</span><br></pre></td></tr></table></figure>
+
+<h3 id="动态调整策略"><a href="#动态调整策略" class="headerlink" title="动态调整策略"></a>动态调整策略</h3><h4 id="根据报告内容的自适应调整"><a href="#根据报告内容的自适应调整" class="headerlink" title="根据报告内容的自适应调整"></a>根据报告内容的自适应调整</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 大量失败时：</span><br><span class="line"><span class="bullet">   -</span> 优先分析共性模式</span><br><span class="line"><span class="bullet">   -</span> 按失败类型分组处理</span><br><span class="line"><span class="bullet">   -</span> 限制每个类型的详细分析数量</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> 复杂堆栈跟踪时：</span><br><span class="line"><span class="bullet">   -</span> 重点关注项目代码部分</span><br><span class="line"><span class="bullet">   -</span> 简化第三方库堆栈信息</span><br><span class="line"><span class="bullet">   -</span> 使用模式匹配提取关键信息</span><br><span class="line"></span><br><span class="line"><span class="bullet">3.</span> 缺乏明确错误信息时：</span><br><span class="line"><span class="bullet">   -</span> 扩大日志搜索范围</span><br><span class="line"><span class="bullet">   -</span> 分析测试执行环境</span><br><span class="line"><span class="bullet">   -</span> 考虑时序和资源竞争问题</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用场景与动态策略"><a href="#实际应用场景与动态策略" class="headerlink" title="实际应用场景与动态策略"></a>实际应用场景与动态策略</h2><h3 id="场景1：数据库连接问题的动态分析"><a href="#场景1：数据库连接问题的动态分析" class="headerlink" title="场景1：数据库连接问题的动态分析"></a>场景1：数据库连接问题的动态分析</h3><p><strong>初始检测</strong>：发现SQLException异常<br><strong>动态调整策略</strong>：</p>
+<ol>
+<li>立即扩展搜索关键词：connection, timeout, sql, pool, transaction</li>
+<li>重点分析system-out中的数据库配置和连接池状态</li>
+<li>检查是否有网络相关的前置错误</li>
+<li>分析测试执行时间是否异常（可能表明超时）</li>
+</ol>
+<p><strong>根因定位路径</strong>：</p>
+<ul>
+<li>直接原因：Connection timeout</li>
+<li>深层原因：数据库服务不可达 或 连接池配置错误</li>
+<li>环境因素：测试数据库未启动 或 网络隔离</li>
+</ul>
+<h3 id="场景2：并发测试失败的智能分析"><a href="#场景2：并发测试失败的智能分析" class="headerlink" title="场景2：并发测试失败的智能分析"></a>场景2：并发测试失败的智能分析</h3><p><strong>模式识别</strong>：发现Concurrency相关异常或超时<br><strong>动态调整策略</strong>：</p>
+<ol>
+<li>搜索关键词：deadlock, race, condition, synchronized, atomic</li>
+<li>分析测试执行时间和线程模式</li>
+<li>检查是否有资源竞争或锁等待</li>
+<li>评估测试的并发设置是否合理</li>
+</ol>
+<p><strong>根因定位路径</strong>：</p>
+<ul>
+<li>直接原因：线程死锁 或 竞态条件</li>
+<li>深层原因：同步机制缺陷 或 资源访问设计问题</li>
+<li>测试设计：并发度设置不当 或 测试数据污染</li>
+</ul>
+<h3 id="场景3：大规模测试失败的优先级处理"><a href="#场景3：大规模测试失败的优先级处理" class="headerlink" title="场景3：大规模测试失败的优先级处理"></a>场景3：大规模测试失败的优先级处理</h3><p><strong>情况评估</strong>：发现大量测试失败（&gt;20个）<br><strong>动态调整策略</strong>：</p>
+<ol>
+<li>快速分类失败模式，识别共性</li>
+<li>优先分析基础设施相关失败（配置、环境）</li>
+<li>按失败类型分组，每组只详细分析2-3个代表性案例</li>
+<li>识别可能的连锁反应失败</li>
+</ol>
+<p><strong>处理优先级</strong>：</p>
+<ol>
+<li>高优先级：环境配置、依赖缺失</li>
+<li>中优先级：核心业务逻辑错误</li>
+<li>低优先级：个别测试数据问题</li>
+</ol>
+<h2 id="动态关键词选择方法论"><a href="#动态关键词选择方法论" class="headerlink" title="动态关键词选择方法论"></a>动态关键词选择方法论</h2><h3 id="基于异常类型的智能扩展"><a href="#基于异常类型的智能扩展" class="headerlink" title="基于异常类型的智能扩展"></a>基于异常类型的智能扩展</h3><p><strong>基础关键词库</strong>：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">通用异常：error, <span class="keyword">exception</span>, failed, timeout</span><br><span class="line">数据库异常：<span class="keyword">sql</span>, <span class="keyword">connection</span>, <span class="keyword">constraint</span>, <span class="keyword">transaction</span>, pool</span><br><span class="line">网络异常：socket, <span class="keyword">connection</span>, network, host, port</span><br><span class="line">并发异常：thread, <span class="keyword">lock</span>, deadlock, race, condition, synchronized</span><br><span class="line">内存异常：memory, heap, gc, outofmemory, leak</span><br><span class="line">断言异常：expected, actual, <span class="keyword">assert</span>, equals, verify</span><br><span class="line"></span><br><span class="line">⚠️ **<span class="type">XML</span>搜索黄金规则**：</span><br><span class="line">- 任何<span class="type">XML</span>标签搜索都使用 <span class="string">&#x27;&lt;tagname&#x27;</span> 格式</span><br><span class="line">- 绝不使用 <span class="string">&#x27;&lt;tagname&gt;&#x27;</span> 格式（会匹配不到任何内容）</span><br><span class="line">- 这是因为<span class="type">XML</span>标签总是包含属性：`&lt;tagname <span class="keyword">attribute</span>=&quot;value&quot;&gt;`</span><br></pre></td></tr></table></figure>
+
+<p><strong>动态扩展规则</strong>：</p>
+<ol>
+<li><strong>异常类型匹配</strong>：根据异常类型自动扩展相关关键词</li>
+<li><strong>包名分析</strong>：从堆栈跟踪中的包名推断技术领域</li>
+<li><strong>消息内容解析</strong>：从错误消息中提取技术术语</li>
+<li><strong>上下文关联</strong>：结合system-out中的日志信息调整关键词</li>
+</ol>
+<h3 id="自适应信息过滤策略"><a href="#自适应信息过滤策略" class="headerlink" title="自适应信息过滤策略"></a>自适应信息过滤策略</h3><p><strong>堆栈跟踪过滤优先级</strong>：</p>
+<ol>
+<li><strong>最高优先级</strong>：项目代码（com.yourcompany.*）</li>
+<li><strong>高优先级</strong>：核心业务逻辑相关代码</li>
+<li><strong>中优先级</strong>：主要依赖库的关键异常</li>
+<li><strong>低优先级</strong>：测试框架和通用工具代码</li>
+</ol>
+<p><strong>日志信息过滤策略</strong>：</p>
+<ol>
+<li><strong>错误级别</strong>：ERROR &gt; WARN &gt; INFO &gt; DEBUG</li>
+<li><strong>时间相关性</strong>：失败时间点前后的日志优先</li>
+<li><strong>线程相关性</strong>：失败测试线程的日志优先</li>
+<li><strong>组件相关性</strong>：失败组件相关的日志优先</li>
+</ol>
+<h2 id="LLM上下文优化技巧"><a href="#LLM上下文优化技巧" class="headerlink" title="LLM上下文优化技巧"></a>LLM上下文优化技巧</h2><h3 id="信息密度优化"><a href="#信息密度优化" class="headerlink" title="信息密度优化"></a>信息密度优化</h3><p><strong>分层信息提取</strong>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一层（摘要）：测试统计 + 主要失败类型 + 关键根因</span><br><span class="line">第二层（详情）：代表性失败案例 + 相关上下文 + 修复建议</span><br><span class="line">第三层（深度）：详细堆栈跟踪 + 完整日志 + 环境信息</span><br></pre></td></tr></table></figure>
+
+<p><strong>动态内容压缩</strong>：</p>
+<ol>
+<li>根据上下文窗口大小动态调整信息详细程度</li>
+<li>优先保留根因分析相关的核心信息</li>
+<li>使用模式匹配提取关键信息片段</li>
+<li>智能合并相似的失败案例</li>
+</ol>
+<h3 id="分析质量保证"><a href="#分析质量保证" class="headerlink" title="分析质量保证"></a>分析质量保证</h3><p><strong>交叉验证机制</strong>：</p>
+<ol>
+<li>多角度验证根因分析的一致性</li>
+<li>检查是否存在遗漏的重要信息</li>
+<li>评估分析结论的置信度</li>
+<li>提供替代解释和不确定性说明</li>
+</ol>
+<p><strong>持续学习优化</strong>：</p>
+<ol>
+<li>记录分析效果和用户反馈</li>
+<li>优化关键词选择策略</li>
+<li>改进信息过滤算法</li>
+<li>调整分析步骤的优先级</li>
+</ol>
+<h2 id="实施指南与最佳实践"><a href="#实施指南与最佳实践" class="headerlink" title="实施指南与最佳实践"></a>实施指南与最佳实践</h2><h3 id="LLM分析指令模板"><a href="#LLM分析指令模板" class="headerlink" title="LLM分析指令模板"></a>LLM分析指令模板</h3><p><strong>基础指令结构</strong>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">你是一个专业的测试报告分析专家。请按照以下步骤分析提供的测试报告：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 首先评估测试总体情况和失败严重程度</span><br><span class="line"><span class="bullet">2.</span> 动态识别失败模式和异常类型</span><br><span class="line"><span class="bullet">3.</span> 根据识别的模式调整搜索策略和关键词</span><br><span class="line"><span class="bullet">4.</span> 逐步深入分析根因，从直接原因到深层原因</span><br><span class="line"><span class="bullet">5.</span> 提供结构化的分析报告和修复建议</span><br><span class="line"></span><br><span class="line">注意：根据具体报告内容动态调整分析深度和重点，不要使用固定的分析模板。</span><br></pre></td></tr></table></figure>
+
+<h3 id="关键决策点指引"><a href="#关键决策点指引" class="headerlink" title="关键决策点指引"></a>关键决策点指引</h3><p><strong>何时进行深度分析</strong>：</p>
+<ul>
+<li>失败数量 &gt; 5个：优先分析共性模式</li>
+<li>异常类型不明确：扩大搜索范围，分析环境因素</li>
+<li>堆栈跟踪复杂：重点分析项目代码部分</li>
+<li>多个组件失败：分析可能的依赖关系和连锁反应</li>
+</ul>
+<p><strong>何时简化分析</strong>：</p>
+<ul>
+<li>单一明确异常：直接分析具体原因</li>
+<li>测试数据问题：重点检查测试配置</li>
+<li>间歇性失败：分析时序和资源竞争因素</li>
+</ul>
+<h3 id="质量控制机制"><a href="#质量控制机制" class="headerlink" title="质量控制机制"></a>质量控制机制</h3><p><strong>分析结果验证</strong>：</p>
+<ol>
+<li>根因是否与所有观察到的现象一致</li>
+<li>是否考虑了所有可能的解释</li>
+<li>修复建议是否具体可行</li>
+<li>是否遗漏了重要的上下文信息</li>
+</ol>
+<p><strong>持续改进策略</strong>：</p>
+<ol>
+<li>收集分析效果的反馈</li>
+<li>优化关键词选择逻辑</li>
+<li>改进信息过滤算法</li>
+<li>调整分析步骤的优先级</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>动态的LLM测试报告分析方法通过灵活的逐步指南，替代了传统的固定脚本模式，实现了真正的智能化根因分析。这种方法的核心优势在于：</p>
+<ol>
+<li><strong>适应性</strong>：根据具体的测试失败模式动态调整分析策略</li>
+<li><strong>智能化</strong>：通过模式识别和关键词动态扩展提高分析准确性</li>
+<li><strong>层次化</strong>：从表面现象到深层根因的系统性分析路径</li>
+<li><strong>可扩展</strong>：支持各种复杂场景和新型失败模式</li>
+</ol>
+<p><code>★ Insight ─────────────────────────────────────</code><br>这种动态分析方法的关键在于让LLM具备了”思考”的能力，而不是机械执行固定流程。通过逐步引导和动态调整，LLM能够像经验丰富的开发者一样，根据具体情况灵活运用分析策略，从而在复杂的测试失败场景中仍能准确定位根本原因。<br><code>─────────────────────────────────────────────────</code></p>
+<p>随着软件系统复杂度的不断提升，这种智能化的测试报告分析方法将成为开发团队的重要工具，不仅提高了问题定位的效率，更为持续集成和快速反馈提供了强有力的技术支撑。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://docs.gradle.org/current/userguide/java_testing.html#sec:test_reporting">Gradle Test Reporting Documentation</a></li>
+<li><a href="https://llg.cubic.org/docs/junitxml/">JUnit XML Format Specification</a></li>
+<li><a href="https://arxiv.org/abs/2309.17453">LLM Context Window Optimization Techniques</a></li>
+<li><a href="https://docs.python.org/3/library/xml.etree.elementtree.html">XML Parsing Best Practices in Python</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A/" rel="tag"># 测试报告</a>
+              <a href="/tags/JUnit/" rel="tag"># JUnit</a>
+              <a href="/tags/Gradle/" rel="tag"># Gradle</a>
+              <a href="/tags/%E6%A0%B9%E5%9B%A0%E5%88%86%E6%9E%90/" rel="tag"># 根因分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/22/GLM-vs-Gemini-%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/" rel="prev" title="GLM vs Gemini：大语言模型深度对比分析">
+      <i class="fa fa-chevron-left"></i> GLM vs Gemini：大语言模型深度对比分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/" rel="next" title="AI代理工具使用指南：查找GitHub Issue关联的Pull Request">
+      AI代理工具使用指南：查找GitHub Issue关联的Pull Request <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
