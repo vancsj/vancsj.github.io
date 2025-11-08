@@ -206,6 +206,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2021/08/22/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/22/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" class="post-title-link" itemprop="url">MQ消息最终一致性事务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-22 10:40:47" itemprop="dateCreated datePublished" datetime="2021-08-22T10:40:47+08:00">2021-08-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式事务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
+<h1 id="MQ消息最终一致性事务"><a href="#MQ消息最终一致性事务" class="headerlink" title="MQ消息最终一致性事务"></a>MQ消息最终一致性事务</h1><p>本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。</p>
+<p>对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。</p>
+<p>但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：RocketMQ、RabbitMQ、Kafka、ActiveMQ等），被动方服务从MQ中消费该消息并进行业务处理，从而形成业务上的闭环。</p>
+<p>这种场景下，我们还是希望异步的多个业务操作同时成功，同时失败，基于TCC的同步型事务解决方案就不可行了，这时就需要祭出可靠消息最终一致性方案。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/22/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://zjuer.net/2021/08/22/%E4%BA%91%E8%AE%A1%E7%AE%97%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -237,7 +315,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-28 22:59:15" itemprop="dateModified" datetime="2025-06-28T22:59:15+08:00">2025-06-28</time>
+                <time title="修改时间：2021-08-31 23:17:06" itemprop="dateModified" datetime="2021-08-31T23:17:06+08:00">2021-08-31</time>
               </span>
 
           
@@ -733,7 +811,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/06/20/%E6%96%97%E9%B1%BCELK%E5%AE%9E%E8%B7%B5/">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2020/07/12/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -747,7 +825,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/06/20/%E6%96%97%E9%B1%BCELK%E5%AE%9E%E8%B7%B5/" class="post-title-link" itemprop="url">斗鱼ELK实践</a>
+            <a href="/2020/07/12/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Web服务分层设计模型</a>
         </h2>
 
         <div class="post-meta">
@@ -757,15 +835,8 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-06-20 11:02:05" itemprop="dateCreated datePublished" datetime="2019-06-20T11:02:05+08:00">2019-06-20</time>
+              <time title="创建时间：2020-07-13 01:08:39" itemprop="dateCreated datePublished" datetime="2020-07-13T01:08:39+08:00">2020-07-13</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-28 23:57:28" itemprop="dateModified" datetime="2025-06-28T23:57:28+08:00">2025-06-28</time>
-              </span>
 
           
 
@@ -778,86 +849,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>大家好，我是黄歆，目前担任斗鱼数据平台部基础架构组Leader，主要负责斗鱼数据平台部基础环境建设（Hadoop、ELK、容器集群等）及基础服务开发（发布系统、监控告警、任务调度等）。首先自我介绍一下，我2010年毕业后进入传统行业从事JavaWeb方向近4年时间，随后转入互联网行业进入一号店。2015年3月份加入斗鱼，开始从事基础环境、基础服务相关工作。</p>
-<p>今天跟大家分享的主题是《基于ELK的亿级实时日志分析平台实践》，主要跟大家分享一些斗鱼在ELK上的实践、架构演变以及一些采坑、调优的经历。此次分享我分成3个部分，分别是：</p>
-<p>1. ELK是什么，为什么要使用ELK；</p>
-<p>2. 斗鱼ELK日志分析平台实践；</p>
-<p>3. 高并发环境下的ELK相关优化；</p>
+          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>如何写好代码，是每个程序员都应该去关注的话题。代码不仅仅是给机器执行的，更是给人看的。我们都希望自己的代码写的好看犹如你的外表，但面对复杂业务需求和多人协同时，如果没有一套基本的原则规范，很难确保不迷失方向。本文就如何写好代码的问题，试图整理出一套规范。</p>
+<h3 id="什么是分层设计"><a href="#什么是分层设计" class="headerlink" title="什么是分层设计"></a>什么是分层设计</h3><p>简单的理解就是，把系统的逻辑功能按照某些原则抽象出几个层次，层次内保持高类聚，层次间保持低耦合，整个系统达到概念清晰，边界清晰，最终功能稳定。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/06/20/%E6%96%97%E9%B1%BCELK%E5%AE%9E%E8%B7%B5/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/06/17/TopK%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/17/TopK%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">TopK问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-06-17 19:44:04" itemprop="dateCreated datePublished" datetime="2019-06-17T19:44:04+08:00">2019-06-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-08-05 06:06:48" itemprop="dateModified" datetime="2025-08-05T06:06:48+08:00">2025-08-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>首先对于1亿的数据量，要求不高的话，大可只使用一个最小堆来维护前10万个最大的数。<br>不妨设数的总数为<strong>N</strong>，需要选出的数为<strong>M</strong>，那么这种方法带来的时间复杂度为：<img src="https://www.zhihu.com/equation?tex=O(NlogM)" alt="O(NlogM)"><br>这个方法最大的缺点是没有<strong>并行计算</strong>。  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/17/TopK%E9%97%AE%E9%A2%98/#more" rel="contents">
+              <a class="btn" href="/2020/07/12/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

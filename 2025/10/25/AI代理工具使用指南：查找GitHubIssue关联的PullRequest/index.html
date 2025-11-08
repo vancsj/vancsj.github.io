@@ -25,12 +25,12 @@
   <meta name="description" content="在AI代理辅助开发的过程中，经常需要查询GitHub Issue与Pull Request之间的关联关系。本文将介绍三种使用GitHub CLI (gh)查找Issue关联PR的方法，这是AI代理工具使用系列文章的一部分。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AI代理工具使用指南：查找GitHub Issue关联的Pull Request">
-<meta property="og:url" content="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/index.html">
+<meta property="og:url" content="https://zjuer.net/2025/10/25/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/index.html">
 <meta property="og:site_name" content="已所欲，己所从">
 <meta property="og:description" content="在AI代理辅助开发的过程中，经常需要查询GitHub Issue与Pull Request之间的关联关系。本文将介绍三种使用GitHub CLI (gh)查找Issue关联PR的方法，这是AI代理工具使用系列文章的一部分。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-10-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-24T16:00:00.000Z">
+<meta property="article:published_time" content="2025-10-25T06:30:00.000Z">
+<meta property="article:modified_time" content="2025-10-25T06:30:00.000Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="AI代理">
 <meta property="article:tag" content="CLI工具">
@@ -38,7 +38,7 @@
 <meta property="article:tag" content="开发效率">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
+<link rel="canonical" href="https://zjuer.net/2025/10/25/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
 
 
 <script id="page-configurations">
@@ -154,7 +154,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/10/24/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/10/25/AI%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%9F%A5%E6%89%BEGitHubIssue%E5%85%B3%E8%81%94%E7%9A%84PullRequest/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -177,7 +177,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2025-10-25 00:00:00" itemprop="dateCreated datePublished" datetime="2025-10-25T00:00:00+08:00">2025-10-25</time>
+              <time title="创建时间：2025-10-25 14:30:00" itemprop="dateCreated datePublished" datetime="2025-10-25T14:30:00+08:00">2025-10-25</time>
             </span>
 
           
@@ -330,7 +330,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/10/24/LLM%E6%99%BA%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E5%88%86%E6%9E%90%EF%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%B0%E7%B2%BE%E5%87%86%E6%A0%B9%E5%9B%A0%E5%AE%9A%E4%BD%8D/" rel="prev" title="LLM智能测试报告分析：从海量数据到精准根因定位">
+    <a href="/2025/10/25/LLM%E6%99%BA%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A%E5%88%86%E6%9E%90%EF%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%88%B0%E7%B2%BE%E5%87%86%E6%A0%B9%E5%9B%A0%E5%AE%9A%E4%BD%8D/" rel="prev" title="LLM智能测试报告分析：从海量数据到精准根因定位">
       <i class="fa fa-chevron-left"></i> LLM智能测试报告分析：从海量数据到精准根因定位
     </a></div>
       <div class="post-nav-item">

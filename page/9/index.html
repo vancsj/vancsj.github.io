@@ -148,7 +148,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/1970/01/01/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -162,7 +162,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/1970/01/01/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" class="post-title-link" itemprop="url">MQ消息最终一致性事务</a>
+            <a href="/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/" class="post-title-link" itemprop="url">不可不说的Java锁事-美团技术团队</a>
         </h2>
 
         <div class="post-meta">
@@ -172,24 +172,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：1970-01-01 08:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T08:00:00+08:00">1970-01-01</time>
+              <time title="创建时间：2019-05-30 12:49:39" itemprop="dateCreated datePublished" datetime="2019-05-30T12:49:39+08:00">2019-05-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-30 06:35:45" itemprop="dateModified" datetime="2025-06-30T06:35:45+08:00">2025-06-30</time>
+                <time title="修改时间：2025-06-30 06:32:36" itemprop="dateModified" datetime="2025-06-30T06:32:36+08:00">2025-06-30</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式事务</span></a>
-                </span>
-            </span>
 
           
 
@@ -202,14 +193,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://blog.csdn.net/lby0307/article/details/86350385" title="Permalink to MQ消息最终一致性事务 - lby0307 - CSDN博客">Source</a></p>
-<h1 id="MQ消息最终一致性事务"><a href="#MQ消息最终一致性事务" class="headerlink" title="MQ消息最终一致性事务"></a>MQ消息最终一致性事务</h1><p>本文我们将学习到一种常见的柔性事务解决方案：消息一致性事务方案。</p>
-<p>对于TCC型事务，跨系统的调用均是基于服务间的直接调用，即很大程度上是同步调用。基于TCC方案能够保证主子事务同时成功，同时失败。</p>
-<p>但实际开发中，由于多方面的考虑，我们会将服务拆分为异步方式，一般是基于MQ进行服务间的解耦，服务发起方执行完本地业务操作后发送一条消息给到消息中间件（比如：RocketMQ、RabbitMQ、Kafka、ActiveMQ等），被动方服务从MQ中消费该消息并进行业务处理，从而形成业务上的闭环。</p>
-<p>这种场景下，我们还是希望异步的多个业务操作同时成功，同时失败，基于TCC的同步型事务解决方案就不可行了，这时就需要祭出可靠消息最终一致性方案。</p>
+          <p><a href="https://tech.meituan.com/2018/11/15/java-lock.html" title="Permalink to 不可不说的Java“锁”事 - 美团技术团队">Source</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文旨在对锁相关源码（本文中的源码来自JDK 8和Netty 3.10.6）、使用场景进行举例，为读者介绍主流锁的知识点，以及不同的锁的适用场景。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/1970/01/01/MQ%E6%B6%88%E6%81%AF%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/#more" rel="contents">
+              <a class="btn" href="/2019/05/30/%E4%B8%8D%E5%8F%AF%E4%B8%8D%E8%AF%B4%E7%9A%84Java%E9%94%81%E4%BA%8B-%E7%BE%8E%E5%9B%A2%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -233,7 +221,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/1970/01/01/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -247,7 +235,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/1970/01/01/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Web服务分层设计模型</a>
+            <a href="/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">幂等的实现方案</a>
         </h2>
 
         <div class="post-meta">
@@ -257,14 +245,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：1970-01-01 08:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T08:00:00+08:00">1970-01-01</time>
+              <time title="创建时间：2019-05-30 11:55:54" itemprop="dateCreated datePublished" datetime="2019-05-30T11:55:54+08:00">2019-05-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-30 06:35:56" itemprop="dateModified" datetime="2025-06-30T06:35:56+08:00">2025-06-30</time>
+                <time title="修改时间：2025-06-28 23:38:38" itemprop="dateModified" datetime="2025-06-28T23:38:38+08:00">2025-06-28</time>
               </span>
 
           
@@ -278,11 +266,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>如何写好代码，是每个程序员都应该去关注的话题。代码不仅仅是给机器执行的，更是给人看的。我们都希望自己的代码写的好看犹如你的外表，但面对复杂业务需求和多人协同时，如果没有一套基本的原则规范，很难确保不迷失方向。本文就如何写好代码的问题，试图整理出一套规范。</p>
-<h3 id="什么是分层设计"><a href="#什么是分层设计" class="headerlink" title="什么是分层设计"></a>什么是分层设计</h3><p>简单的理解就是，把系统的逻辑功能按照某些原则抽象出几个层次，层次内保持高类聚，层次间保持低耦合，整个系统达到概念清晰，边界清晰，最终功能稳定。</p>
+          <p><a href="https://mp.weixin.qq.com/s?__biz=MzAxODcyNjEzNQ==&mid=2247486580&idx=1&sn=7b97af5b67ae020ef285be3b76c630a3&chksm=9bd0a1ecaca728facb97015874ee4f4b34303545870eed544ad29caa6dde9b2acb17ce8baa5d&scene=21" title="Permalink to ">Source</a></p>
+<h3 id="幂等的概念"><a href="#幂等的概念" class="headerlink" title="幂等的概念"></a>幂等的概念</h3><p>幂等（idempotent、idempotence）是一个数学与计算机学概念，常见于抽象代数中。 复制代码</p>
+<p>在编程中，一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。例如，”getUsername()和setTrue()”函数就是一个幂等函数。</p>
+<blockquote>
+<p>用通俗的话讲：就是针对一个操作，不管做多少次，产生效果或返回的结果都是一样的</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/1970/01/01/Web%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+              <a class="btn" href="/2019/05/30/%E5%B9%82%E7%AD%89%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
