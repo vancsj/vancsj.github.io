@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="过去二十年，API设计的核心追求是消除歧义。严格的类型、明确的契约、可预测的响应。但AI带来了一个悖论：AI擅长理解歧义，却也需要更明确的指引。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="给AI用的API该怎么设计">
+<meta property="og:url" content="https://zjuer.net/2025/11/08/%E7%BB%99AI%E7%94%A8%E7%9A%84API%E8%AF%A5%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="过去二十年，API设计的核心追求是消除歧义。严格的类型、明确的契约、可预测的响应。但AI带来了一个悖论：AI擅长理解歧义，却也需要更明确的指引。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-08T06:30:00.000Z">
+<meta property="article:modified_time" content="2025-11-08T06:30:00.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="API设计">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2025/11/08/%E7%BB%99AI%E7%94%A8%E7%9A%84API%E8%AF%A5%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>给AI用的API该怎么设计 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/11/08/%E7%BB%99AI%E7%94%A8%E7%9A%84API%E8%AF%A5%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          给AI用的API该怎么设计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-08 14:30:00" itemprop="dateCreated datePublished" datetime="2025-11-08T14:30:00+08:00">2025-11-08</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>过去二十年，API设计的核心追求是消除歧义。严格的类型、明确的契约、可预测的响应。但AI带来了一个悖论：AI擅长理解歧义，却也需要更明确的指引。</p>
+<span id="more"></span>
+
+<h2 id="传统API和AI调用API的本质区别"><a href="#传统API和AI调用API的本质区别" class="headerlink" title="传统API和AI调用API的本质区别"></a>传统API和AI调用API的本质区别</h2><p>传统API面向人类开发者。人类会读文档、查Stack Overflow、根据错误信息调试。</p>
+<p>AI调用API时没有这些能力。它只有当前的响应和有限的上下文。这意味着：</p>
+<p><strong>1. 错误信息要更易读</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统API错误</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="string">&quot;INVALID_PARAM&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">400</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对AI友好的错误</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="string">&quot;INVALID_PARAM&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;参数 &#x27;user_id&#x27; 不能为空。请检查调用时是否传入了正确的用户ID。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;hint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;使用 GET /users 接口获取有效的用户ID列表&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>AI不知道”INVALID_PARAM”意味着什么。它需要具体的提示：哪里错了、怎么修。</p>
+<p><strong>2. 响应要告诉AI下一步做什么</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统API响应</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;balance&quot;</span><span class="punctuation">:</span> <span class="number">1500.00</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;active&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对AI友好的响应</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;balance&quot;</span><span class="punctuation">:</span> <span class="number">1500.00</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;active&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;_interpretation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;balance&quot;</span><span class="punctuation">:</span> <span class="string">&quot;账户余额，单位为人民币元&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;账户状态。active表示正常使用&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;_suggested_actions&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;如果用户想查询交易记录，调用 GET /transactions&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;如果用户想提现，调用 POST /withdraw&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这增加了响应大小，但减少了AI调用错误接口或误解数据的概率。</p>
+<p><strong>3. 数据结构要自解释</strong></p>
+<p>传统API依赖文档解释字段含义。AI不会去读文档。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不友好</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;temp&quot;</span><span class="punctuation">:</span> <span class="number">23.5</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;hum&quot;</span><span class="punctuation">:</span> <span class="number">65</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 友好</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;temperature_celsius&quot;</span><span class="punctuation">:</span> <span class="number">23.5</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;humidity_percent&quot;</span><span class="punctuation">:</span> <span class="number">65</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>temp</code> 是摄氏还是华氏？<code>hum</code> 是百分比还是小数？AI猜错了就是你承担后果。</p>
+<h2 id="探讨性设计：语义层和协议层"><a href="#探讨性设计：语义层和协议层" class="headerlink" title="探讨性设计：语义层和协议层"></a>探讨性设计：语义层和协议层</h2><p>这是探索性的想法，不是生产经验。</p>
+<p>传统API设计关注”契约”——接口签名、参数类型、返回格式。AI时代的API可能需要一个”协议层”——描述数据的含义和使用方式。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">传统: 请求 → 契约验证 → 响应</span></span><br><span class="line"><span class="section">AI时代: 请求 → 契约验证 → 响应 + 语义提示 + 行为建议</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>语义层包含什么：</strong></p>
+<ul>
+<li>字段的业务含义（不只是数据类型）</li>
+<li>数据的时效性和置信度</li>
+<li>字段之间的关联关系</li>
+<li>常见的误读提醒</li>
+</ul>
+<p><strong>协议层包含什么：</strong></p>
+<ul>
+<li>基于当前结果，AI可能想调用的下一个接口</li>
+<li>处理当前数据的推荐方式</li>
+<li>错误恢复路径</li>
+</ul>
+<h2 id="Token成本的权衡"><a href="#Token成本的权衡" class="headerlink" title="Token成本的权衡"></a>Token成本的权衡</h2><p>每个token都有成本。添加语义提示会让响应变大。</p>
+<p>这是个权衡：多花的token成本 vs AI少犯错的收益。</p>
+<p>对于高频、低风险的API，可能不值得。对于低频、高风险的操作（支付、权限变更），多几个token的提示可能避免严重的错误。</p>
+<h2 id="MCP"><a href="#MCP" class="headerlink" title="MCP"></a>MCP</h2><p>Model Context Protocol是AI领域的”USB-C”——标准化的连接方式。如果你在设计面向AI的系统，值得了解。但这是另一个话题，这里不展开。</p>
+<h2 id="核心观点"><a href="#核心观点" class="headerlink" title="核心观点"></a>核心观点</h2><p>传统API假设消费者是人类，会自己找答案。AI时代的API要假设消费者是AI，需要在响应中提供足够的上下文和指引。</p>
+<p>这不是技术升级，是设计思路的转变。从”让人类能读懂”到”让AI不会读错”。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"># 架构</a>
+              <a href="/tags/API%E8%AE%BE%E8%AE%A1/" rel="tag"># API设计</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/25/AI%E7%94%9F%E4%BA%A7%E5%8A%9B%E5%88%86%E5%8C%96%E7%9A%84%E8%A1%8C%E4%B8%9A%E5%9B%BE%E8%B0%B1%EF%BC%9A%E8%B0%81%E5%B0%86%E6%88%90%E4%B8%BA%E6%9C%80%E5%A4%A7%E8%B5%A2%E5%AE%B6%EF%BC%9F/" rel="prev" title="AI生产力分化的行业图谱：谁将成为最大赢家？">
+      <i class="fa fa-chevron-left"></i> AI生产力分化的行业图谱：谁将成为最大赢家？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/11/08/How-to-Design-APIs-for-AI/" rel="next" title="How to Design APIs for AI">
+      How to Design APIs for AI <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

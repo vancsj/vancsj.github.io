@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Stop asking which AI is “best.” The question is outdated. The models that matter right now are Gemini 3 Pro, GPT-5.2, and Claude Opus 4.5. They’re all excellent. They’re all different. Pick based on w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Which AI Model Should You Use? (Feb 2026)">
+<meta property="og:url" content="https://zjuer.net/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="Stop asking which AI is “best.” The question is outdated. The models that matter right now are Gemini 3 Pro, GPT-5.2, and Claude Opus 4.5. They’re all excellent. They’re all different. Pick based on w">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-25T16:00:00.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Benchmarks">
+<meta property="article:tag" content="LLMs">
+<meta property="article:tag" content="Practical Guide">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Which AI Model Should You Use? (Feb 2026) | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Which AI Model Should You Use? (Feb 2026)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-02-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-02-26T00:00:00+08:00">2026-02-26</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Stop asking which AI is “best.” The question is outdated.</p>
+<p>The models that matter right now are Gemini 3 Pro, GPT-5.2, and Claude Opus 4.5. They’re all excellent. They’re all different. Pick based on what you need to do.</p>
+<span id="more"></span>
+
+<h2 id="Why-Benchmarks-Aren’t-The-Whole-Story"><a href="#Why-Benchmarks-Aren’t-The-Whole-Story" class="headerlink" title="Why Benchmarks Aren’t The Whole Story"></a>Why Benchmarks Aren’t The Whole Story</h2><p>Two things break any benchmark comparison:</p>
+<p><strong>Data contamination.</strong> If benchmark questions leaked into training data, the model isn’t solving the problem—it’s remembering the answer. You can’t tell if it actually learned.</p>
+<p><strong>Teaching to the test.</strong> A company can optimize a model to crush one benchmark while being mediocre at everything else. The numbers look great. Real work doesn’t.</p>
+<p>Use benchmarks to narrow the field, not to decide. Benchmarks measure controlled environments. You need real performance.</p>
+<h2 id="General-Reasoning-MMLU-Pro-GPQA"><a href="#General-Reasoning-MMLU-Pro-GPQA" class="headerlink" title="General Reasoning (MMLU-Pro, GPQA)"></a>General Reasoning (MMLU-Pro, GPQA)</h2><p>Gemini 3 Pro leads MMLU-Pro (expert knowledge questions) at 90.1%.</p>
+<p>On GPQA Diamond (graduate-level science), GPT-5.2 edges ahead at 94.3%, with Claude Opus 4.5 at 93.8% and Gemini 3.1 Pro at 93.2%. The gap is 0.5%. It doesn’t matter.</p>
+<p>All three handle complex reasoning. Pick one based on the next section.</p>
+<h2 id="Conversation-Quality-Arena-Hard-User-Preference"><a href="#Conversation-Quality-Arena-Hard-User-Preference" class="headerlink" title="Conversation Quality (Arena-Hard, User Preference)"></a>Conversation Quality (Arena-Hard, User Preference)</h2><p>Arena-Hard measures user preferences across thousands of comparisons. Gemini 3 Pro wins overall at 1492 Elo.</p>
+<p>But this shifts by task. Claude Opus 4.5 (Thinking) reaches 1510 in coding and complex problem-solving, slightly ahead of Gemini 3 Pro.</p>
+<p>Use Gemini 3 Pro for general conversation. Use Claude 4.5 (Thinking) if you need it to work through complex steps methodically.</p>
+<h2 id="Code-Work-SWE-bench"><a href="#Code-Work-SWE-bench" class="headerlink" title="Code Work (SWE-bench)"></a>Code Work (SWE-bench)</h2><p>SWE-bench measures how many real GitHub bugs a model can fix autonomously.</p>
+<p>GPT-5.2 reaches ~82%. GPT-5 is at 74.9%. The version matters—latest is better.</p>
+<p>Claude Opus 4.5 also performs well on SWE-bench Verified, competing closely with GPT-5.2.</p>
+<p>For production code fixes, either works. GPT-5.2 has the edge.</p>
+<h2 id="Multi-Step-Tasks-With-Tools-GAIA"><a href="#Multi-Step-Tasks-With-Tools-GAIA" class="headerlink" title="Multi-Step Tasks With Tools (GAIA)"></a>Multi-Step Tasks With Tools (GAIA)</h2><p>GAIA tests complex goals that need research, planning, and tool use—the kind of work that requires the AI to figure out what to do next.</p>
+<p>Claude Sonnet 4.5 (not Opus, Sonnet) scores 74.6%. This is the model that developers report can “handle months of architectural work” autonomously.</p>
+<p>If you’re delegating entire features or complex system design, use Claude Sonnet 4.5. It’s better at the “what do I do next?” part.</p>
+<h2 id="The-Real-Split"><a href="#The-Real-Split" class="headerlink" title="The Real Split"></a>The Real Split</h2><p>These three models cluster so tightly on academic benchmarks that the numbers don’t tell you which to pick. Here’s what actually matters:</p>
+<p><strong>Gemini 3 Pro:</strong> Leads on conversation quality and multi-modal reasoning. Best all-around if you don’t care about code.</p>
+<p><strong>GPT-5.2:</strong> Best for fixing code bugs. If your bottleneck is a bug backlog, use this.</p>
+<p><strong>Claude Opus 4.5 (Thinking):</strong> Best for complex reasoning with multiple steps. Also best for Sonnet (lighter weight) variant on autonomous multi-step work.</p>
+<p>Pick by task, not by benchmark. You’ll get similar results with any of them—the 1-5% differences on benchmarks don’t translate to real-world gaps.</p>
+<h2 id="What-Changed-Since-October-2025"><a href="#What-Changed-Since-October-2025" class="headerlink" title="What Changed Since October 2025"></a>What Changed Since October 2025</h2><p>The frontier moved forward fast. Gemini 3 Pro released late January. GPT-5.2 released mid-February. Claude Opus 4.5 (Thinking) came with native reasoning capabilities.</p>
+<p>All three now use reasoning modes where the model thinks through a problem before answering. This changed the game. The models are more reliable, more careful, and noticeably better on hard problems.</p>
+<p>The “best” model changed twice in six weeks. Don’t chase benchmarks. Ship with what works for your task now.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Benchmarks/" rel="tag"># Benchmarks</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+              <a href="/tags/Practical-Guide/" rel="tag"># Practical Guide</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/02/21/%E8%AE%A9AI%E5%86%99%E5%87%BA%E5%83%8F%E4%BA%BA%E8%AF%9D%E7%9A%84%E6%96%87%E7%AB%A0/" rel="prev" title="让AI写出像人话的文章">
+      <i class="fa fa-chevron-left"></i> 让AI写出像人话的文章
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/02/28/Nvidia-Two-Clocks/" rel="next" title="Nvidia: Two Clocks">
+      Nvidia: Two Clocks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

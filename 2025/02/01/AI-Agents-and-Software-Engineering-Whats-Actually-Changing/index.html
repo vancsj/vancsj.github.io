@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="The first AI coding tools were smart autocomplete — you typed, they suggested. That was the whole loop. 第一批AI编程工具就是智能补全：你打字，它给建议，仅此而已。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Agents and Software Engineering: What&#39;s Actually Changing">
+<meta property="og:url" content="https://zjuer.net/2025/02/01/AI-Agents-and-Software-Engineering-Whats-Actually-Changing/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="The first AI coding tools were smart autocomplete — you typed, they suggested. That was the whole loop. 第一批AI编程工具就是智能补全：你打字，它给建议，仅此而已。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-01T15:05:28.000Z">
+<meta property="article:modified_time" content="2025-02-01T15:05:28.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Software Engineering">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2025/02/01/AI-Agents-and-Software-Engineering-Whats-Actually-Changing/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AI Agents and Software Engineering: What's Actually Changing | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2025/02/01/AI-Agents-and-Software-Engineering-Whats-Actually-Changing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI Agents and Software Engineering: What's Actually Changing
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-02-01 23:05:28" itemprop="dateCreated datePublished" datetime="2025-02-01T23:05:28+08:00">2025-02-01</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>The first AI coding tools were smart autocomplete — you typed, they suggested. That was the whole loop.</p>
+<p>第一批AI编程工具就是智能补全：你打字，它给建议，仅此而已。</p>
+<span id="more"></span>
+
+<p>Agents are different. An agent perceives its environment, decides what to do next, acts, and adjusts based on what it sees. It has goals, not just inputs.</p>
+<p>代理不一样。它有目标，不只是响应输入。它会感知环境、决策、行动，再根据结果调整方向。</p>
+<p>The practical gap shows up when things go wrong: a chatbot fails and stops; an agent fails and tries something else.</p>
+<p>区别在出错的时候最明显——聊天机器人卡死就算了，代理换个方法继续。</p>
+<hr>
+<p>Four things make an agent work.</p>
+<p>代理由四个部分构成。</p>
+<p><strong>Perception</strong> — reads the environment. Code files, error messages, API responses.</p>
+<p><strong>感知</strong> — 读取环境：代码文件、报错信息、API响应。</p>
+<p><strong>Reasoning</strong> — an LLM figures out what to do next. This is the hard part, and why LLMs are central to agent design.</p>
+<p><strong>推理</strong> — 大模型决定下一步怎么做。这是最难的部分，也是为什么LLM是代理架构的核心。</p>
+<p><strong>Action</strong> — actually does something. Writes a file. Calls an API. Runs a test.</p>
+<p><strong>行动</strong> — 真的去做：写文件、调接口、跑测试。</p>
+<p><strong>Memory</strong> — short-term (current context) and long-term (what it learned across sessions). Most current tools only have perception and action. Memory is the unsolved part.</p>
+<p><strong>记忆</strong> — 分短期（当前上下文）和长期（跨会话的积累）。目前多数工具有感知和行动，记忆还是个悬案。</p>
+<hr>
+<p>Today’s agents work like batch jobs — input goes in, output comes out, everything is forgotten. Fine for simple tasks, but they break down on anything that requires remembering what was tried, what failed, and why.</p>
+<p>现在的代理本质上是无状态的：一次请求，一次响应，上下文清零。做个简单任务没问题，但稍微复杂一点——需要记住试过什么、哪里出了问题——就撑不住了。</p>
+<p>The real shift will be stateful agents that can pick up a problem across sessions and maintain something like project knowledge.</p>
+<p>真正的突破是有状态的代理：能跨会话接着干，慢慢积累对项目的理解，知道之前试了什么、为什么卡住。</p>
+<p>This is why agent memory architecture matters more than model capability right now. The models are already good enough for many tasks; the bottleneck is persistence.</p>
+<p>所以现在记忆架构比模型本身更重要。模型的能力已经够用了，真正的瓶颈是怎么让它记住东西。</p>
+<hr>
+<p>For software engineers, the work is changing — not “write code” anymore, but “design the systems where an agent can write good code reliably.”</p>
+<p>对工程师来说，工作重心变了。不再是亲自写代码，而是搭出一个让代理能可靠运作的系统。</p>
+<p>The work shifts upstream. You define module boundaries, document architecture conventions, build specialized tools for specific domains. The agent handles mechanical parts; you handle the parts that require understanding why the system is structured the way it is.</p>
+<p>工作向上游移动：定义模块边界、记录架构约定、为特定领域搭专用工具。机械性的活交给代理，你来处理那些需要理解”系统为什么这样设计”的部分。</p>
+<p>This is specialization, not replacement. Senior engineers don’t write boilerplate — they design systems where others can write safe boilerplate. Agents fit a similar slot.</p>
+<p>这是分工，不是替代。高级工程师从来不亲自写样板代码，他们设计让别人能安全写样板代码的系统。代理的角色和这差不多。</p>
+<hr>
+<p>Three tools dominate agentic CLI coding right now: Aider, Gemini CLI, Claude Code. Three distinct philosophies.</p>
+<p>目前代理式命令行编程有三个主流工具：Aider、Gemini CLI、Claude Code，设计哲学各不相同。</p>
+<p><strong>Aider</strong> builds a symbol map of your repo and makes edits in diff format. It verifies the original code block exists before applying any change. Reliable, transparent, good for targeted edits.</p>
+<p><strong>Aider</strong> 先建代码库的符号索引，改动以diff格式输出，每次修改前都确认原始代码块存在。可靠、透明，适合需要精准改动的场景。</p>
+<p><strong>Gemini CLI</strong> explores the codebase on demand — grep, file reads, piecing together context as it goes. Works well for multi-file tasks where you can’t predict upfront what context you’ll need.</p>
+<p><strong>Gemini CLI</strong> 按需探索代码库——grep、读文件、边走边拼凑上下文。适合那种改之前根本不知道要看哪些文件的多文件任务。</p>
+<p><strong>Claude Code</strong> treats editing as one step in a larger workflow — file manipulation combined with hooks for linters and tests, project-specific memory, and pre-planned execution. Better for delegating entire workflows.</p>
+<p><strong>Claude Code</strong> 把编辑只当成工作流的一步，配合lint/测试钩子、项目级记忆和执行前规划。适合把整个任务流程都交给它的情况。</p>
+<p>Pick by task. Precise edit: Aider. Exploratory multi-file work: Gemini CLI. Full workflow automation: Claude Code.</p>
+<p>按任务选。精准改动用Aider，探索性多文件任务用Gemini CLI，完整工作流自动化用Claude Code。</p>
+<hr>
+<p>Code completion is still mostly bad. Worth saying clearly.</p>
+<p>代码补全现在还是差。不客气地说。</p>
+<p>The core problem: completion models see the current file. They don’t understand conventions elsewhere in the codebase, constraints set in other modules, or the reason the code is structured the way it is.</p>
+<p>核心问题在于：补全模型只看眼前这个文件，不知道代码库其他地方的约定、其他模块的约束，更不知道代码为什么这样设计。</p>
+<p>The suggestions that fail most: naming (too generic), patterns (doesn’t match established conventions), context (correct in isolation, wrong given system constraints).</p>
+<p>最常出问题的：命名（太通用）、写法（不符合既有约定）、上下文（孤立看没错，但违反系统约束）。</p>
+<p>What helps: larger context windows, RAG over the full codebase, fine-tuning on specific projects. None are fully solved at the tool level yet. If you find completion annoying, that’s an accurate read of the current state.</p>
+<p>有帮助的方向：更大的上下文窗口、对整个代码库做RAG、在特定项目上微调。但工具层面都还没完全解决。如果你觉得补全很烦，那是对的，工具还没到位。</p>
+<hr>
+<p>The long-term pattern matters more than any specific tool.</p>
+<p>工具会变，但背后的模式是不变的。</p>
+<p>AI-first software engineering means building systems where agents can operate reliably: clear module boundaries, explicit conventions documented somewhere agents can read, deterministic components handling the parts where LLMs make mistakes.</p>
+<p>AI优先的软件工程，核心是搭出让代理能可靠工作的系统：模块边界清晰、约定明确记录（放在代理能读到的地方）、用确定性组件兜住LLM容易出错的地方。</p>
+<p>The engineers who do well will understand both sides: what LLMs are good at (pattern matching, code generation, summarization) and where they fail (counting, precise constraint tracking, long-range consistency). Design around both.</p>
+<p>真正做得好的工程师，既清楚LLM擅长什么（模式匹配、生成、归纳），也清楚它在哪里出问题（计数、精确追踪约束、长程一致性）——然后围绕这两点设计系统。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/AI-Agents/" rel="tag"># AI Agents</a>
+              <a href="/tags/Software-Engineering/" rel="tag"># Software Engineering</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/05/05/OnAI/" rel="prev" title="OnAI">
+      <i class="fa fa-chevron-left"></i> OnAI
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/02/09/In-Depth-Comparison-of-Popular-AI-Code-Assistants/" rel="next" title="In-Depth Comparison of Popular AI Code Agents">
+      In-Depth Comparison of Popular AI Code Agents <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
