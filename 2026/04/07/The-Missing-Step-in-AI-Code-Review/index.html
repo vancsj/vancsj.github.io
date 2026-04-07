@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="“If AI makes us code faster but review slower, did we actually get faster?” I kept seeing this question in developer discussions. Nobody had a satisfying answer — partly because the question itself re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Missing Step in AI Code Review">
+<meta property="og:url" content="https://zjuer.net/2026/04/07/The-Missing-Step-in-AI-Code-Review/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="“If AI makes us code faster but review slower, did we actually get faster?” I kept seeing this question in developer discussions. Nobody had a satisfying answer — partly because the question itself re">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-07T10:06:19.000Z">
+<meta property="article:modified_time" content="2026-04-07T17:07:20.383Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="Code Review">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2026/04/07/The-Missing-Step-in-AI-Code-Review/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>The Missing Step in AI Code Review | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/04/07/The-Missing-Step-in-AI-Code-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Missing Step in AI Code Review
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-07 18:06:19" itemprop="dateCreated datePublished" datetime="2026-04-07T18:06:19+08:00">2026-04-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-04-08 01:07:20" itemprop="dateModified" datetime="2026-04-08T01:07:20+08:00">2026-04-08</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>“If AI makes us code faster but review slower, did we actually get faster?”</p>
+<p>I kept seeing this question in developer discussions. Nobody had a satisfying answer — partly because the question itself reveals something real: AI changed the bottleneck.</p>
+<p>Senior engineers started spending most of their week on AI-generated review comments. The coding got faster, the review queue got longer, and the trade-off wasn’t obvious until it was.</p>
+<p>Most implementations fail because they treat AI review like a faster linter. The ones that work treat it like a first draft for human editing.</p>
+<hr>
+<h2 id="The-Confidence-Problem"><a href="#The-Confidence-Problem" class="headerlink" title="The Confidence Problem"></a>The Confidence Problem</h2><p>Claude Code — and AI code review tools generally — presents every finding with the same authority. A naming nit looks the same as a security vulnerability. That confidence is the feature, and it’s also the problem.</p>
+<p>The research tells a complicated story. False positive rates vary widely: vendor benchmarks claim 5-15% <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>, but independent studies show 22-86% depending on the vulnerability class <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode]</a>. One study found that 45% of AI-generated code contains at least one known security flaw <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a> — and AI review doesn’t catch all of them.</p>
+<p>Developers noticed. 84% use AI coding tools <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>, but only 29% trust their outputs <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>. Two out of three developers say AI misses critical context despite claiming productivity gains <a target="_blank" rel="noopener" href="https://www.qodo.us/blog/ai-code-review-productivity">[Qodo]</a>. That’s the trust gap.</p>
+<p>The more subtle issue: AI is confident when it’s wrong. It flags unused variables that are actually there for side effects. It recommends patterns that break in production because it lacks full project context. It pushes conventional best practices onto code that deliberately deviates. And because it sounds certain, people believe it.</p>
+<p>At the intersection of confidence and probability, AI generates code that matches the probability distribution of “how code looks,” not “how code works correctly.” It often doesn’t flag missing authentication because the patterns in its training data include working API calls without auth checks. The same logic applies when it reviews: it produces comments that sound right, not comments that are right. A security analysis found that 45% of AI-generated code contains at least one known security flaw <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a> — not because the AI doesn’t know about security, but because it generates what looks most likely, not what is most correct.</p>
+<p>This compounds downstream. When AI code exceeds 40% of a repository, bug rates increase by 9% and rework rates increase by 20-25% <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>. AI-generated code contains 1.7x more defects than human-written code <a target="_blank" rel="noopener" href="https://coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report">[CodeRabbit]</a>. Faster generation, more bugs, longer reviews — the math doesn’t work without better curation.</p>
+<hr>
+<h2 id="Why-Most-Implementations-Fail"><a href="#Why-Most-Implementations-Fail" class="headerlink" title="Why Most Implementations Fail"></a>Why Most Implementations Fail</h2><p>The typical approach: paste code, ask “review this,” get a list of issues, post to PR. It feels smooth — and it’s ineffective for several reasons.</p>
+<p><strong>Single-pass review treats every finding equally.</strong> Architectural issues and naming conventions land in the same comment thread. A redesign that would invalidate hundreds of nits gets discussed after the nits are already resolved. The reviewer spent time on details that no longer matter.</p>
+<p><strong>Single-pass review hits the early-impression problem especially hard.</strong> Research shows that reviewers form an impression of a PR within the first few lines and adjust insufficiently when later evidence contradicts it <a target="_blank" rel="noopener" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0301111">[PLOS ONE 2025]</a>. Defect detection becomes skewed toward whatever caught attention first. In controlled experiments, reviewers who were anchored to an initial bug cue found more of the same bug type and missed unrelated defects. The same happens with AI review: once the model has committed to a reading of the code, it keeps generating comments in that direction.</p>
+<p><strong>AI doesn’t know what it doesn’t know.</strong> It doesn’t ask which findings matter most. It doesn’t distinguish between “this is technically correct but the approach is wrong” and “this variable name could be more descriptive.” It just comments. A senior human reviewer would flag the approach first; the AI treats both as equally important.</p>
+<p><strong>The bottleneck.</strong> Some teams automate posting AI comments directly to PRs. This sounds efficient. In practice, it generates noise that buries real issues — and the research confirms the bottleneck is real. After AI coding tool adoption, PR review time increases by 91% <a target="_blank" rel="noopener" href="https://www.faros.ai/blog/ai-software-engineering">[Faros]</a> while senior engineers spend 19% more time on review <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a> — and see their own coding output drop by 19% as a result <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>. The coding got faster, the review queue got longer, and the net capacity of senior engineers shrank.</p>
+<p><strong>Alert fatigue sets in.</strong> When false positives pile up, developers start ignoring the entire report — including the real issues. The tool becomes counterproductive. One survey found that 66% of senior engineers cite “almost right but not quite” AI output as a major frustration <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>, and 61% distrust AI-generated code’s reliability <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>. When the tool cries wolf enough times, real warnings get dismissed too.</p>
+<hr>
+<h2 id="What-the-Research-Says-Actually-Works"><a href="#What-the-Research-Says-Actually-Works" class="headerlink" title="What the Research Says Actually Works"></a>What the Research Says Actually Works</h2><p>The evidence converges on a few practices that address these failure modes.</p>
+<p><strong>Tiered pipelines.</strong> Let AI handle low-risk, mechanical checks — syntax, style, common patterns, known vulnerability patterns. Reserve human review for architectural decisions, security-sensitive code, and anything involving business logic <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/best-ai-code-review-tools">[CodeAnt]</a>. The split isn’t about replacing humans; it’s about matching task complexity to the right reviewer. AI is good at catching the patterns humans miss. Humans are good at judgment AI lacks.</p>
+<p><strong>Parallel review with specialist lenses.</strong> Running several specialized reviewers simultaneously — each focused on a distinct lens like security, architecture, conventions, or test coverage — avoids the early-impression problem. Each reviewer forms its verdict independently before findings are shared. Architectural concerns get addressed separately from naming conventions. Structural issues that would invalidate dozens of detail-level comments get caught first, so you don’t waste effort on details that will change anyway.</p>
+<p><strong>Context over prompts.</strong> Custom instruction files (CLAUDE.md, REVIEW.md) that encode project conventions, patterns to ignore, and architectural principles do more to reduce noise than prompt engineering. The AI knows what to flag because it knows what you actually care about. Without this, every review starts from scratch with no understanding of your codebase’s specific context.</p>
+<p>For example, if your project uses a specific naming convention that differs from the default, putting that in CLAUDE.md means the AI won’t flag deviations that are actually intentional. If you’ve decided that a certain pattern is acceptable for your use case, the AI can learn to ignore it.</p>
+<p><strong>Feedback loops.</strong> Tracking which findings developers accept, dismiss, or edit — and why — creates data to tune the system over time. In one study, 73.8% of AI comments were acted upon <a target="_blank" rel="noopener" href="https://arxiv.org/html/2412.18531v2">[arXiv]</a>, but AI-generated comments are addressed only 19.2% of the time on average, compared to 60% for human comments <a target="_blank" rel="noopener" href="https://arxiv.org/html/2508.18771v1">[arXiv]</a>. This gap tells you the AI is useful but insufficient on its own — and that the gap is learnable. Over time, as you tune the system based on actual usage, the acceptance rate improves.</p>
+<p>There’s also a threshold effect: when AI-generated code exceeds 30-40% of a codebase, review overhead and bug leakage rise sharply <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>. The benefits of AI coding plateau while the costs compound. The editorial function becomes more important, not less, as AI usage increases.</p>
+<p>False positive rates above 15% make a tool unusable; keeping them below 5% requires iteration <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>. The only way to get there is to measure and adjust.</p>
+<hr>
+<h2 id="The-Editorial-Role"><a href="#The-Editorial-Role" class="headerlink" title="The Editorial Role"></a>The Editorial Role</h2><p>There’s a step most implementations skip: the human as editor.</p>
+<p>It’s a genuine editorial function: deciding what exists, what it means, and what deserves attention.</p>
+<p>When AI generates a review, the human editor’s job is three things:</p>
+<p><strong>Filter false positives.</strong> AI confidently flags things that aren’t actually problems. Maybe the flagged pattern is intentional. Maybe it’s a false match. Maybe it’s technically correct but contextually fine. The editor decides.</p>
+<p><strong>Curate priority.</strong> What’s a real blocker? What’s a suggestion? What’s noise? AI presents everything with equal weight. The editor decides what the author actually needs to hear right now.</p>
+<p><strong>Reframe for context.</strong> AI may flag something technically correct but misunderstand the intent. It doesn’t know that this module is deliberately designed a certain way for legacy compatibility. It doesn’t know that this “duplication” is actually intentional because the two use cases need to evolve independently. The editor adjusts the framing before it reaches the PR.</p>
+<p>The editorial gate is where the process becomes a system instead of a tool. Without it, AI review generates comments. With it, AI review generates a draft for human curation.</p>
+<p>Think of it like a newsroom. The reporter generates copy quickly — that’s useful. But the copy isn’t published until an editor reviews it, cuts the noise, adjusts the framing, and decides what the reader actually needs to know. The reporter’s productivity matters. But without the editor, you get messy output that damages credibility.</p>
+<p>The editorial role also addresses the threshold problem. When AI generates 70% of your code, you can’t review everything with equal depth. The editor has to triage: what matters most, what can wait, what can be ignored. Without that prioritization, you’re treating a naming nit and a security vulnerability with the same urgency — which means neither gets the attention it deserves.</p>
+<hr>
+<h2 id="A-Grounded-Approach-with-Claude-Code"><a href="#A-Grounded-Approach-with-Claude-Code" class="headerlink" title="A Grounded Approach with Claude Code"></a>A Grounded Approach with Claude Code</h2><p>Claude Code’s built-in features support this workflow without requiring a custom pipeline.</p>
+<p><strong>Local review.</strong> The <code>/review</code> command — available via the code-review plugin (<code>claude plugin install code-review@claude-plugins-official</code>) — runs a multi-agent analysis on the current diff. It dispatches several specialized agents (logic, security, API misuse) that each try to falsify their findings before presenting them. Findings are tagged with severity markers: 🔴 for bugs that must be fixed, 🟡 for nits, 🟣 for pre-existing issues. The output is a draft, not a verdict.</p>
+<p><strong>PR-level review.</strong> Commenting <code>@claude review</code> on a pull request triggers the same analysis. Use <code>@claude review once</code> for a single check, or subscribe to automated runs after each push. The review posts as inline comments — again, draft output requiring human judgment.</p>
+<p><strong>Sub-agents for specialized review.</strong> Creating specialized reviewers (stored in <code>.claude/agents/</code>) lets you run focused analysis with tool permissions restricted to read-only operations. You might have a security reviewer that focuses on injection vulnerabilities and auth bypasses, an architecture reviewer that looks at module boundaries and dependency direction, and a conventions reviewer that checks naming and style. Running several agents in parallel instead of one general review avoids the early-impression problem and surfaces structural issues before detail-level ones.</p>
+<p>To create a sub-agent, run <code>/agents</code> in Claude Code and follow the prompts. The agent file is a markdown document with YAML front-matter defining name, description, and tool permissions.</p>
+<p><strong>Hooks for verification.</strong> Adding a pre-edit hook that runs Prettier, or a post-edit hook that runs type-checking, means the reviewer receives clean input — reducing false positives before they reach the review stage. Hooks are defined in <code>.claude/settings.json</code> and run at lifecycle events like PreToolUse and PostToolUse.</p>
+<p>The pattern throughout: AI generates a draft, a human edits it, only then does it reach the PR.</p>
+<hr>
+<h2 id="The-Real-Value"><a href="#The-Real-Value" class="headerlink" title="The Real Value"></a>The Real Value</h2><p>Code review with AI isn’t about automating judgment. It’s about generating better drafts for human editors.</p>
+<p>AI catches patterns humans miss. It asks questions the author stopped asking months ago. It sees the code fresh, without the blind spots that come from knowing exactly what you meant to write. It can review every file in a PR when a human reviewer might only skim the most obviously changed ones.</p>
+<p>But it also generates noise — it lacks context, sounds certain when it’s wrong, and presents every finding with equal weight. The confidence that makes it useful also makes it dangerous.</p>
+<p>The workflow that works treats AI as a reviewer who generates notes, not verdicts. A human editor reviews those notes, filters the noise, decides what matters, and shapes the final output. The AI suggests. The human curates.</p>
+<p>How AI should work in code review: not as an oracle, but as a resource — one that requires an editor to be useful.</p>
+<p>The review bottleneck isn’t a bug to fix with better AI. It’s a signal that the process needs human judgment at the right point — after generation, before publication. The bottleneck becomes a flow when you add the editor.</p>
+<p>This reframes the question. Instead of “how do we make AI review faster?” we ask “how do we make AI review more useful for human editors?” Faster review that requires more triage isn’t faster. Review that surfaces the right issues for human judgment is.</p>
+<p>The teams getting value from AI code review aren’t the ones with the best models. They’re the ones who designed the process: AI generates, humans edit, only the curated output reaches the PR. The productivity gains come from the editorial efficiency, not the generation speed.</p>
+<span id="more"></span>
+
+<h1 id="AI-代码审查缺失的那一步"><a href="#AI-代码审查缺失的那一步" class="headerlink" title="AI 代码审查缺失的那一步"></a>AI 代码审查缺失的那一步</h1><p>“如果 AI 让编码变快但审查变慢，我们真的变快了吗？”</p>
+<p>这个问题的反复出现本身就说明了一些事情：AI 改变了瓶颈所在。</p>
+<p>高级工程师把一周的大部分时间花在了 AI 生成审查评论上。编码变快了，审查队列变长了，这个权衡在变成现实之前并不明显。</p>
+<p>大多数实现失败的原因是把 AI 审查当成了更快的 linter。真正有效的做法是把它当成人类编辑的初稿。</p>
+<hr>
+<h2 id="置信度问题"><a href="#置信度问题" class="headerlink" title="置信度问题"></a>置信度问题</h2><p>Claude Code——以及 AI 代码审查工具——呈现每个发现时都带有同样的权威性。一个命名细节和一个安全漏洞看起来没什么区别。这种自信既是特点，也是问题所在。</p>
+<p>研究讲述了一个复杂的故事。误报率差异很大：供应商基准声称 5-15% <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>，但独立研究显示根据漏洞类型不同，为 22-86% <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode]</a>。一项研究发现 45% 的 AI 生成代码包含至少一个已知安全缺陷 <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a>——而 AI 审查并不能全部捕获。</p>
+<p>开发者注意到了。84% 使用 AI 编码工具 <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>，但只有 29% 信任它们的输出 <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>。三分之二的开发者说 AI 错过了关键上下文，尽管声称有生产力提升 <a target="_blank" rel="noopener" href="https://www.qodo.us/blog/ai-code-review-productivity">[Qodo]</a>。这是信任差距。</p>
+<p>更微妙的问题：AI 在错误时也很自信。它标记从未使用但实际存在的变量。它推荐在生产环境中会失败的模式，因为它缺乏完整的项目上下文。它将传统的最佳实践强加于刻意偏离的代码。因为它听起来如此确定，人们相信了它。</p>
+<p>根本问题在于 AI 基于概率生成代码。它生成看起来对的代码，而不是实际对的代码。当它审查代码时，应用同样的逻辑：生成听起来对的评论，而不是实际对的评论。安全分析发现 45% 的 AI 生成代码包含至少一个已知安全缺陷 <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a>——不是因为 AI 不了解安全，而是因为它生成的是最像样的，不是最正确的。</p>
+<p>这个问题会在下游加剧。当 AI 代码超过代码库的 40% 时，bug 率增加 9%，返工率增加 20-25% <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>。AI 生成的代码包含 1.7 倍于人类编写代码的缺陷 <a target="_blank" rel="noopener" href="https://coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report">[CodeRabbit]</a>。生成更快，bug 更多，审查更久——没有更好的编辑，这个数学不成立。</p>
+<hr>
+<h2 id="为什么大多数实现失败"><a href="#为什么大多数实现失败" class="headerlink" title="为什么大多数实现失败"></a>为什么大多数实现失败</h2><p>典型做法是粘贴代码、问”审查一下”、得到问题列表、再发布到 PR。这个流程看起来很顺畅——也很低效。</p>
+<p>问题不在于 AI 不能审查代码。问题在于单次通过的审查对每个发现一视同仁。架构问题和命名规范出现在同一条评论里。一个会否定数十个细节评论的重新设计，在那些细节已经解决之后才被讨论。</p>
+<p>还有个早期印象问题：审查者很快对 PR 形成印象，当后来的证据与它矛盾时，调整得不够。这一点在代码审查研究中反复出现——缺陷检测变得偏向于首先引起注意的 bug 类型，不相关的问题被遗漏。</p>
+<p>更糟的是，AI 不知道自己不知道什么。它不问哪些发现最重要。它不区分”这在技术上是正确的但方法错了”和”这个变量名可以更描述性”。它只是评论。</p>
+<p>警告疲劳也随之而来。当误报堆积时，开发者开始忽略整个报告——包括真正的问题。一项调查发现，66% 的高级工程师认为”差不多但不完全对”的 AI 输出是一个主要挫败感来源 <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>，61% 不信任 AI 生成代码的可靠性 <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>。当工具狼来了叫得够多，真正的警告也被忽略了。</p>
+<p>另一个失败模式：审查没有编辑环节。一些团队将 AI 评论直接自动发布到 PR。这听起来高效。实际上，噪音埋没了真正的问题——研究证实了这个瓶颈是真实的。采用 AI 编码工具后，PR 审查时间增加 91% <a target="_blank" rel="noopener" href="https://www.faros.ai/blog/ai-software-engineering">[Faros]</a>，高级工程师在审查上多花 19% 的时间 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>，而他们自己的编码产出下降了 19% <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>。编码变快了，审查队列变长了，高级工程师的净产能缩减了。</p>
+<hr>
+<h2 id="研究说真正有效的是什么"><a href="#研究说真正有效的是什么" class="headerlink" title="研究说真正有效的是什么"></a>研究说真正有效的是什么</h2><p>证据在少数几个实践上汇聚。</p>
+<p><strong>分层管道</strong>：把低风险、机械性的检查交给 AI——语法、风格、常见模式——人工审查留给架构决策、安全敏感代码和涉及业务逻辑的部分。这不是取代人类，而是将任务复杂度匹配给正确的审查者。</p>
+<p><strong>并行审查配合专业视角</strong>：同时运行几个专业审查者，每个聚焦于不同的视角，避免早期印象问题。每个审查者独立形成判断后再分享发现。架构问题与命名规范分开处理。会否定数十个细节层面评论的结构性问题在细节评论之前被捕获，这样才不会浪费精力在注定要改的东西上。</p>
+<p><strong>上下文比提示词更重要</strong>：自定义指令文件（CLAUDE.md、REVIEW.md）编码项目规范、要忽略的模式和架构原则，在减少噪音方面比提示词工程更有效。AI 知道该标记什么，因为它知道你们真正关心什么。</p>
+<p><strong>反馈循环</strong>：跟踪开发者接受、拒绝或编辑了哪些发现——以及为什么——创造数据来随时间调整系统。一项研究中，73.8% 的 AI 评论被采纳 <a target="_blank" rel="noopener" href="https://arxiv.org/html/2412.18531v2">[arXiv]</a>，但 AI 生成的评论平均只有 19.2% 被处理，而人类评论是 60% <a target="_blank" rel="noopener" href="https://arxiv.org/html/2508.18771v1">[arXiv]</a>。这个差距告诉你两件事：AI 有用，但单靠它不够；而且这个差距是可以缩小的，随着你根据实际使用情况调整系统，采纳率会提高。</p>
+<p>还有个阈值效应：当 AI 代码超过代码库的 30-40% 时，审查开销和 bug 泄漏急剧上升 <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>。AI 的好处停滞，而成本却在增加。编辑功能变得更加重要，而不是不那么重要。</p>
+<p>误报率超过 15% 使工具不可用；保持在 5% 以下需要迭代 <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>。唯一的办法是测量和调整。</p>
+<hr>
+<h2 id="编辑角色"><a href="#编辑角色" class="headerlink" title="编辑角色"></a>编辑角色</h2><p>大多数实现跳过了一步：人类作为编辑。</p>
+<p>这不是让你看一眼就合并。这是真正的编辑职能：决定存在什么、意味着什么、值得关注。</p>
+<p>当 AI 生成审查时，人类编辑的工作是三件事。第一，过滤误报——AI 自信地标记实际上不是问题的东西。第二，策划优先级——什么是真正的阻塞项，什么是建议，什么是噪音。第三，重新调整背景——AI 可能标记了技术正确但误解了意图的东西；编辑在它到达 PR 之前调整框架。</p>
+<p>编辑环节是流程变成系统而非工具的地方。没有它，AI 审查生成评论。有了它，AI 审查生成人类策划的草稿。</p>
+<p>想象一个新闻编辑部。记者快速生成稿件——这很有用。但稿件在编辑审阅之前不会发布，编辑要削减噪音、调整框架、决定读者真正需要知道什么。记者的生产力很重要。但没有编辑，你得到的是损害信誉的混乱输出。</p>
+<p>编辑角色也解决了阈值问题。当 AI 生成 70% 的代码时，你不可能对所有内容都给予同等的深度关注。编辑必须分类：什么最重要，什么可以等，什么可以忽略。没有这种优先级排序，你用同样的紧迫性对待命名细节和安全漏洞——这意味着两者都没有得到应有的关注。</p>
+<hr>
+<h2 id="Claude-Code-的务实方法"><a href="#Claude-Code-的务实方法" class="headerlink" title="Claude Code 的务实方法"></a>Claude Code 的务实方法</h2><p>Claude Code 的内置功能支持这种工作流，不需要定制管道。</p>
+<p>本地审查用 <code>/review</code> 命令——通过 code-review 插件获得——对当前差异运行多智能体分析。发现标记了严重性标记：🔴 表示必须修复的 bug，🟡 表示细节，🟣 表示已存在的问题。输出是草稿，不是裁决。</p>
+<p>PR 级别审查，在 pull request 上评论 <code>@claude review</code> 触发相同的分析。用 <code>@claude review once</code> 做单次检查，或订阅每次推送后的自动运行。审查作为内联评论发布——同样是需要人类判断的草稿。</p>
+<p>子智能体扩展了模型。创建专业审查者（存储在 <code>.claude/agents/</code> 中）让你运行聚焦分析——安全、架构，性能——并将工具权限限制为只读操作。运行几个智能体并行而不是一个通用审查，避免早期印象问题，并在细节层面之前浮出结构性问题。</p>
+<p>钩子自动化验证。添加在编辑前运行 Prettier 的预编辑钩子，或在编辑后运行类型检查的后编辑钩子，意味着审查者收到干净的输入——在问题到达审查阶段之前减少误报。</p>
+<p>贯穿始终的模式：AI 生成草稿，人类编辑它，只有经过编辑的内容才到达 PR。</p>
+<hr>
+<h2 id="真正的价值"><a href="#真正的价值" class="headerlink" title="真正的价值"></a>真正的价值</h2><p>AI 代码审查不是为了自动化判断。而是为了给人类编辑提供更好的草稿。</p>
+<p>AI 捕获人类遗漏的模式。它问作者几个月前停止问的问题。它新鲜地看代码，没有因精确知道自己想写什么而产生的盲点。</p>
+<p>但它也产生噪音——缺乏上下文，在错误时也很自信。</p>
+<p>有效的工作流把 AI 视为生成笔记而非裁决的审查者。人类编辑审查那些笔记，过滤噪音，决定什么重要，塑造最终输出——AI 建议，人类策划。</p>
+<p>这是 AI 在代码审查中应有的方式：不是作为一个能下判决的权威，而是作为一个资源——需要编辑才能发挥作用。</p>
+<p>审查瓶颈不是用更好的 AI 来修复的 bug。它是一个信号，说明流程需要在正确的时机加入人类判断——生成之后，发布之前。当你加入编辑时，瓶颈变成流动。</p>
+<p>这重新构建了问题。不是问”如何让 AI 审查更快？”而是问”如何让 AI 审查对人类编辑更有用？”需要更多分类的更快审查并不是更快。能够为人类判断呈现正确问题的审查才是。</p>
+<p>从 AI 代码审查中获得价值的团队不是拥有最好模型的团队。他们是设计了流程的团队：AI 生成，人类编辑，只有经过策划的输出才到达 PR。生产力提升来自编辑效率，而不是生成速度。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Claude-Code/" rel="tag"># Claude Code</a>
+              <a href="/tags/Code-Review/" rel="tag"># Code Review</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/03/11/Why-Tech-Giants-Are-Really-Buying-Agent-Teams/" rel="prev" title="Why Tech Giants Are Really Buying Agent Teams: The True Logic Behind the 2026 Agent Consolidation Wave">
+      <i class="fa fa-chevron-left"></i> Why Tech Giants Are Really Buying Agent Teams: The True Logic Behind the 2026 Agent Consolidation Wave
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

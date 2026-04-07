@@ -148,6 +148,264 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/04/07/The-Missing-Step-in-AI-Code-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/04/07/The-Missing-Step-in-AI-Code-Review/" class="post-title-link" itemprop="url">The Missing Step in AI Code Review</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-04-07 18:06:19" itemprop="dateCreated datePublished" datetime="2026-04-07T18:06:19+08:00">2026-04-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-04-08 01:07:20" itemprop="dateModified" datetime="2026-04-08T01:07:20+08:00">2026-04-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>“If AI makes us code faster but review slower, did we actually get faster?”</p>
+<p>I kept seeing this question in developer discussions. Nobody had a satisfying answer — partly because the question itself reveals something real: AI changed the bottleneck.</p>
+<p>Senior engineers started spending most of their week on AI-generated review comments. The coding got faster, the review queue got longer, and the trade-off wasn’t obvious until it was.</p>
+<p>Most implementations fail because they treat AI review like a faster linter. The ones that work treat it like a first draft for human editing.</p>
+<hr>
+<h2 id="The-Confidence-Problem"><a href="#The-Confidence-Problem" class="headerlink" title="The Confidence Problem"></a>The Confidence Problem</h2><p>Claude Code — and AI code review tools generally — presents every finding with the same authority. A naming nit looks the same as a security vulnerability. That confidence is the feature, and it’s also the problem.</p>
+<p>The research tells a complicated story. False positive rates vary widely: vendor benchmarks claim 5-15% <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>, but independent studies show 22-86% depending on the vulnerability class <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode]</a>. One study found that 45% of AI-generated code contains at least one known security flaw <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a> — and AI review doesn’t catch all of them.</p>
+<p>Developers noticed. 84% use AI coding tools <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>, but only 29% trust their outputs <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>. Two out of three developers say AI misses critical context despite claiming productivity gains <a target="_blank" rel="noopener" href="https://www.qodo.us/blog/ai-code-review-productivity">[Qodo]</a>. That’s the trust gap.</p>
+<p>The more subtle issue: AI is confident when it’s wrong. It flags unused variables that are actually there for side effects. It recommends patterns that break in production because it lacks full project context. It pushes conventional best practices onto code that deliberately deviates. And because it sounds certain, people believe it.</p>
+<p>At the intersection of confidence and probability, AI generates code that matches the probability distribution of “how code looks,” not “how code works correctly.” It often doesn’t flag missing authentication because the patterns in its training data include working API calls without auth checks. The same logic applies when it reviews: it produces comments that sound right, not comments that are right. A security analysis found that 45% of AI-generated code contains at least one known security flaw <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/securemath/ai-generated-code-security-analysis">[Veracode 2025]</a> — not because the AI doesn’t know about security, but because it generates what looks most likely, not what is most correct.</p>
+<p>This compounds downstream. When AI code exceeds 40% of a repository, bug rates increase by 9% and rework rates increase by 20-25% <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>. AI-generated code contains 1.7x more defects than human-written code <a target="_blank" rel="noopener" href="https://coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report">[CodeRabbit]</a>. Faster generation, more bugs, longer reviews — the math doesn’t work without better curation.</p>
+<hr>
+<h2 id="Why-Most-Implementations-Fail"><a href="#Why-Most-Implementations-Fail" class="headerlink" title="Why Most Implementations Fail"></a>Why Most Implementations Fail</h2><p>The typical approach: paste code, ask “review this,” get a list of issues, post to PR. It feels smooth — and it’s ineffective for several reasons.</p>
+<p><strong>Single-pass review treats every finding equally.</strong> Architectural issues and naming conventions land in the same comment thread. A redesign that would invalidate hundreds of nits gets discussed after the nits are already resolved. The reviewer spent time on details that no longer matter.</p>
+<p><strong>Single-pass review hits the early-impression problem especially hard.</strong> Research shows that reviewers form an impression of a PR within the first few lines and adjust insufficiently when later evidence contradicts it <a target="_blank" rel="noopener" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0301111">[PLOS ONE 2025]</a>. Defect detection becomes skewed toward whatever caught attention first. In controlled experiments, reviewers who were anchored to an initial bug cue found more of the same bug type and missed unrelated defects. The same happens with AI review: once the model has committed to a reading of the code, it keeps generating comments in that direction.</p>
+<p><strong>AI doesn’t know what it doesn’t know.</strong> It doesn’t ask which findings matter most. It doesn’t distinguish between “this is technically correct but the approach is wrong” and “this variable name could be more descriptive.” It just comments. A senior human reviewer would flag the approach first; the AI treats both as equally important.</p>
+<p><strong>The bottleneck.</strong> Some teams automate posting AI comments directly to PRs. This sounds efficient. In practice, it generates noise that buries real issues — and the research confirms the bottleneck is real. After AI coding tool adoption, PR review time increases by 91% <a target="_blank" rel="noopener" href="https://www.faros.ai/blog/ai-software-engineering">[Faros]</a> while senior engineers spend 19% more time on review <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a> — and see their own coding output drop by 19% as a result <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>. The coding got faster, the review queue got longer, and the net capacity of senior engineers shrank.</p>
+<p><strong>Alert fatigue sets in.</strong> When false positives pile up, developers start ignoring the entire report — including the real issues. The tool becomes counterproductive. One survey found that 66% of senior engineers cite “almost right but not quite” AI output as a major frustration <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>, and 61% distrust AI-generated code’s reliability <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>. When the tool cries wolf enough times, real warnings get dismissed too.</p>
+<hr>
+<h2 id="What-the-Research-Says-Actually-Works"><a href="#What-the-Research-Says-Actually-Works" class="headerlink" title="What the Research Says Actually Works"></a>What the Research Says Actually Works</h2><p>The evidence converges on a few practices that address these failure modes.</p>
+<p><strong>Tiered pipelines.</strong> Let AI handle low-risk, mechanical checks — syntax, style, common patterns, known vulnerability patterns. Reserve human review for architectural decisions, security-sensitive code, and anything involving business logic <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/best-ai-code-review-tools">[CodeAnt]</a>. The split isn’t about replacing humans; it’s about matching task complexity to the right reviewer. AI is good at catching the patterns humans miss. Humans are good at judgment AI lacks.</p>
+<p><strong>Parallel review with specialist lenses.</strong> Running several specialized reviewers simultaneously — each focused on a distinct lens like security, architecture, conventions, or test coverage — avoids the early-impression problem. Each reviewer forms its verdict independently before findings are shared. Architectural concerns get addressed separately from naming conventions. Structural issues that would invalidate dozens of detail-level comments get caught first, so you don’t waste effort on details that will change anyway.</p>
+<p><strong>Context over prompts.</strong> Custom instruction files (CLAUDE.md, REVIEW.md) that encode project conventions, patterns to ignore, and architectural principles do more to reduce noise than prompt engineering. The AI knows what to flag because it knows what you actually care about. Without this, every review starts from scratch with no understanding of your codebase’s specific context.</p>
+<p>For example, if your project uses a specific naming convention that differs from the default, putting that in CLAUDE.md means the AI won’t flag deviations that are actually intentional. If you’ve decided that a certain pattern is acceptable for your use case, the AI can learn to ignore it.</p>
+<p><strong>Feedback loops.</strong> Tracking which findings developers accept, dismiss, or edit — and why — creates data to tune the system over time. In one study, 73.8% of AI comments were acted upon <a target="_blank" rel="noopener" href="https://arxiv.org/html/2412.18531v2">[arXiv]</a>, but AI-generated comments are addressed only 19.2% of the time on average, compared to 60% for human comments <a target="_blank" rel="noopener" href="https://arxiv.org/html/2508.18771v1">[arXiv]</a>. This gap tells you the AI is useful but insufficient on its own — and that the gap is learnable. Over time, as you tune the system based on actual usage, the acceptance rate improves.</p>
+<p>There’s also a threshold effect: when AI-generated code exceeds 30-40% of a codebase, review overhead and bug leakage rise sharply <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>. The benefits of AI coding plateau while the costs compound. The editorial function becomes more important, not less, as AI usage increases.</p>
+<p>False positive rates above 15% make a tool unusable; keeping them below 5% requires iteration <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>. The only way to get there is to measure and adjust.</p>
+<hr>
+<h2 id="The-Editorial-Role"><a href="#The-Editorial-Role" class="headerlink" title="The Editorial Role"></a>The Editorial Role</h2><p>There’s a step most implementations skip: the human as editor.</p>
+<p>It’s a genuine editorial function: deciding what exists, what it means, and what deserves attention.</p>
+<p>When AI generates a review, the human editor’s job is three things:</p>
+<p><strong>Filter false positives.</strong> AI confidently flags things that aren’t actually problems. Maybe the flagged pattern is intentional. Maybe it’s a false match. Maybe it’s technically correct but contextually fine. The editor decides.</p>
+<p><strong>Curate priority.</strong> What’s a real blocker? What’s a suggestion? What’s noise? AI presents everything with equal weight. The editor decides what the author actually needs to hear right now.</p>
+<p><strong>Reframe for context.</strong> AI may flag something technically correct but misunderstand the intent. It doesn’t know that this module is deliberately designed a certain way for legacy compatibility. It doesn’t know that this “duplication” is actually intentional because the two use cases need to evolve independently. The editor adjusts the framing before it reaches the PR.</p>
+<p>The editorial gate is where the process becomes a system instead of a tool. Without it, AI review generates comments. With it, AI review generates a draft for human curation.</p>
+<p>Think of it like a newsroom. The reporter generates copy quickly — that’s useful. But the copy isn’t published until an editor reviews it, cuts the noise, adjusts the framing, and decides what the reader actually needs to know. The reporter’s productivity matters. But without the editor, you get messy output that damages credibility.</p>
+<p>The editorial role also addresses the threshold problem. When AI generates 70% of your code, you can’t review everything with equal depth. The editor has to triage: what matters most, what can wait, what can be ignored. Without that prioritization, you’re treating a naming nit and a security vulnerability with the same urgency — which means neither gets the attention it deserves.</p>
+<hr>
+<h2 id="A-Grounded-Approach-with-Claude-Code"><a href="#A-Grounded-Approach-with-Claude-Code" class="headerlink" title="A Grounded Approach with Claude Code"></a>A Grounded Approach with Claude Code</h2><p>Claude Code’s built-in features support this workflow without requiring a custom pipeline.</p>
+<p><strong>Local review.</strong> The <code>/review</code> command — available via the code-review plugin (<code>claude plugin install code-review@claude-plugins-official</code>) — runs a multi-agent analysis on the current diff. It dispatches several specialized agents (logic, security, API misuse) that each try to falsify their findings before presenting them. Findings are tagged with severity markers: 🔴 for bugs that must be fixed, 🟡 for nits, 🟣 for pre-existing issues. The output is a draft, not a verdict.</p>
+<p><strong>PR-level review.</strong> Commenting <code>@claude review</code> on a pull request triggers the same analysis. Use <code>@claude review once</code> for a single check, or subscribe to automated runs after each push. The review posts as inline comments — again, draft output requiring human judgment.</p>
+<p><strong>Sub-agents for specialized review.</strong> Creating specialized reviewers (stored in <code>.claude/agents/</code>) lets you run focused analysis with tool permissions restricted to read-only operations. You might have a security reviewer that focuses on injection vulnerabilities and auth bypasses, an architecture reviewer that looks at module boundaries and dependency direction, and a conventions reviewer that checks naming and style. Running several agents in parallel instead of one general review avoids the early-impression problem and surfaces structural issues before detail-level ones.</p>
+<p>To create a sub-agent, run <code>/agents</code> in Claude Code and follow the prompts. The agent file is a markdown document with YAML front-matter defining name, description, and tool permissions.</p>
+<p><strong>Hooks for verification.</strong> Adding a pre-edit hook that runs Prettier, or a post-edit hook that runs type-checking, means the reviewer receives clean input — reducing false positives before they reach the review stage. Hooks are defined in <code>.claude/settings.json</code> and run at lifecycle events like PreToolUse and PostToolUse.</p>
+<p>The pattern throughout: AI generates a draft, a human edits it, only then does it reach the PR.</p>
+<hr>
+<h2 id="The-Real-Value"><a href="#The-Real-Value" class="headerlink" title="The Real Value"></a>The Real Value</h2><p>Code review with AI isn’t about automating judgment. It’s about generating better drafts for human editors.</p>
+<p>AI catches patterns humans miss. It asks questions the author stopped asking months ago. It sees the code fresh, without the blind spots that come from knowing exactly what you meant to write. It can review every file in a PR when a human reviewer might only skim the most obviously changed ones.</p>
+<p>But it also generates noise — it lacks context, sounds certain when it’s wrong, and presents every finding with equal weight. The confidence that makes it useful also makes it dangerous.</p>
+<p>The workflow that works treats AI as a reviewer who generates notes, not verdicts. A human editor reviews those notes, filters the noise, decides what matters, and shapes the final output. The AI suggests. The human curates.</p>
+<p>How AI should work in code review: not as an oracle, but as a resource — one that requires an editor to be useful.</p>
+<p>The review bottleneck isn’t a bug to fix with better AI. It’s a signal that the process needs human judgment at the right point — after generation, before publication. The bottleneck becomes a flow when you add the editor.</p>
+<p>This reframes the question. Instead of “how do we make AI review faster?” we ask “how do we make AI review more useful for human editors?” Faster review that requires more triage isn’t faster. Review that surfaces the right issues for human judgment is.</p>
+<p>The teams getting value from AI code review aren’t the ones with the best models. They’re the ones who designed the process: AI generates, humans edit, only the curated output reaches the PR. The productivity gains come from the editorial efficiency, not the generation speed.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/04/07/The-Missing-Step-in-AI-Code-Review/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/03/11/Why-Tech-Giants-Are-Really-Buying-Agent-Teams/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/11/Why-Tech-Giants-Are-Really-Buying-Agent-Teams/" class="post-title-link" itemprop="url">Why Tech Giants Are Really Buying Agent Teams: The True Logic Behind the 2026 Agent Consolidation Wave</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-03-11 18:00:00" itemprop="dateCreated datePublished" datetime="2026-03-11T18:00:00+08:00">2026-03-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>In early 2026, three high-profile events coincided. OpenAI made an aggressive move to acquire OpenClaw’s core talent and pushed the project toward an open foundation; Meta closed a $2 billion acquisition of Manus, a startup that had reached $100 million ARR in just eight months; on March 10, <a target="_blank" rel="noopener" href="https://www.yicai.com/news/103079210.html">Tencent formally announced its “Lobster” product matrix, with QClaw—a local AI assistant built on OpenClaw, now packaged for WeChat remote execution</a>. The tech press erupted with “AI Agent Era has truly arrived.” But peel back the hype, and what emerges is far more revealing—a panicked scramble for high-quality execution trajectories, and a tacit admission that the Consumer AI dream has already crumbled.</p>
+<p>2026 年初，三起标志性事件接连发生。OpenAI 挖走了 OpenClaw 的核心创始人并推动该项目向开源基金会靠拢；Meta 在 2025 年底斥资 20 亿美元收购了 Manus，后者在短短 8 个月内就突破了 1 亿美元的年度经常性收入（ARR）；3 月 10 日，<a target="_blank" rel="noopener" href="https://www.yicai.com/news/103079210.html">腾讯正式宣布推出全系”龙虾”产品矩阵，其中 QClaw——一款基于 OpenClaw 封装的本地 AI 助手，现已打通微信远程执行</a>。科技媒体欢呼雀跃：”AI Agent 全能时代真的来了”。但剥开这层浮躁的叙事，真正值得关注的是另一个故事——大模型厂商对”轨迹数据”的疯狂争夺，以及一个隐形的认输：消费级 AI 的梦想已经破灭。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/11/Why-Tech-Giants-Are-Really-Buying-Agent-Teams/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/03/11/%E5%85%A8%E6%B0%91%E5%85%BB%E9%BE%99%E8%99%BE%EF%BC%9A%E8%B0%81%E5%9C%A8%E8%B5%9A%E9%92%B1%EF%BC%8C%E8%B0%81%E5%9C%A8%E4%BA%A4%E5%AD%A6%E8%B4%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/11/%E5%85%A8%E6%B0%91%E5%85%BB%E9%BE%99%E8%99%BE%EF%BC%9A%E8%B0%81%E5%9C%A8%E8%B5%9A%E9%92%B1%EF%BC%8C%E8%B0%81%E5%9C%A8%E4%BA%A4%E5%AD%A6%E8%B4%B9/" class="post-title-link" itemprop="url">全民养龙虾：谁在赚钱，谁在交学费</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-03-11 14:00:00" itemprop="dateCreated datePublished" datetime="2026-03-11T14:00:00+08:00">2026-03-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2026 年 3 月，中国互联网上最火的词不是某款新游戏，也不是某个明星，而是一只红色的 AI 龙虾。</p>
+<p>OpenClaw 的 logo 是一只波士顿龙虾，”养龙虾”的意思是：持续训练你的 AI Agent，让它越来越懂你，直到它能帮你自动处理邮件、整理文件、监控竞品、打理业务。与之配套的叙事是”一人公司”——一个人 + 一群 AI Agent = 一家具备团队战斗力的公司。</p>
+<p>听起来很诱人。但在这场全民狂欢里，有一本账没人愿意算清楚。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/11/%E5%85%A8%E6%B0%91%E5%85%BB%E9%BE%99%E8%99%BE%EF%BC%9A%E8%B0%81%E5%9C%A8%E8%B5%9A%E9%92%B1%EF%BC%8C%E8%B0%81%E5%9C%A8%E4%BA%A4%E5%AD%A6%E8%B4%B9/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/03/04/MCP-rise-limits-and-whats-next/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -643,222 +901,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2026/02/28/Amazon-Three-Businesses/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/02/28/Tesla-Cash-Cow-Problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/02/28/Tesla-Cash-Cow-Problem/" class="post-title-link" itemprop="url">Tesla: When the Cash Cow Stops Grazing</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-02-28 10:00:00" itemprop="dateCreated datePublished" datetime="2026-02-28T10:00:00+08:00">2026-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-03-05 06:43:36" itemprop="dateModified" datetime="2026-03-05T06:43:36+08:00">2026-03-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><em>This is part of a series on the Magnificent Seven. The framing — four distinct scenarios, seven companies that should not be priced as one story — is laid out in <a href="/2025/10/18/Magnificent-Seven-Contrarian-Pricing-Memo/">the original memo</a>.</em></p>
-<p><em>本文是科技七巨头系列的一部分。四种截然不同的终局剧本——完整框架见<a href="/2025/10/18/Magnificent-Seven-Contrarian-Pricing-Memo/">原始备忘录</a>。</em></p>
-<p>Tesla is not an EV company making a robotaxi bet. It is a robotaxi and humanoid robot company that currently runs on EV cash flows. The distinction matters because EV cash flows are declining, and the bets require years of runway before they generate revenue.</p>
-<p>特斯拉不是一家在押注自动驾驶出租车的电动车公司。它是一家以机器人出租车和人形机器人为终局目标、目前靠电动车现金流维系运转的公司。这个区别至关重要，因为电动车现金流正在收缩，而这些赌注在产生收入之前还需要数年的资金支撑。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/02/28/Tesla-Cash-Cow-Problem/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/02/28/Nvidia-Two-Clocks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/02/28/Nvidia-Two-Clocks/" class="post-title-link" itemprop="url">Nvidia: Two Clocks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-02-28 09:00:00" itemprop="dateCreated datePublished" datetime="2026-02-28T09:00:00+08:00">2026-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-03-05 06:43:36" itemprop="dateModified" datetime="2026-03-05T06:43:36+08:00">2026-03-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><em>This is part of a series on the Magnificent Seven. The framing — four distinct scenarios, seven companies that should not be priced as one story — is laid out in <a href="/2025/10/18/Magnificent-Seven-Contrarian-Pricing-Memo/">the original memo</a>.</em></p>
-<p><em>本文是科技七巨头系列的一部分。四种截然不同的终局剧本——完整框架见<a href="/2025/10/18/Magnificent-Seven-Contrarian-Pricing-Memo/">原始备忘录</a>。</em></p>
-<p>Nvidia just reported Q4 FY2026: $68.1 billion in total revenue, $62.3 billion from data centers, up 75% year-over-year. Q1 FY2027 guidance is $78 billion — $5 billion above analyst consensus. The stock barely moved. At a trailing PE of ~48x and forward PE of ~30x, the market has two concerns running simultaneously that it treats as one. They are not one. They operate on entirely different timescales, have different triggers, and require different hedges.</p>
-<p>英伟达刚刚公布了 FY2026 第四季度业绩：总收入 681 亿美元，数据中心收入 623 亿美元，同比增长 75%。FY2027 第一季度指引 780 亿美元——高出分析师共识 50 亿。股价几乎没动。以约 48 倍的追踪市盈率和约 30 倍的远期市盈率，市场同时怀揣着两种担忧，却把它们当成一件事来定价。它们不是一件事，运行在完全不同的时间尺度上，有不同的触发机制，需要不同的对冲策略。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/02/28/Nvidia-Two-Clocks/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="vancsj">
-      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="已所欲，己所从">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/" class="post-title-link" itemprop="url">Which AI Model Should You Use? (Feb 2026)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2026-02-26 00:00:00" itemprop="dateCreated datePublished" datetime="2026-02-26T00:00:00+08:00">2026-02-26</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Stop asking which AI is “best.” The question is outdated.</p>
-<p>The models that matter right now are Gemini 3 Pro, GPT-5.2, and Claude Opus 4.5. They’re all excellent. They’re all different. Pick based on what you need to do.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/02/25/The-AI-Decathlon-Why-Theres-No-Single-Champion-in-the-Tech-Race-of-the-Century/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
