@@ -30,7 +30,7 @@
 <meta property="og:description" content="“If AI makes us code faster but review slower, did we actually get faster?” I kept seeing this question in developer discussions. Nobody had a satisfying answer — partly because the question itself re">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-07T10:06:19.000Z">
-<meta property="article:modified_time" content="2026-04-08T08:02:20.170Z">
+<meta property="article:modified_time" content="2026-04-08T08:09:21.820Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Claude Code">
@@ -183,7 +183,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2026-04-08 16:02:20" itemprop="dateModified" datetime="2026-04-08T16:02:20+08:00">2026-04-08</time>
+                <time title="修改时间：2026-04-08 16:09:21" itemprop="dateModified" datetime="2026-04-08T16:09:21+08:00">2026-04-08</time>
               </span>
 
           
@@ -265,7 +265,7 @@
 <p>大多数实现失败的原因是把 AI 审查当成了更快的 linter。真正有效的做法是把它当成人类编辑的初稿。</p>
 <hr>
 <h2 id="置信度问题"><a href="#置信度问题" class="headerlink" title="置信度问题"></a>置信度问题</h2><p>Claude Code——以及 AI 代码审查工具——呈现每个发现时都带有同样的权威性。一个命名细节和一个安全漏洞看起来没什么区别。这种自信既是特点，也是问题所在。</p>
-<p>研究讲述了一个复杂的故事。误报率差异很大：供应商基准声称 5-15% <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>，但独立研究显示根据漏洞类型不同，为 22-86% <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/genai-code-security-report/">[Veracode]</a>。一项研究发现 45% 的 AI 生成代码包含至少一个已知安全缺陷 <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/genai-code-security-report/">[Veracode]</a>——而 AI 审查并不能全部捕获。</p>
+<p>研究给出的结论很复杂。误报率差异很大：供应商基准声称 5-15% <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>，但独立研究显示根据漏洞类型不同，为 22-86% <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/genai-code-security-report/">[Veracode]</a>。一项研究发现 45% 的 AI 生成代码包含至少一个已知安全缺陷 <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/genai-code-security-report/">[Veracode]</a>——而 AI 审查并不能全部捕获。</p>
 <p>开发者注意到了。84% 使用 AI 编码工具 <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>，但只有 29% 信任它们的输出 <a target="_blank" rel="noopener" href="https://survey.stackoverflow.co/2024/ai">[Stack Overflow 2025]</a>。三分之二的开发者说 AI 错过了关键上下文，尽管声称有生产力提升 <a target="_blank" rel="noopener" href="https://www.prnewswire.com/news-releases/despite-78-claiming-productivity-gains-two-in-three-developers-say-ai-misses-critical-context-according-to-qodo-survey-302480084.html">[PRNewswire/Qodo]</a>。这是信任差距。</p>
 <p>更微妙的问题：AI 在错误时也很自信。它标记从未使用但实际存在的变量。它推荐在生产环境中会失败的模式，因为它缺乏完整的项目上下文。它将传统的最佳实践强加于刻意偏离的代码。因为它听起来如此确定，人们相信了它。</p>
 <p>根本问题在于 AI 基于概率生成代码。它生成看起来对的代码，而不是实际对的代码。当它审查代码时，应用同样的逻辑：生成听起来对的评论，而不是实际对的评论。安全分析发现 45% 的 AI 生成代码包含至少一个已知安全缺陷 <a target="_blank" rel="noopener" href="https://www.veracode.com/blog/genai-code-security-report/">[Veracode]</a>——不是因为 AI 不了解安全，而是因为它生成的是最像样的，不是最正确的。</p>
@@ -276,14 +276,14 @@
 <p>还有个早期印象问题：审查者很快对 PR 形成印象，当后来的证据与它矛盾时，调整得不够。这一点在代码审查研究中反复出现——缺陷检测变得偏向于首先引起注意的 bug 类型，不相关的问题被遗漏。</p>
 <p>更糟的是，AI 不知道自己不知道什么。它不问哪些发现最重要。它不区分”这在技术上是正确的但方法错了”和”这个变量名可以更描述性”。它只是评论。</p>
 <p>警告疲劳也随之而来。当误报堆积时，开发者开始忽略整个报告——包括真正的问题。一项调查发现，66% 的高级工程师认为”差不多但不完全对”的 AI 输出是一个主要挫败感来源 <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>，61% 不信任 AI 生成代码的可靠性 <a target="_blank" rel="noopener" href="https://devops.com/survey-sees-wider-adoption-of-ai-coding-tools-creating-more-devops-challenges/">[DevOps.com]</a>。当工具狼来了叫得够多，真正的警告也被忽略了。</p>
-<p>另一个失败模式：审查没有编辑环节。一些团队将 AI 评论直接自动发布到 PR。这听起来高效。实际上，噪音埋没了真正的问题——研究证实了这个瓶颈是真实的。采用 AI 编码工具后，PR 审查时间增加 91% <a target="_blank" rel="noopener" href="https://www.faros.ai/blog/ai-software-engineering">[Faros]</a>，高级工程师在审查上多花 19% 的时间 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>，而他们自己的编码产出下降了 19% <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>。编码变快了，审查队列变长了，高级工程师的净产能缩减了。</p>
+<p>另一个失败模式：审查没有编辑环节。一些团队将 AI 评论直接自动发布到 PR。这听起来高效。实际上，噪音埋没了真正的问题——研究证实了这一点。采用 AI 编码工具后，PR 审查时间增加 91% <a target="_blank" rel="noopener" href="https://www.faros.ai/blog/ai-software-engineering">[Faros]</a>，高级工程师在审查上多花 19% 的时间 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>，而他们自己的编码产出下降了 19% <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2510.10165">[arXiv]</a>。编码变快了，审查队列变长了，高级工程师的净产能缩减了。</p>
 <hr>
 <h2 id="研究说真正有效的是什么"><a href="#研究说真正有效的是什么" class="headerlink" title="研究说真正有效的是什么"></a>研究说真正有效的是什么</h2><p>证据在少数几个实践上汇聚。</p>
-<p><strong>分层管道</strong>：把低风险、机械性的检查交给 AI——语法、风格、常见模式——人工审查留给架构决策、安全敏感代码和涉及业务逻辑的部分。这不是取代人类，而是将任务复杂度匹配给正确的审查者。</p>
+<p><strong>分层管道</strong>：把低风险、机械性的检查交给 AI——语法、风格、常见模式——人工审查留给架构决策、安全敏感代码和涉及业务逻辑的部分。这不是要取代人类，而是将任务复杂度匹配给正确的审查者。</p>
 <p><strong>并行审查配合专业视角</strong>：同时运行几个专业审查者，每个聚焦于不同的视角，避免早期印象问题。每个审查者独立形成判断后再分享发现。架构问题与命名规范分开处理。会否定数十个细节层面评论的结构性问题在细节评论之前被捕获，这样才不会浪费精力在注定要改的东西上。</p>
 <p><strong>上下文比提示词更重要</strong>：自定义指令文件（CLAUDE.md、REVIEW.md）编码项目规范、要忽略的模式和架构原则，在减少噪音方面比提示词工程更有效。AI 知道该标记什么，因为它知道你们真正关心什么。</p>
 <p><strong>反馈循环</strong>：跟踪开发者接受、拒绝或编辑了哪些发现——以及为什么——创造数据来随时间调整系统。一项研究中，73.8% 的 AI 评论被采纳 <a target="_blank" rel="noopener" href="https://arxiv.org/html/2412.18531v2">[arXiv]</a>，但 AI 生成的评论平均只有 19.2% 被处理，而人类评论是 60% <a target="_blank" rel="noopener" href="https://arxiv.org/html/2508.18771v1">[arXiv]</a>。这个差距告诉你两件事：AI 有用，但单靠它不够；而且这个差距是可以缩小的，随着你根据实际使用情况调整系统，采纳率会提高。</p>
-<p>还有个阈值效应：当 AI 代码超过代码库的 30-40% 时，审查开销和 bug 泄漏急剧上升 <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>。AI 的好处停滞，而成本却在增加。编辑功能变得更加重要，而不是不那么重要。</p>
+<p>还有个阈值效应：当 AI 代码超过代码库的 30-40% 时，审查开销和 bug 泄漏急剧上升 <a target="_blank" rel="noopener" href="https://blog.exceeds.ai/industry-benchmarks-ai-code-productivity/">[Exceeds AI]</a>。AI 的好处停滞，而成本却在增加。编辑功能变得更加重要。</p>
 <p>误报率超过 15% 使工具不可用；保持在 5% 以下需要迭代 <a target="_blank" rel="noopener" href="https://www.codeant.ai/blogs/ai-code-review-false-positives">[CodeAnt]</a>。唯一的办法是测量和调整。</p>
 <hr>
 <h2 id="编辑角色"><a href="#编辑角色" class="headerlink" title="编辑角色"></a>编辑角色</h2><p>大多数实现跳过了一步：人类作为编辑。</p>
@@ -294,7 +294,7 @@
 <p>编辑角色也解决了阈值问题。当 AI 生成 70% 的代码时，你不可能对所有内容都给予同等的深度关注。编辑必须分类：什么最重要，什么可以等，什么可以忽略。没有这种优先级排序，你用同样的紧迫性对待命名细节和安全漏洞——这意味着两者都没有得到应有的关注。</p>
 <hr>
 <h2 id="Claude-Code-的务实方法"><a href="#Claude-Code-的务实方法" class="headerlink" title="Claude Code 的务实方法"></a>Claude Code 的务实方法</h2><p>Claude Code 的内置功能支持这种工作流，不需要定制管道。</p>
-<p>本地审查用 <code>/review</code> 命令——通过 code-review 插件获得——对当前差异运行多智能体分析。发现标记了严重性标记：🔴 表示必须修复的 bug，🟡 表示细节，🟣 表示已存在的问题。输出是草稿，不是裁决。</p>
+<p>本地审查用 <code>/review</code> 命令——通过 code-review 插件获得——对当前差异运行多智能体分析。发现标记了严重程度：🔴 表示必须修复的 bug，🟡 表示细节，🟣 表示已存在的问题。输出是草稿，不是裁决。</p>
 <p>PR 级别审查，在 pull request 上评论 <code>@claude review</code> 触发相同的分析。用 <code>@claude review once</code> 做单次检查，或订阅每次推送后的自动运行。审查作为内联评论发布——同样是需要人类判断的草稿。</p>
 <p>子智能体扩展了模型。创建专业审查者（存储在 <code>.claude/agents/</code> 中）让你运行聚焦分析——安全、架构，性能——并将工具权限限制为只读操作。运行几个智能体并行而不是一个通用审查，避免早期印象问题，并在细节层面之前浮出结构性问题。</p>
 <p>钩子自动化验证。添加在编辑前运行 Prettier 的预编辑钩子，或在编辑后运行类型检查的后编辑钩子，意味着审查者收到干净的输入——在问题到达审查阶段之前减少误报。</p>
