@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="过去两年，企业AI工具的新闻看多了，基本都是一个套路：给现有软件加个聊天窗口，号称能回答你的问题。但用过的人都知道，大多时候它就是个套了壳的搜索引擎，连你公司内部的权限、上下文都搞不清楚。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Atlassian Rovo不是另一个AI聊天机器人：深度解析 &#x2F; Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive">
+<meta property="og:url" content="https://zjuer.net/2026/05/02/Atlassian%20Rovo%E4%B8%8D%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AAAI%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%9A%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="过去两年，企业AI工具的新闻看多了，基本都是一个套路：给现有软件加个聊天窗口，号称能回答你的问题。但用过的人都知道，大多时候它就是个套了壳的搜索引擎，连你公司内部的权限、上下文都搞不清楚。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-02T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-02T02:00:00.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI Collaboration">
+<meta property="article:tag" content="AI协作">
+<meta property="article:tag" content="Atlassian">
+<meta property="article:tag" content="Enterprise Software">
+<meta property="article:tag" content="Rovo">
+<meta property="article:tag" content="Teamwork Graph">
+<meta property="article:tag" content="企业软件">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2026/05/02/Atlassian%20Rovo%E4%B8%8D%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AAAI%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%9A%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/05/02/Atlassian%20Rovo%E4%B8%8D%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AAAI%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%9A%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-02 10:00:00" itemprop="dateCreated datePublished" datetime="2026-05-02T10:00:00+08:00">2026-05-02</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>过去两年，企业AI工具的新闻看多了，基本都是一个套路：给现有软件加个聊天窗口，号称能回答你的问题。但用过的人都知道，大多时候它就是个套了壳的搜索引擎，连你公司内部的权限、上下文都搞不清楚。</p>
+<span id="more"></span>
+
+<h2 id="为什么说Rovo不一样"><a href="#为什么说Rovo不一样" class="headerlink" title="为什么说Rovo不一样"></a>为什么说Rovo不一样</h2><p>现在的知识工作者每天要在10个以上的SaaS工具之间切换，超过四分之一的时间花在找信息、核对数据、追溯决策背景上。这不是小问题，是结构性的效率黑洞。Atlassian 最近推出的 Rovo，我一开始也没抱太大期望，但扒完它的技术底座，发现还真不是噱头。</p>
+<h3 id="核心不是AI，是Teamwork-Graph"><a href="#核心不是AI，是Teamwork-Graph" class="headerlink" title="核心不是AI，是Teamwork Graph"></a>核心不是AI，是Teamwork Graph</h3><p>Rovo 的所有能力都建立在 <strong>Teamwork Graph</strong> 上，这是 Atlassian 藏着没怎么宣传的杀手锏。它的本质是一个统一数据层，把企业里所有零散的工作元素——Jira 任务、Confluence 文档、Slack 消息、GitHub PR——都抽象成标准对象，再把这些对象之间的关系（谁负责什么、哪个决策关联哪份文档）全部映射出来。</p>
+<p>技术实现上，Teamwork Graph 使用图论方法，将每个工作元素表示为具有特定属性的”对象”。无论是 Jira 的任务、Confluence 的文档，还是 Google Drive 的文件、Slack 的消息，都通过统一的对象模型进行标准化。这种标准化使得不同来源的数据能在同一语境下进行互操作和关联。</p>
+<p>打个比方：以前你的公司数据像散落在各个房间的文件，现在 Teamwork Graph 把它们拼成了一张完整的工作地图。而且它实时同步源系统的权限，不会泄露敏感数据，还支持50多个预构建连接器（截至2025年中），不止能接 Atlassian 自己的工具，外部 SaaS 的数据也能整合进来。</p>
+<p>Atlassian 官方文档显示，Teamwork Graph 定义了四种关系类型：<strong>规范关系</strong>（直接的结构连接）、<strong>活动关系</strong>（用户交互行为）、<strong>逻辑关系</strong>（高层抽象关系）、<strong>推断关系</strong>（通过机器学习推导出的隐含连接）。这些关系的组合让 Rovo 能够还原业务决策的真实路径，消除信息盲区。</p>
+<blockquote>
+<p>参考：<a href="https://developer.atlassian.com/platform/teamwork-graph/what-is-teamwork-graph/">What is Teamwork Graph</a> | <a href="https://developer.atlassian.com/platform/teamwork-graph/relationships/">Relationships</a></p>
+</blockquote>
+<h3 id="搜索架构：BM25-kNN-重排序"><a href="#搜索架构：BM25-kNN-重排序" class="headerlink" title="搜索架构：BM25 + kNN + 重排序"></a>搜索架构：BM25 + kNN + 重排序</h3><p>Rovo 的语义搜索不是简单的向量相似度计算，而是经过精心设计的混合检索架构。根据 Atlassian 工程团队的博客，搜索栈分为三层：</p>
+<ol>
+<li><strong>L1 检索层</strong>：基于 AWS OpenSearch，结合 BM25（关键词匹配）和 kNN（k近邻语义检索），同时应用基于梯度提升决策树模型的重排序，考虑热门度、贡献者等特征</li>
+<li><strong>L2 语义与行为排序层</strong>：使用精调的跨编码器（cross-encoder）模型和 DCN（Deep &amp; Cross Network）神经网络，结合用户行为信号（点击率、停留时间等）进行二次排序</li>
+<li><strong>L3 跨产品交织层</strong>：对不同产品（Jira、Confluence、第三方工具）的结果进行最终交织排序，根据查询意图调整优先级</li>
+</ol>
+<p>特别值得注意的是，Rovo 使用了多阶段嵌入模型演进：从早期的 MiniLM（快速原型验证），到 BGE-large（更好处理 Jira 工单等”工作语言”），再到当前的 EmbeddingGemma-300m（在质量、延迟和成本之间取得平衡）。</p>
+<p>2026年初，Atlassian 与 NVIDIA 合作，使用 NVIDIA NeMo 工具链对 Llama-Nemotron-Embed-1B-V2 模型进行微调，在检索质量上实现了 26%-40% 的提升（通过 Recall@60 和 NDCG@1 衡量）。</p>
+<blockquote>
+<p>参考：<a href="https://www.atlassian.com/blog/atlassian-engineering/advancing-rovo-semantic-search">Advancing semantic search for millions of Rovo users</a> | <a href="https://atlstg.reaktivdev.com/atlassian-engineering/unraveling-rovo-search">Unraveling Rovo search relevance</a></p>
+</blockquote>
+<h3 id="三个核心功能，每一个都踩在痛点上"><a href="#三个核心功能，每一个都踩在痛点上" class="headerlink" title="三个核心功能，每一个都踩在痛点上"></a>三个核心功能，每一个都踩在痛点上</h3><h4 id="1-智能搜索：理解意图，而非关键词"><a href="#1-智能搜索：理解意图，而非关键词" class="headerlink" title="1. 智能搜索：理解意图，而非关键词"></a>1. 智能搜索：理解意图，而非关键词</h4><p>Rovo Search 的差异化在于语义理解。当你搜索”为什么Q3发布延期了？”时，Rovo 会寻找解释原因和决策的问题、页面和讨论——即使这些内容中从未出现过”延期”或”Q3”字样。</p>
+<p>更实用的是「知识卡片」（Knowledge Cards），搜一个项目直接弹出负责人、当前进度、相关文档。还有自动定义功能，新员工不用再挨个问「这个缩写是什么意思」，Rovo 直接给你解释公司内部的黑话。</p>
+<p>搜索还会根据上下文调整结果优先级：在 Jira 中优先显示能推进执行的问题和史诗；在 Confluence 中优先显示规范、决策和运行手册；跨工具搜索时连接相关工作（如事件↔修复↔后续跟进）。</p>
+<h4 id="2-上下文感知聊天：三种推理模式"><a href="#2-上下文感知聊天：三种推理模式" class="headerlink" title="2. 上下文感知聊天：三种推理模式"></a>2. 上下文感知聊天：三种推理模式</h4><p>Rovo Chat 不是独立的聊天机器人，而是嵌在 Jira 和 Confluence 的侧边栏中。它深度感知当前工作上下文——你正在编辑产品需求文档时调用它，它知道当前页面的内容，能直接补充相关的 Jira 任务数据。</p>
+<p>2025-2026年，Rovo Chat 进化出了三种推理模式：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>响应速度</th>
+<th>推理深度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标准对话</td>
+<td>亚秒级</td>
+<td>基础文本处理</td>
+<td>简单问答、摘要生成</td>
+</tr>
+<tr>
+<td>Think Deeper</td>
+<td>1-3分钟</td>
+<td>结构化任务拆解与验证</td>
+<td>财务报告风险分析、技术提案对比</td>
+</tr>
+<tr>
+<td>Deep Research</td>
+<td>最长15分钟</td>
+<td>全域数据综合研究</td>
+<td>多渠道客户反馈趋势合成、竞争对手分析</td>
+</tr>
+</tbody></table>
+<p>Deep Research 模式尤其值得关注。它采用多智能体架构：由中央编排智能体（使用 Claude 3.7 Sonnet 的思考能力进行规划和反思）协调<strong>接地面智能体</strong>（收集环境上下文）、<strong>规划智能体</strong>（将目标转化为结构化计划）、<strong>执行智能体</strong>（并行执行查询和迭代优化）。2025年12月发布的 v2 版本引入了<strong>自我进化引擎</strong>，能够基于发现动态调整查询，智能判断研究何时完成。</p>
+<p>每份 Deep Research 报告都包含内联引用，每个关键声明都直接链接到支持来源（Confluence 页面、Jira 工单、Slack 频道等），解决了早期版本中”来源归属不足”的问题。</p>
+<blockquote>
+<p>参考：<a href="https://www.atlassian.com/blog/atlassian-engineering/how-rovo-deep-research-works">How Rovo Deep Research works</a> | <a href="https://www.atlassian.com/blog/artificial-intelligence/rovo-deep-research-v2">Deep Research v2</a></p>
+</blockquote>
+<h4 id="3-智能代理：从工具到团队成员"><a href="#3-智能代理：从工具到团队成员" class="headerlink" title="3. 智能代理：从工具到团队成员"></a>3. 智能代理：从工具到团队成员</h4><p>Rovo Agents 是可配置的 AI 团队成员，任何团队成员都可以调用或创建。开箱即用的代理包括：写作助手、决策辅助、客户洞察分析等。用户还可以通过 <strong>Studio</strong> 应用（2025年推出的”一站式商店”）创建自定义代理，无需代码即可配置专业知识、工具和行为目标。</p>
+<p>2025年推出的 <strong>Dev Agents</strong>（目前处于 Beta 阶段）专门针对开发者，分析从业务需求到技术实现的整个开发生态系统。例如，<strong>代码审查代理</strong>会对照 Jira 中的技术需求和验收标准分析拉取请求，在生产前发现潜在问题，减少审查周期。</p>
+<p>代理可以在多个地方调用：Rovo Chat、自动化规则、Confluence 和 Jira 中的编辑界面（使用 <code>/Rovo</code> 或 <code>/ai</code> 快捷方式）。根据 Atlassian 的数据，已有近 2000 个 Rovo 代理被集成到客户的工作流中。</p>
+<h3 id="Rovo-Everywhere：Canvas-与个人记忆"><a href="#Rovo-Everywhere：Canvas-与个人记忆" class="headerlink" title="Rovo Everywhere：Canvas 与个人记忆"></a>Rovo Everywhere：Canvas 与个人记忆</h3><p>2025年10月，Atlassian 推出了”Rovo Everywhere”计划，将平台扩展到 <strong>Canvas</strong>（协作画布）、<strong>个人记忆</strong>（跨会话记住用户偏好和上下文）和更强的治理功能。</p>
+<p>Canvas 是一个创新的协作界面，允许用户与 Rovo 共同创建内容。根据 Atlassian 工程博客的技术解析，Canvas 的后端围绕一个顶级编排代理构建，该代理可以访问一组专门的技能：跨产品搜索（包括第三方产品）、Teamwork Graph 搜索、Jira 检索代理等。</p>
+<p>对于内容生成，LLM 直接生成 ADF（Atlassian 文档格式，一种嵌套 JSON 结构），然后通过专有的 ADF 修复库确保其有效性。流式传输通过 SVG 解析器和约束求解算法实时处理，让用户可以实时看到他们的白板被”组装”出来。</p>
+<blockquote>
+<p>参考：<a href="https://www.atlassian.com/blog/atlassian-engineering/rovo-creation-canvas">Creating with Rovo: How We Built a Collaborative AI Canvas</a></p>
+</blockquote>
+<h3 id="为什么这是范式转移？"><a href="#为什么这是范式转移？" class="headerlink" title="为什么这是范式转移？"></a>为什么这是范式转移？</h3><p>以前的企业协作软件都是「记录系统」：存数据、记流程、留痕迹。Rovo 想做的是「行动系统」：主动给你推上下文、帮你做决策、自动化重复工作。</p>
+<p>关键变化在于：</p>
+<ul>
+<li><strong>从被动到主动</strong>：AI 不再等你输入指令，而是基于 Teamwork Graph 主动感知并推送相关信息</li>
+<li><strong>从工具到成员</strong>：把 AI 视为具有目标、角色、知识和行动的虚拟团队成员</li>
+<li><strong>从孤立到连接</strong>：通过100+连接器和统一数据层，打破工具间的信息孤岛</li>
+</ul>
+<p>Atlassian 的报告显示，Rovo 目前拥有超过 <strong>500 万月活跃用户</strong>。这不是一个功能更新，而是企业协作软件进入”代理化”阶段的标志。</p>
+<hr>
+<h2 id="Why-Rovo-Is-Different-The-English-Version"><a href="#Why-Rovo-Is-Different-The-English-Version" class="headerlink" title="Why Rovo Is Different: The English Version"></a>Why Rovo Is Different: The English Version</h2><p>I’ve seen enough enterprise AI tool launches over the past two years to be skeptical. Most follow the same playbook: slap a chat window onto existing software, claim it can answer all your questions. But anyone who’s used them knows they’re mostly thin wrappers around search engines, with zero understanding of your company’s internal context or permissions.</p>
+<!--more-->
+
+<h2 id="Why-Rovo-Actually-Matters"><a href="#Why-Rovo-Actually-Matters" class="headerlink" title="Why Rovo Actually Matters"></a>Why Rovo Actually Matters</h2><p>Knowledge workers today switch between 10+ SaaS tools daily. Over 25% of their time goes to hunting for info, verifying data, tracing decision context. This isn’t a minor annoyance — it’s a structural drag on productivity. Atlassian’s Rovo didn’t impress me on paper, but after digging into its technical foundation, I’ll admit it’s not just hype.</p>
+<h3 id="The-Real-Magic-Is-the-Teamwork-Graph"><a href="#The-Real-Magic-Is-the-Teamwork-Graph" class="headerlink" title="The Real Magic Is the Teamwork Graph"></a>The Real Magic Is the Teamwork Graph</h3><p>All of Rovo’s capabilities are built on the <strong>Teamwork Graph</strong>, Atlassian’s underrated secret weapon. It’s a unified data layer that takes every fragmented work element in your company — Jira tasks, Confluence docs, Slack messages, GitHub PRs — and turns them into standardized objects, then maps the relationships between them (who owns what, which decision links to which document).</p>
+<p>Technically, Teamwork Graph uses graph theory to represent each work element as an “object” with specific attributes. Whether it’s a Jira issue, a Confluence page, a Google Drive file, or a Slack message, all are standardized through a unified object model. This standardization allows data from different sources to interoperate and relate within the same context.</p>
+<p>Think of it like this: previously your company’s data was scattered files across separate rooms. The Teamwork Graph turns it into a complete map of your work. It syncs source system permissions in real time to avoid data leaks, and has 50+ pre-built connectors for external SaaS tools (as of mid-2025), not just Atlassian’s own ecosystem.</p>
+<p>Atlassian’s documentation shows that Teamwork Graph defines four relationship types: <strong>canonical</strong> (direct structural connections), <strong>activity</strong> (user interaction behaviors), <strong>logical</strong> (high-level abstractions), and <strong>inferred</strong> (implicit connections derived via machine learning). The combination of these relationships allows Rovo to reconstruct the true path of business decisions and eliminate information blind spots.</p>
+<blockquote>
+<p>See: <a href="https://developer.atlassian.com/platform/teamwork-graph/what-is-teamwork-graph/">What is Teamwork Graph</a> | <a href="https://developer.atlassian.com/platform/teamwork-graph/relationships/">Relationships</a></p>
+</blockquote>
+<h3 id="Search-Architecture-BM25-kNN-Reranking"><a href="#Search-Architecture-BM25-kNN-Reranking" class="headerlink" title="Search Architecture: BM25 + kNN + Reranking"></a>Search Architecture: BM25 + kNN + Reranking</h3><p>Rovo’s semantic search isn’t simple vector similarity — it’s a carefully designed hybrid retrieval architecture. According to Atlassian’s engineering blog, the search stack has three layers:</p>
+<ol>
+<li><strong>L1 Retrieval Layer</strong>: Built on AWS OpenSearch, combining BM25 (keyword matching) and kNN (k-nearest neighbor semantic retrieval), with gradient-boosted decision tree model reranking that considers popularity, contributors, and other features</li>
+<li><strong>L2 Semantic &amp; Behavioral Ranking Layer</strong>: Uses fine-tuned cross-encoder models and DCN (Deep &amp; Cross Network) neural networks, incorporating user behavioral signals (click-through rate, dwell time) for secondary ranking</li>
+<li><strong>L3 Cross-Product Interleaving Layer</strong>: Final interleaving of results from different products (Jira, Confluence, third-party tools), adjusting priority based on query intent</li>
+</ol>
+<p>Notably, Rovo evolved through multiple embedding model generations: from early MiniLM (fast prototyping), to BGE-large (better handling of “work-shaped” language like Jira issues), to the current EmbeddingGemma-300m (balancing quality, latency, and cost).</p>
+<p>In early 2026, Atlassian partnered with NVIDIA to fine-tune the Llama-Nemotron-Embed-1B-V2 model using NVIDIA NeMo toolchain, achieving a 26%-40% improvement in retrieval quality (measured by Recall@60 and NDCG@1).</p>
+<blockquote>
+<p>See: <a href="https://www.atlassian.com/blog/atlassian-engineering/advancing-rovo-semantic-search">Advancing semantic search for millions of Rovo users</a> | <a href="https://atlstg.reaktivdev.com/atlassian-engineering/unraveling-rovo-search">Unraveling Rovo search relevance</a></p>
+</blockquote>
+<h3 id="Three-Core-Features-That-Actually-Solve-Pain-Points"><a href="#Three-Core-Features-That-Actually-Solve-Pain-Points" class="headerlink" title="Three Core Features That Actually Solve Pain Points"></a>Three Core Features That Actually Solve Pain Points</h3><h4 id="1-Smart-Search-Understanding-Intent-Not-Keywords"><a href="#1-Smart-Search-Understanding-Intent-Not-Keywords" class="headerlink" title="1. Smart Search: Understanding Intent, Not Keywords"></a>1. Smart Search: Understanding Intent, Not Keywords</h4><p>Rovo Search’s differentiation is semantic understanding. When you search “Why did we delay the Q3 launch?”, Rovo looks for issues, pages, and discussions that explain causes and decisions — even if none of them literally say “delay” or “Q3 launch.”</p>
+<p>The “Knowledge Cards” feature is even more useful: search a project and get a popup with owners, current progress, related docs. It also auto-defines company-specific jargon, so new hires don’t have to ask “what does this acronym mean” every five minutes.</p>
+<p>Search also adjusts result priority based on context: prioritize issues and epics that unblock execution in Jira; surface specs, decisions, and runbooks in Confluence; connect related work (incidents ↔ fixes ↔ follow-ups) in cross-tool search.</p>
+<h4 id="2-Context-Aware-Chat-Three-Reasoning-Modes"><a href="#2-Context-Aware-Chat-Three-Reasoning-Modes" class="headerlink" title="2. Context-Aware Chat: Three Reasoning Modes"></a>2. Context-Aware Chat: Three Reasoning Modes</h4><p>Rovo Chat isn’t a standalone bot — it’s embedded in Jira and Confluence sidebars. It deeply understands current work context — if you’re editing a PRD and invoke it, it knows the current page content and can pull in related Jira task data directly.</p>
+<p>In 2025-2026, Rovo Chat evolved three reasoning modes:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Response Time</th>
+<th>Reasoning Depth</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Standard Chat</td>
+<td>Sub-second</td>
+<td>Basic text processing</td>
+<td>Simple Q&amp;A, summarization</td>
+</tr>
+<tr>
+<td>Think Deeper</td>
+<td>1-3 minutes</td>
+<td>Structured task decomposition</td>
+<td>Financial report risk analysis, technical proposal comparison</td>
+</tr>
+<tr>
+<td>Deep Research</td>
+<td>Up to 15 minutes</td>
+<td>Comprehensive cross-domain synthesis</td>
+<td>Multi-channel customer feedback trend synthesis, competitor analysis</td>
+</tr>
+</tbody></table>
+<p>The Deep Research mode deserves special attention. It uses a multi-agent architecture: a central orchestrator (using Claude 3.7 Sonnet’s thinking capability for planning and reflection) coordinates a <strong>Grounding Agent</strong> (collects environmental context), <strong>Planning Agent</strong> (translates objectives into structured plans), and <strong>Execution Agent</strong> (parallel query execution with iterative refinement). The v2 release in December 2025 introduced a <strong>Self-Evolution Engine</strong> that dynamically adjusts queries based on discoveries and intelligently determines when research is complete.</p>
+<p>Every Deep Research report includes inline citations, linking each key claim directly to its supporting source (Confluence pages, Jira issues, Slack channels, etc.), addressing the “insufficient source attribution” problem in earlier versions.</p>
+<blockquote>
+<p>See: <a href="https://www.atlassian.com/blog/atlassian-engineering/how-rovo-deep-research-works">How Rovo Deep Research works</a> | <a href="https://www.atlassian.com/blog/artificial-intelligence/rovo-deep-research-v2">Deep Research v2</a></p>
+</blockquote>
+<h4 id="3-Intelligent-Agents-From-Tools-to-Team-Members"><a href="#3-Intelligent-Agents-From-Tools-to-Team-Members" class="headerlink" title="3. Intelligent Agents: From Tools to Team Members"></a>3. Intelligent Agents: From Tools to Team Members</h4><p>Rovo Agents are configurable AI teammates that any team member can invoke or create. Out-of-the-box agents include: writing assistants, decision support, customer insight analysis, and more. Users can also create custom agents through the <strong>Studio</strong> app (launched in 2025 as a “one-stop shop”), configuring expertise, tools, and behavioral goals without code.</p>
+<p>Launched in 2025, <strong>Dev Agents</strong> (currently in Beta) specifically target developers, analyzing the entire development ecosystem from business requirements to technical implementation. For example, the <strong>Code Reviewer Agent</strong> analyzes pull requests against technical requirements and acceptance criteria in Jira, spotting potential issues before they reach production and reducing review cycles.</p>
+<p>Agents can be invoked in multiple places: Rovo Chat, automation rules, editing interfaces in Confluence and Jira (using <code>/Rovo</code> or <code>/ai</code> shortcuts). According to Atlassian, nearly 2,000 Rovo Agents have been integrated into customer workflows.</p>
+<h3 id="Rovo-Everywhere-Canvas-and-Personal-Memory"><a href="#Rovo-Everywhere-Canvas-and-Personal-Memory" class="headerlink" title="Rovo Everywhere: Canvas and Personal Memory"></a>Rovo Everywhere: Canvas and Personal Memory</h3><p>In October 2025, Atlassian launched the “Rovo Everywhere” initiative, expanding the platform to <strong>Canvas</strong> (collaborative canvas), <strong>Personal Memory</strong> (remembering user preferences and context across sessions), and stronger governance features.</p>
+<p>Canvas is an innovative collaboration interface that allows users to co-create content with Rovo. According to Atlassian’s engineering blog, Canvas’s backend is built around a top-level orchestrator agent with access to specialized skills: cross-product search (including third-party products), Teamwork Graph search, Jira retrieval agent, and more.</p>
+<p>For content generation, the LLM produces ADF (Atlassian Document Format, a nested JSON structure) directly, then passes it through a proprietary ADF repair library to ensure validity. Streaming is handled by an SVG parser and constraint-solving algorithms in real time, letting users see their whiteboard being “assembled” live.</p>
+<blockquote>
+<p>See: <a href="https://www.atlassian.com/blog/atlassian-engineering/rovo-creation-canvas">Creating with Rovo: How We Built a Collaborative AI Canvas</a></p>
+</blockquote>
+<h3 id="Why-This-Is-a-Paradigm-Shift"><a href="#Why-This-Is-a-Paradigm-Shift" class="headerlink" title="Why This Is a Paradigm Shift"></a>Why This Is a Paradigm Shift</h3><p>Legacy enterprise collaboration software is a “system of record”: it stores data, tracks processes, leaves an audit trail. Rovo aims to be a “system of action”: proactively surfacing context, aiding decisions, automating repetitive work.</p>
+<p>The key changes:</p>
+<ul>
+<li><strong>From passive to active</strong>: AI no longer waits for your commands — it proactively senses and pushes relevant information based on the Teamwork Graph</li>
+<li><strong>From tool to member</strong>: Treating AI as a virtual team member with goals, character, knowledge, and actions</li>
+<li><strong>From siloed to connected</strong>: Breaking information silos across tools through 100+ connectors and a unified data layer</li>
+</ul>
+<p>Atlassian reports that Rovo now has over <strong>5 million monthly active users</strong>. This isn’t a feature update — it’s a sign that enterprise collaboration software is entering the “agentic” phase.</p>
+<hr>
+<p><strong>References:</strong></p>
+<ul>
+<li><a href="https://developer.atlassian.com/platform/teamwork-graph/">Teamwork Graph Documentation</a></li>
+<li><a href="https://www.atlassian.com/blog/atlassian-engineering/advancing-rovo-semantic-search">Advancing Rovo Semantic Search</a></li>
+<li><a href="https://www.atlassian.com/blog/atlassian-engineering/how-rovo-deep-research-works">How Rovo Deep Research Works</a></li>
+<li><a href="https://www.atlassian.com/blog/artificial-intelligence/rovo-deep-research-v2">Deep Research v2</a></li>
+<li><a href="https://www.atlassian.com/blog/atlassian-engineering/rovo-creation-canvas">Rovo Canvas Engineering</a></li>
+<li><a href="https://www.neteye-blog.com/2025/12/atlassian-rovo-today-architecture-technologies-and-enterprise-trust/">Rovo Today: Architecture and Enterprise Trust</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Atlassian/" rel="tag"># Atlassian</a>
+              <a href="/tags/Rovo/" rel="tag"># Rovo</a>
+              <a href="/tags/AI%E5%8D%8F%E4%BD%9C/" rel="tag"># AI协作</a>
+              <a href="/tags/%E4%BC%81%E4%B8%9A%E8%BD%AF%E4%BB%B6/" rel="tag"># 企业软件</a>
+              <a href="/tags/AI-Collaboration/" rel="tag"># AI Collaboration</a>
+              <a href="/tags/Enterprise-Software/" rel="tag"># Enterprise Software</a>
+              <a href="/tags/Teamwork-Graph/" rel="tag"># Teamwork Graph</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/12/30-Days-of-the-Lobster-Platform-Wars-National-Standards-and-the-10-Trillion-Hangover/" rel="prev" title="The Industrialization of the Lobster: 30 Days of Platform Wars and the $10 Trillion Hangover">
+      <i class="fa fa-chevron-left"></i> The Industrialization of the Lobster: 30 Days of Platform Wars and the $10 Trillion Hangover
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
