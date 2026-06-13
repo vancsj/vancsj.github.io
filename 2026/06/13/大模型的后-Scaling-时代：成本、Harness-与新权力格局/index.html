@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在2026年，scaling law依然成立：Anthropic 最新的Mythos&#x2F;Fable模型，据说参数规模达到10T；Gemini参数量预计3-5T；国产大模型也纷纷达到1T规模。与规模对应的，是模型智能水涨船高。 那么问题来了：scaling law还能继续吗？我毫不怀疑100T的模型会更加智能，但有用得起的应用场景吗？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大模型的后 Scaling 时代：成本、Harness 与新权力格局">
+<meta property="og:url" content="https://zjuer.net/2026/06/13/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%8E-Scaling-%E6%97%B6%E4%BB%A3%EF%BC%9A%E6%88%90%E6%9C%AC%E3%80%81Harness-%E4%B8%8E%E6%96%B0%E6%9D%83%E5%8A%9B%E6%A0%BC%E5%B1%80/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="在2026年，scaling law依然成立：Anthropic 最新的Mythos&#x2F;Fable模型，据说参数规模达到10T；Gemini参数量预计3-5T；国产大模型也纷纷达到1T规模。与规模对应的，是模型智能水涨船高。 那么问题来了：scaling law还能继续吗？我毫不怀疑100T的模型会更加智能，但有用得起的应用场景吗？">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-13T04:29:02.000Z">
+<meta property="article:modified_time" content="2026-06-13T04:29:02.000Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AGI">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Infrastructure">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Technology">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2026/06/13/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%8E-Scaling-%E6%97%B6%E4%BB%A3%EF%BC%9A%E6%88%90%E6%9C%AC%E3%80%81Harness-%E4%B8%8E%E6%96%B0%E6%9D%83%E5%8A%9B%E6%A0%BC%E5%B1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>大模型的后 Scaling 时代：成本、Harness 与新权力格局 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/06/13/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%8E-Scaling-%E6%97%B6%E4%BB%A3%EF%BC%9A%E6%88%90%E6%9C%AC%E3%80%81Harness-%E4%B8%8E%E6%96%B0%E6%9D%83%E5%8A%9B%E6%A0%BC%E5%B1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大模型的后 Scaling 时代：成本、Harness 与新权力格局
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-13 12:29:02" itemprop="dateCreated datePublished" datetime="2026-06-13T12:29:02+08:00">2026-06-13</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在2026年，scaling law依然成立：Anthropic 最新的Mythos&#x2F;Fable模型，据说参数规模达到10T；Gemini参数量预计3-5T；国产大模型也纷纷达到1T规模。与规模对应的，是模型智能水涨船高。</p>
+<p>那么问题来了：scaling law还能继续吗？我毫不怀疑100T的模型会更加智能，但有用得起的应用场景吗？</p>
+<span id="more"></span>
+
+<h2 id="成本的墙"><a href="#成本的墙" class="headerlink" title="成本的墙"></a>成本的墙</h2><p>2026 年出了两个新闻，把”成本墙”从概念变成了现实。</p>
+<p><strong>Uber 四个月烧光全年 AI 预算。</strong> Uber 设了个内部排行榜，按团队用 AI 工具的量排名。工程师们积极响应，大量使用 Claude Code 和 Cursor——然后发现全年预算在第一季度就花光了。Uber 不得不在六月对每个工具设了 $1,500&#x2F;人&#x2F;月的硬上限。COO Andrew Macdonald 在采访里说，token 消耗量和有用功能之间并没有清晰的对价关系。</p>
+<p><strong>微软在内部替换第三方模型。</strong> Azure 现在每分钟处理 100 亿个 token（同比涨了 52 倍），AI 业务年化收入 $370 亿——但同时，微软在 Experiences + Devices 部门里逐步砍掉 Claude Code 许可证，把工程师往 GitHub Copilot CLI 上赶。原因很简单：自家的东西不用按 token 付费。GitHub Copilot 也从 2026 年 6 月开始转向按用量计费。</p>
+<p>两个故事指向同一个结构性问题：agent 类 AI 的 token 消耗量跟前一代的 API 调用完全不是一个数量级。Goldman Sachs 预测 agentic AI 会让 token 消费量在 2030 年增长 24 倍，达到每月 120 quadrillion。OpenAI 内部最大的一个客户每月消耗 1000 亿 token，有单个员工一周就用掉 2100 亿。</p>
+<p>Claude Code 把这个矛盾放到了最刺眼的位置。$200&#x2F;月的 Max 20x 含几千刀的等价算力，中度使用绰绰有余。但用 API 按量计费做主力开发，要把一位 senior 工程师提效 30%，折算下来的费用已经逼近他的月薪。</p>
+<p>API 单价在跌（GPT-4 到 Gemini 3.1 Flash 三年跌了 99.7%），但总消耗量涨得更快，意味着用户的账单总额不降反升。Gartner 预测 2030 年推理成本会比 2025 年降 90%，但也明确说：更便宜的 token 不会带来更便宜的企业 AI——因为 agent 类模型每任务需要的 token 远多于标准模型，而且供应商不会把成本降幅全部传导给用户。</p>
+<p>这就是”成本的墙”的真实含义：scaling law 没有变。但用户侧的账单，开始让 CFO 皱眉了。</p>
+<p>Agent 的爆发式增长带来了一个矛盾：应用对模型智能下限的容忍度在提高——GPT-5.5 比前代强，但 DeepSeek V4 Pro 在很多场景下已经”足够好”了。真正卡脖子的，是对低幻觉率的要求反而更高了。因为 agent 是自主行动的，它的错误不是”抛个异常等下次”，而是直接写坏代码、算错账、签错合同。</p>
+<h2 id="幻觉：可用性的第一条红线"><a href="#幻觉：可用性的第一条红线" class="headerlink" title="幻觉：可用性的第一条红线"></a>幻觉：可用性的第一条红线</h2><p>说个场景：你让人写代码，他写错了——编译器会告诉你。你让人写合同，他引用了一条不存在的法条——谁来告诉你？</p>
+<p><strong>低幻觉率是所有应用场景中可用性的前提条件。</strong> 没有低幻觉率，其他都是空谈。</p>
+<p>为什么？因为高幻觉率的模型在任何一个需要信任的场景里都不可用。客服算错退款金额，代码审查漏掉安全漏洞，法务分析引用不存在的判例——每个错误都是一次信任崩塌。用户只需要几次”被坑”的经历，就会彻底放弃这个工具。</p>
+<p>幻觉率本质上是个注意力问题。上下文越长，注意力越分散，幻觉率越高。Fable 5 在 1M 上下文表现出极低幻觉率，但那是靠它的参数量硬撑。按这个比例推算，它的极限上下文可能在 5-10M。一旦推到那个级别，注意力稀疏了，幻觉率大概率飙升。这是注意力机制的内在秉性。</p>
+<p>编程场景率先跑通，很大程度上因为它的 verification loop 是天生的：编译器和测试用例就是完美的幻觉检测器。代码不对就是不对，模型没法狡辩。客服、法务、医疗可没这种东西。</p>
+<p>高幻觉率的模型会被市场直接剔除。份额减少都是轻的，用户直接不用了——就像早期的搜索引擎如果返回大量垃圾结果，你会直接换掉它。</p>
+<p>幻觉说到底是个模型内在的问题，不能靠训一个更大的模型根除。但你可以绕过去：用工具来补充。比如代码场景，你让模型写段 SQL，它写错了——跑一下就能发现。这跟模型强不强关系不大，取决于两个条件：一是工具能提供验证能力，二是模型得主动去调用这些工具。</p>
+<h2 id="工具调用：模型能力的乘数"><a href="#工具调用：模型能力的乘数" class="headerlink" title="工具调用：模型能力的乘数"></a>工具调用：模型能力的乘数</h2><p>一个 70B 模型，允许 tool calling 之后的表现，在某些任务上能压过不让调工具的 1T 闭源模型。</p>
+<p>2026 年，MCP已经成了连接模型和工具的”USB-C”。上万个公开 MCP 服务器，月均 SDK 下载量破亿。一个模型只要支持 MCP，就能瞬间获得搜索、代码执行、数据库查询、文件操作的能力。工具不再是定制集成，而是即插即用。</p>
+<p>关键在于<strong>主动性</strong>——模型自己判断”这里我需要更多信息”，主动去查。能不能做到这一点，是模型能力上限的分水岭。</p>
+<h2 id="Harness-成为主战场"><a href="#Harness-成为主战场" class="headerlink" title="Harness 成为主战场"></a>Harness 成为主战场</h2><p>新的注意力机制——Mamba、NSA、MLA——正在大幅降低推理成本。但代价是模型的”脾气”更难摸透了。同样的架构，换一个任务可能表现天差地别。复杂度从模型层转移到了 harness 层。</p>
+<p>Harness 是什么？是模型之外的整套工程系统：</p>
+<ul>
+<li>提示词管理和路由</li>
+<li>工具定义和编排（MCP 正在成为标准层）</li>
+<li>上下文窗口的策略性使用</li>
+<li>输出验证和纠错</li>
+<li>多模型间的调度</li>
+</ul>
+<p>无论什么级别的模型——本地 8B 还是云端 Fable 5——<strong>没有良好的 workflow 定义和合适的 harness 管理，都不可能在实际场景中稳定输出</strong>。</p>
+<p>Anthropic对OpenAI的市值反超已经证明了，光做好大模型不足以成为护城河。</p>
+<p>Harness 领域已经形成了几个代表。<strong>Claude Code</strong> 是最成功的编程 harness，单产品年化收入达 $25 亿，支持子代理、hooks、MCP 集成和调度任务。<strong>OpenClaw</strong> 是 MIT 许可的开源个人 AI 助手，Node.js 构建，自带 100 多个 AgentSkills。<strong>Hermes Agent</strong> 是 Nous Research 在 2026 年 2 月发布的自改进 agent，十周内拿到 11 万 GitHub stars，核心差异是持续的学习闭环。</p>
+<p>但它们都还处于粗放阶段：AI 自行为自己创建 skills 和 memory，缺少创建 harness 本身的 meta 工具。我们有 agent，但没有”制造 agent 的工具”。</p>
+<p>Harness 方向会怎么走？我猜至少三个方向同时推进：框架层的公司（Anthropic Managed Agents 已经是了）、云厂商的托管服务、专注垂直场景的方案。人的角色也在跟着变——主要工作不再是写代码或调模型，而是设计和验证 harness，再验证 agent 的输出。你从”建造者”往”质检员”的方向走。</p>
+<h2 id="架构范式：本地小-远端大"><a href="#架构范式：本地小-远端大" class="headerlink" title="架构范式：本地小 + 远端大"></a>架构范式：本地小 + 远端大</h2><p>Qwen 3.5 9B、Llama 3 8B 这一代模型，在 Apple Silicon M3 上跑 Q4 量化，生成速度约 18 tok&#x2F;s，短提示首次响应 1-3 秒。推理成本几乎为零，隐私数据不出本机。2026 年，本地模型终于不再是玩具。</p>
+<p>这就催生了一个新架构：<strong>本地小模型处理日常、延迟敏感、隐私敏感的任务；远端大模型处理复杂推理和罕见场景。</strong></p>
+<p>这个模式的关键路径是 <strong>memory</strong>。本地模型要真正谈得上”个性化”，需要持久化的跨会话上下文。远端模型要跨设备一致，也需要共享的记忆层。</p>
+<p>但 memory 层目前没有明显领先的玩家。向量数据库、KV cache 持久化、结构化记忆文件、Hermes Agent 的自改进循环……各种方案并存。这块还没人跑出来——但谁先解决 memory，谁就拿到了代理持续性的钥匙。</p>
+<h2 id="验证器的空白"><a href="#验证器的空白" class="headerlink" title="验证器的空白"></a>验证器的空白</h2><p>写代码有编译器和测试。做客服有满意度打分。但文档分析、策略制定、创意写作、数据分析报告——这些场景里，<strong>几乎没有靠谱的 verification 工具</strong>。</p>
+<p>“你怎么知道 AI 给的结果是对的？”——这个问题在很多场景里至今没有好答案。没有验证工具，你就只能 blind trust。关键决策里，这不可接受。</p>
+<p>验证器的机会很大。方向也很清楚：</p>
+<ul>
+<li>针对特定输出格式的结构化验证器</li>
+<li>基于规则的约束检查器</li>
+<li>模型间的交叉验证（用一个模型验证另一个）</li>
+<li>半自动的 human-in-the-loop 验证框架</li>
+</ul>
+<p>谁能把验证器做出来，谁就打开了非编程场景的大门。</p>
+<h2 id="我设想的-agent-架构"><a href="#我设想的-agent-架构" class="headerlink" title="我设想的 agent 架构"></a>我设想的 agent 架构</h2><p>Agent自主工作流里面的三层分工。</p>
+<p>骨架是 workflow 模板、工具注册、路由惯例、安全基线。人画骨架不是画死框——模型当然可以偶尔越界，很多好结果就是这么来的。骨架给它方向，但不卡死它。</p>
+<p>中间层是模型的工作区：代码、文案、分析、推理都在这一层。方向有了，怎么发挥是模型的事。</p>
+<p>验证器才是真正兜底的。它的范围比骨架宽——不光检查输出是否符合骨架定义，还要做测试、交叉验证、tree shaking，确保任何越界行为不会变成问题。</p>
+<p>在此之上的一层：meta工具层，用来系统性生成骨架和验证器，纯人类工作或者AI部分辅助。</p>
+<h2 id="市场推演：权力在转移"><a href="#市场推演：权力在转移" class="headerlink" title="市场推演：权力在转移"></a>市场推演：权力在转移</h2><p>把上面几条线串在一起看：</p>
+<p><strong>模型供应商的定价权在收窄。</strong> 推理毛利率比什么都说明问题。Anthropic 每 1 美元收入要花 71 美分在推理算力上（Q1），Q2 降到了 56 美分。OpenAI 没有单独披露过推理毛利，但整体毛利率已经被推理成本压到 33%——2025 年推理支出翻倍到 $8.7B。Anthropic 刚递交 S-1，估值 $9650 亿。OpenAI 的 IPO 也在路上，2026 年预计亏损 $140 亿。</p>
+<p><strong>价值在往”用模型做什么”这一层转移。</strong> 当模型日益商品化，工具定义、workflow 编排、memory 管理、验证器——这些模块的供应商拿到的议价权会越来越大。Claude Code 的 $25 亿年化收入已经是一个信号。</p>
+<p><strong>B 端先跑通，C 端在后面。</strong> 企业愿意为确定性和可控性付费，所以 B 端率先落地。但推理成本还在降——DeepSeek 已经把 V4 Pro 的价永久砍了 75%——到时候面向消费者的 AI 服务会重新成为热门赛道。成本降下来，体验才能做上去。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>Scaling law 仍然成立。但更强的模型不等于更赚钱的生意。</p>
+<p>如果你在找下一波投入的方向，这几个坐标比下一个 SOTA 模型更重要：<strong>harness、memory、verification、agent 软件</strong>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Technology/" rel="tag"># Technology</a>
+              <a href="/tags/AGI/" rel="tag"># AGI</a>
+              <a href="/tags/Infrastructure/" rel="tag"># Infrastructure</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/02/Atlassian%20Rovo%E4%B8%8D%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AAAI%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%9A%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" rel="prev" title="Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive">
+      <i class="fa fa-chevron-left"></i> Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
