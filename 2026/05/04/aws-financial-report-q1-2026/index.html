@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zjuer.net","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":false,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="5 月 4 日 Amazon 发布 2026 Q1 财报，AWS 营收 376 亿美元，同比增长 28%。这是 15 个季度以来最快的一次。 过去两年大家习惯的叙事是 AWS 增速见顶、被 Azure 和 Google Cloud 甩开。这个季度它自己把这条线拉了回来。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS 2026 Q1 财报：增速回到 28%，芯片手握 2250 亿订单">
+<meta property="og:url" content="https://zjuer.net/2026/05/04/aws-financial-report-q1-2026/index.html">
+<meta property="og:site_name" content="已所欲，己所从">
+<meta property="og:description" content="5 月 4 日 Amazon 发布 2026 Q1 财报，AWS 营收 376 亿美元，同比增长 28%。这是 15 个季度以来最快的一次。 过去两年大家习惯的叙事是 AWS 增速见顶、被 Azure 和 Google Cloud 甩开。这个季度它自己把这条线拉了回来。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-04T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-07T09:10:38.212Z">
+<meta property="article:author" content="vancsj">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="Amazon">
+<meta property="article:tag" content="Q1 2026">
+<meta property="article:tag" content="芯片">
+<meta property="article:tag" content="财务报告">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zjuer.net/2026/05/04/aws-financial-report-q1-2026/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AWS 2026 Q1 财报：增速回到 28%，芯片手握 2250 亿订单 | 已所欲，己所从</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">已所欲，己所从</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">己所之，己所终</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zjuer.net/2026/05/04/aws-financial-report-q1-2026/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vancsj">
+      <meta itemprop="description" content="已所欲，己所从；己所之，己所终; Be where you desire, be where you belong.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="已所欲，己所从">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AWS 2026 Q1 财报：增速回到 28%，芯片手握 2250 亿订单
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-04 18:00:00" itemprop="dateCreated datePublished" datetime="2026-05-04T18:00:00+08:00">2026-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-09-07 17:10:38" itemprop="dateModified" datetime="2026-09-07T17:10:38+08:00">2026-09-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AWS/" itemprop="url" rel="index"><span itemprop="name">AWS</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AWS/%E4%BA%91%E8%AE%A1%E7%AE%97/" itemprop="url" rel="index"><span itemprop="name">云计算</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AWS/%E4%BA%91%E8%AE%A1%E7%AE%97/%E8%B4%A2%E6%8A%A5%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">财报分析</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>5 月 4 日 Amazon 发布 2026 Q1 财报，AWS 营收 376 亿美元，同比增长 28%。这是 15 个季度以来最快的一次。</p>
+<p>过去两年大家习惯的叙事是 AWS 增速见顶、被 Azure 和 Google Cloud 甩开。这个季度它自己把这条线拉了回来。</p>
+<span id="more"></span>
+
+<h2 id="AWS-Q1-核心数据"><a href="#AWS-Q1-核心数据" class="headerlink" title="AWS Q1 核心数据"></a>AWS Q1 核心数据</h2><ul>
+<li><strong>营收</strong>: 376 亿美元，同比增长 28%</li>
+<li><strong>运营利润</strong>: 142 亿美元，利润率 37.7%</li>
+<li><strong>年化营收</strong>: 1500 亿美元</li>
+<li><strong>AI 业务</strong>: 年化收入超过 150 亿美元，三位数增长</li>
+<li><strong>自研芯片业务</strong>: 年化收入超过 200 亿美元</li>
+<li><strong>在手订单</strong>: 3640 亿美元（不含 Anthropic 那笔）</li>
+</ul>
+<p>28% 这个数字的分量在于基数。1500 亿的年化规模上还能跑出 28%，Andy Jassy 在电话会上说这种情况很少见。</p>
+<p>利润率 37.7%，在整个科技行业属于顶级水平。</p>
+<p>AI 相关服务的年化收入已经超过 150 亿美元，还在三位数增长。它现在是 AWS 里增速最快的部分，但相对 1500 亿的总盘子仍然只占一成。</p>
+<h2 id="芯片才是这份财报里最硬的数字"><a href="#芯片才是这份财报里最硬的数字" class="headerlink" title="芯片才是这份财报里最硬的数字"></a>芯片才是这份财报里最硬的数字</h2><p>从 2018 年起 AWS 就在铺 AI 基础设施，最早是 SageMaker，之后不断加服务。但这一轮真正拉开身位的是自研芯片。</p>
+<p>AWS 有两条线：Trainium 针对大模型训练，Graviton 做通用计算，已经到第四代，性价比上对 Intel 和 AMD 有明显优势。</p>
+<p>芯片业务的年化收入超过 200 亿美元。更值得看的是订单：Trainium 的收入承诺累计超过 <strong>2250 亿美元</strong>。Trainium2 基本售罄，性价比比同级 GPU 好约 30%；Trainium3 在 2026 年初开始出货，比 Trainium2 又好 30% 到 40%，目前也接近订满。</p>
+<p>作个参照，Nvidia FY2025 数据中心营收 1152 亿美元，FY2026 涨到 2159 亿。AWS 的 200 亿还差得远，而且口径不同：它主要按内部使用计价，不是对外卖芯片。但 2250 亿的承诺是签出去的，那是未来几年的确定性收入。</p>
+<h2 id="三家云都在加速，AWS-是最慢的那个"><a href="#三家云都在加速，AWS-是最慢的那个" class="headerlink" title="三家云都在加速，AWS 是最慢的那个"></a>三家云都在加速，AWS 是最慢的那个</h2><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>Q1 2026 营收</th>
+<th>增速</th>
+<th>利润率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AWS</td>
+<td>376 亿美元</td>
+<td>28%</td>
+<td>37.7%</td>
+</tr>
+<tr>
+<td>Google Cloud</td>
+<td>200 亿美元以上</td>
+<td>63%</td>
+<td>32.9%</td>
+</tr>
+<tr>
+<td>Microsoft Azure</td>
+<td>未单独披露</td>
+<td>40%</td>
+<td>未单独披露</td>
+</tr>
+</tbody></table>
+<p>Google Cloud 首次突破 200 亿美元，增速 63%，运营利润从去年同期的 22 亿涨到 66 亿，利润率翻了近一倍到 32.9%。这已经是它连续第三个季度加速：2025 年 Q2 是 32%，Q3 是 34%，Q4 是 48%。</p>
+<p>Azure 连续三个季度维持在 39% 到 40%，微软的 AI 业务年化收入突破 370 亿美元。微软不单独披露 Azure 的绝对营收，所以表里只能放增速。</p>
+<p>全球云基础设施市场 Q1 2026 规模 1290 亿美元，同比增长 35%，是连续第九个季度增速上升。三家一起加速，说明 AI 需求是把整个盘子做大了，不是在彼此之间搬份额。</p>
+<p>按份额算，AWS 约 28%，Azure 约 21%，Google Cloud 约 14%（不同机构口径差异不小，有的把 AWS 算到 31%）。</p>
+<p>所以 AWS 增速最慢这件事要分两面看。63% 对 28%，Google Cloud 快得多；但 AWS 的基数是它的近两倍，单季度多出来的绝对金额仍然更大。</p>
+<h2 id="服务构成：EC2-占一半以上"><a href="#服务构成：EC2-占一半以上" class="headerlink" title="服务构成：EC2 占一半以上"></a>服务构成：EC2 占一半以上</h2><p>AWS 从不公布服务级别的营收构成。按 analyst 估计，EC2 仍然占 AWS 营收的 50% 以上。</p>
+<p>这不难理解。EC2 是起家业务，也是云计算的底层。AI 训练、大数据处理、网页托管，都要先有计算资源。</p>
+<p>其他主要服务的估算占比：</p>
+<ul>
+<li>S3 + EBS（存储）: 约 15-20%</li>
+<li>RDS（数据库）: 约 10%</li>
+<li>其他（Lambda、API Gateway 等）: 约 15-20%</li>
+</ul>
+<p>EC2 的利润率 analyst 估在 55% 左右，这是 AWS 整体能维持在 37.7% 的主要原因。</p>
+<h2 id="地区分布：这组数字是-Amazon-全公司的"><a href="#地区分布：这组数字是-Amazon-全公司的" class="headerlink" title="地区分布：这组数字是 Amazon 全公司的"></a>地区分布：这组数字是 Amazon 全公司的</h2><p>从 2025 年 10-K 看，Amazon 全公司的收入地区分布：</p>
+<ul>
+<li><strong>美国</strong>: 4897 亿美元（68%）</li>
+<li><strong>德国</strong>: 459 亿美元（6.4%）</li>
+<li><strong>英国</strong>: 432 亿美元（6.0%）</li>
+<li><strong>日本</strong>: 307 亿美元（4.3%）</li>
+<li><strong>其他地区</strong>: 1075 亿美元（15%）</li>
+</ul>
+<p>五项合计约 7170 亿美元，是 Amazon 全公司的规模，其中绝大部分来自零售。AWS 全年营收 1500 亿左右，占不到零头。10-K 按这五个地区披露的是全公司净销售额，AWS 自己的地区拆分 Amazon 从不单独公布。</p>
+<p>所以从这组数字只能读出一件事：Amazon 的收入高度集中在美国本土。AWS 在海外的占比是多少，这份财报回答不了。</p>
+<h2 id="风险：钱正在以前所未有的速度出去"><a href="#风险：钱正在以前所未有的速度出去" class="headerlink" title="风险：钱正在以前所未有的速度出去"></a>风险：钱正在以前所未有的速度出去</h2><p>Amazon 给的 Q2 指引：</p>
+<ul>
+<li><strong>营收</strong>: 1940-1990 亿美元，同比增长 16% 到 19%</li>
+<li><strong>运营利润</strong>: 200-240 亿美元</li>
+</ul>
+<p>Q1 的运营利润是 239 亿，所以指引中位数意味着环比可能下滑。Amazon 点了两个原因：Q2 有年度股权激励的季节性上升，另外 Leo 卫星制造成本会带来约 10 亿美元的同比逆风。Jassy 还提到内存和存储的元器件价格涨得很凶。</p>
+<p>更值得盯的是现金。Q1 的现金资本开支 432 亿美元，主要投在 AWS 和生成式 AI。滚动十二个月的自由现金流从 259 亿掉到 12 亿，因为固定资产采购同比多了 593 亿。BofA 在财报后的报告里预计 2026 和 2027 两年自由现金流都会是负的。</p>
+<p>Q1 净利润 303 亿美元，但这里面有 Anthropic 相关的投资收益。看经营质量要看 239 亿的运营利润，不是净利润。</p>
+<h2 id="我的看法"><a href="#我的看法" class="headerlink" title="我的看法"></a>我的看法</h2><p>这份财报里最容易被忽略的是那个 2250 亿。</p>
+<p>营收和增速是过去一个季度的结果，会随需求波动。2250 亿的 Trainium 收入承诺是已经签下来的未来几年收入，而且客户在 Trainium3 出货前就把产能订得差不多了。这说明 AWS 的自研芯片已经不是省成本的内部项目，是有人排队买的产品。</p>
+<p>至于增速，28% 好看，但它是三家里最低的，而且 Google Cloud 63% 的势头看上去还没到顶。AWS 靠的是基数、利润率和订单深度，不是速度。</p>
+<p>真正的问题在现金流。滚动十二个月自由现金流只剩 12 亿，资本开支单季度 432 亿。这个投入节奏能撑多久，取决于那 3640 亿在手订单转化成收入的速度。下个季度看这两个数字的比值，比看营收增速有意义。</p>
+<hr>
+<p><strong>数据说明</strong>：本文数据来源于 Amazon 2026 Q1 earnings release（2026 年 5 月 4 日）、2025 10-K filings、Alphabet 与 Microsoft 的同期财报披露、NVIDIA FY2025&#x2F;FY2026 财报。部分服务级别的占比为 analyst 估计，Amazon 从不披露此类细节。云市场份额为第三方机构估算，各家口径不一。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Amazon/" rel="tag"># Amazon</a>
+              <a href="/tags/AWS/" rel="tag"># AWS</a>
+              <a href="/tags/Q1-2026/" rel="tag"># Q1 2026</a>
+              <a href="/tags/%E8%B4%A2%E5%8A%A1%E6%8A%A5%E5%91%8A/" rel="tag"># 财务报告</a>
+              <a href="/tags/%E8%8A%AF%E7%89%87/" rel="tag"># 芯片</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/02/Atlassian%20Rovo%E4%B8%8D%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AAAI%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%9A%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" rel="prev" title="Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive">
+      <i class="fa fa-chevron-left"></i> Atlassian Rovo不是另一个AI聊天机器人：深度解析 / Why Atlassian Rovo Is More Than Just Another AI Chatbot: A Deep Dive
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/13/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%90%8E-Scaling-%E6%97%B6%E4%BB%A3%EF%BC%9A%E6%88%90%E6%9C%AC%E3%80%81Harness-%E4%B8%8E%E6%96%B0%E6%9D%83%E5%8A%9B%E6%A0%BC%E5%B1%80/" rel="next" title="大模型的后 Scaling 时代：成本、Harness 与新权力格局">
+      大模型的后 Scaling 时代：成本、Harness 与新权力格局 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vancsj</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
