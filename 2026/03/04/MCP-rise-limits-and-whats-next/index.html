@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -33,9 +33,9 @@
 <meta property="article:modified_time" content="2026-03-04T04:00:00.000Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="AI">
-<meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="Anthropic">
+<meta property="article:tag" content="MCP">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://zjuer.net/2026/03/04/MCP-rise-limits-and-whats-next/">
@@ -246,13 +246,13 @@
 <p><strong>Published CVEs:</strong></p>
 <ul>
 <li><strong>CVE-2025-6514</strong> (CVSS 9.6): The <code>mcp-remote</code> npm package allowed remote code execution via OS commands injected through OAuth discovery fields</li>
-<li><strong>CVE-2025-68143 / 68145</strong>: Anthropic’s own <code>mcp-server-git</code> had path validation bypass flaws — arbitrary repository creation and restricted file access. Reported September 2025, fixed December 2025</li>
+<li><strong>CVE-2025-68143 &#x2F; 68145</strong>: Anthropic’s own <code>mcp-server-git</code> had path validation bypass flaws — arbitrary repository creation and restricted file access. Reported September 2025, fixed December 2025</li>
 <li><strong>CVE-2025-59536</strong>: RCE and API token exfiltration through Claude Code project files</li>
 </ul>
 <p><strong>已公开的CVE：</strong></p>
 <ul>
 <li><strong>CVE-2025-6514</strong>（CVSS 9.6）：<code>mcp-remote</code> npm包允许通过OAuth发现字段注入操作系统命令来远程执行代码</li>
-<li><strong>CVE-2025-68143/68145</strong>：Anthropic自己维护的<code>mcp-server-git</code>存在路径验证绕过——可在任意路径创建仓库和访问受限文件。2025年9月报告，12月才修复</li>
+<li><strong>CVE-2025-68143&#x2F;68145</strong>：Anthropic自己维护的<code>mcp-server-git</code>存在路径验证绕过——可在任意路径创建仓库和访问受限文件。2025年9月报告，12月才修复</li>
 <li><strong>CVE-2025-59536</strong>：通过Claude Code项目文件实现RCE和API token外泄</li>
 </ul>
 <p><strong>Real incidents:</strong></p>
@@ -288,8 +288,8 @@
 <p><strong>第一级：</strong> 启动时只加载技能的名称和一句话描述（来自YAML frontmatter），每个技能大约几十个token。代理”知道”自己有哪些技能，但几乎不占上下文。</p>
 <p><strong>Level 2:</strong> When the agent determines the current task needs a specific skill, it reads the SKILL.md body from the filesystem on demand — operational specs, workflow steps, typically a few thousand tokens. Irrelevant skills never enter the context window.</p>
 <p><strong>第二级：</strong> 代理判断当前任务需要某个技能时，通过文件系统按需读取SKILL.md的主体内容——操作规范、工作流步骤，通常几千个token。不相关的技能永远不进上下文。</p>
-<p><strong>Level 3:</strong> Large datasets, API reference docs, and Python/Bash scripts bundled with the skill are accessed only when explicitly needed. Scripts execute in a sandbox; their source code and intermediate processing never enter the model’s context. Only the final result comes back.</p>
-<p><strong>第三级：</strong> 技能包里的大型数据集、API参考文档和Python/Bash脚本，只在明确需要时才被访问。脚本在沙盒里执行，源代码和中间过程不进模型上下文，只有最终结果返回。</p>
+<p><strong>Level 3:</strong> Large datasets, API reference docs, and Python&#x2F;Bash scripts bundled with the skill are accessed only when explicitly needed. Scripts execute in a sandbox; their source code and intermediate processing never enter the model’s context. Only the final result comes back.</p>
+<p><strong>第三级：</strong> 技能包里的大型数据集、API参考文档和Python&#x2F;Bash脚本，只在明确需要时才被访问。脚本在沙盒里执行，源代码和中间过程不进模型上下文，只有最终结果返回。</p>
 <p>To be honest about what this is: it’s on-demand file reading plus local script execution. Smart engineering, not a paradigm shift. Its value is clear — MCP front-loads all tool definitions into the context; Skills break information into layers loaded incrementally — but calling it a “cognitive architecture revolution” overstates it.</p>
 <p>说白了这是什么：按需读文件加上本地脚本执行。工程上很聪明，但不是范式转移。它的价值很明确——MCP把所有工具定义一次性塞进上下文，Skills把信息拆成层级按需加载——但把它叫”认知架构革命”就夸大了。</p>
 <p>The division of labor: MCP handles dynamic data fetching that requires network connections (pulling Slack messages, querying databases). Skills tell the agent how to process that data (what report template to use, what approval workflow to follow).</p>
@@ -325,16 +325,16 @@
 <p>它发布时有50多个合作伙伴，到v0.3（2025年7月）达到150多个支持组织，同样在2025年12月捐给了Linux基金会的AAIF。有开发者质疑A2A是否真的和MCP有本质区别——“I truly don’t understand what A2A is bringing that is not achievable with MCP”是一个有代表性的评论。这个边界争论还在继续。</p>
 <h3 id="The-Competitive-Landscape-Is-Wider-Than-Two-Players"><a href="#The-Competitive-Landscape-Is-Wider-Than-Two-Players" class="headerlink" title="The Competitive Landscape Is Wider Than Two Players"></a>The Competitive Landscape Is Wider Than Two Players</h3><h3 id="竞争格局远不止两家"><a href="#竞争格局远不止两家" class="headerlink" title="竞争格局远不止两家"></a>竞争格局远不止两家</h3><p>Most coverage frames the competition as Anthropic vs. OpenAI. That misses half the field.</p>
 <p>大部分报道把竞争格局简化为Anthropic对OpenAI。这漏掉了半个战场。</p>
-<p><strong>Microsoft</strong> merged AutoGen and Semantic Kernel into a unified Agent Framework in October 2025 — supporting C#, Python, and Java with Azure integration and SOC 2/HIPAA compliance. GA targeting Q1 2026. This is a serious enterprise play.</p>
-<p><strong>微软</strong> 在2025年10月把AutoGen和Semantic Kernel合并为统一的Agent Framework——支持C#、Python和Java，集成Azure，符合SOC 2/HIPAA。目标2026年Q1 GA。这是认真的企业级布局。</p>
-<p><strong>LangChain/LangGraph</strong> remains the largest community by adoption, with graph-based workflow orchestration. <strong>CrewAI</strong> has carved out a niche in role-based multi-agent collaboration. <strong>Google’s ADK</strong> integrates A2A natively with Vertex AI.</p>
-<p><strong>LangChain/LangGraph</strong> 按采纳量仍是最大的社区，主打基于图的工作流编排。<strong>CrewAI</strong> 在基于角色的多代理协作领域站稳了脚跟。<strong>Google的ADK</strong> 原生集成A2A和Vertex AI。</p>
+<p><strong>Microsoft</strong> merged AutoGen and Semantic Kernel into a unified Agent Framework in October 2025 — supporting C#, Python, and Java with Azure integration and SOC 2&#x2F;HIPAA compliance. GA targeting Q1 2026. This is a serious enterprise play.</p>
+<p><strong>微软</strong> 在2025年10月把AutoGen和Semantic Kernel合并为统一的Agent Framework——支持C#、Python和Java，集成Azure，符合SOC 2&#x2F;HIPAA。目标2026年Q1 GA。这是认真的企业级布局。</p>
+<p><strong>LangChain&#x2F;LangGraph</strong> remains the largest community by adoption, with graph-based workflow orchestration. <strong>CrewAI</strong> has carved out a niche in role-based multi-agent collaboration. <strong>Google’s ADK</strong> integrates A2A natively with Vertex AI.</p>
+<p><strong>LangChain&#x2F;LangGraph</strong> 按采纳量仍是最大的社区，主打基于图的工作流编排。<strong>CrewAI</strong> 在基于角色的多代理协作领域站稳了脚跟。<strong>Google的ADK</strong> 原生集成A2A和Vertex AI。</p>
 <p>The agent framework space has five to six serious contenders, not two.</p>
 <p>代理框架领域有五六个认真的竞争者，不是两个。</p>
 <h3 id="Claude-Opus-4-6-What-the-Numbers-Actually-Show"><a href="#Claude-Opus-4-6-What-the-Numbers-Actually-Show" class="headerlink" title="Claude Opus 4.6: What the Numbers Actually Show"></a>Claude Opus 4.6: What the Numbers Actually Show</h3><h3 id="Claude-Opus-4-6：数字到底说明了什么"><a href="#Claude-Opus-4-6：数字到底说明了什么" class="headerlink" title="Claude Opus 4.6：数字到底说明了什么"></a>Claude Opus 4.6：数字到底说明了什么</h3><p>Released February 5, 2026. The headline specs: 1 million token context window (beta), 128K output tokens, adaptive thinking with effort controls, and a native Agent Teams feature for parallel Claude instances sharing a codebase.</p>
 <p>2026年2月5日发布。主要参数：100万token上下文窗口（beta），128K输出token，自适应思考（可控力度），原生Agent Teams功能支持多个Claude实例在共享代码库上并行工作。</p>
-<p>The stress test that got the most attention: 16 parallel Claude agents, each in its own Docker container sharing a Git repo, produced 100,000 lines of <strong>Rust</strong> implementing a C compiler. It can boot Linux 6.9 on x86/ARM/RISC-V, compile QEMU, FFmpeg, SQLite, PostgreSQL, and Redis, pass 99% of GCC’s torture test suite, and run Doom.</p>
-<p>最受关注的压力测试：16个并行Claude代理，各自在独立Docker容器中共享一个Git仓库，产出了10万行<strong>Rust</strong>代码，实现了一个C编译器。它能在x86/ARM/RISC-V上启动Linux 6.9，编译QEMU、FFmpeg、SQLite、PostgreSQL和Redis，通过GCC torture测试套件的99%，还能跑Doom。</p>
+<p>The stress test that got the most attention: 16 parallel Claude agents, each in its own Docker container sharing a Git repo, produced 100,000 lines of <strong>Rust</strong> implementing a C compiler. It can boot Linux 6.9 on x86&#x2F;ARM&#x2F;RISC-V, compile QEMU, FFmpeg, SQLite, PostgreSQL, and Redis, pass 99% of GCC’s torture test suite, and run Doom.</p>
+<p>最受关注的压力测试：16个并行Claude代理，各自在独立Docker容器中共享一个Git仓库，产出了10万行<strong>Rust</strong>代码，实现了一个C编译器。它能在x86&#x2F;ARM&#x2F;RISC-V上启动Linux 6.9，编译QEMU、FFmpeg、SQLite、PostgreSQL和Redis，通过GCC torture测试套件的99%，还能跑Doom。</p>
 <p>The numbers behind it: ~$20,000 in API spend, 2 billion input tokens, 140 million output tokens, roughly 2,000 Claude Code sessions over two weeks.</p>
 <p>背后的数字：约2万美元API费用，20亿输入token，1.4亿输出token，大约2000次Claude Code会话，历时两周。</p>
 <p>The caveats that don’t make the headlines: it requires GCC for 16-bit x86 real-mode code, lacks its own assembler and linker (uses GCC’s), generates less efficient code than GCC, and cannot replace production compilers. The coordination mechanism was file-based locking — text files as task locks — not some sophisticated multi-agent protocol.</p>
@@ -344,8 +344,8 @@
 <hr>
 <h2 id="How-to-Think-About-This"><a href="#How-to-Think-About-This" class="headerlink" title="How to Think About This"></a>How to Think About This</h2><h2 id="怎么看这件事"><a href="#怎么看这件事" class="headerlink" title="怎么看这件事"></a>怎么看这件事</h2><p>MCP accomplished something genuinely difficult: getting an entire industry — including direct competitors — to adopt a single tool-connection standard in one year. That’s real.</p>
 <p>MCP做成了一件很难的事：让整个行业——包括直接竞争对手——在一年内采纳同一套工具连接标准。这是实打实的成就。</p>
-<p>But MCP’s success is precisely what made it invisible. When everyone supports the same protocol, the protocol itself stops being a competitive advantage and becomes infrastructure — essential but unremarkable, like TCP/IP. Anthropic read this correctly and shifted focus to higher layers: Skills (teaching agents how to do things) and Code Execution (making agents do things more efficiently).</p>
-<p>但MCP的成功恰恰让它变得”隐形”。当所有人都支持同一个协议，协议本身就不再是竞争优势，而是基础设施——不可或缺但不引人注目，像TCP/IP一样。Anthropic看清了这一点，把精力转向更高的层次：Skills（教代理怎么做事）和Code Execution（让代理更高效地做事）。</p>
+<p>But MCP’s success is precisely what made it invisible. When everyone supports the same protocol, the protocol itself stops being a competitive advantage and becomes infrastructure — essential but unremarkable, like TCP&#x2F;IP. Anthropic read this correctly and shifted focus to higher layers: Skills (teaching agents how to do things) and Code Execution (making agents do things more efficiently).</p>
+<p>但MCP的成功恰恰让它变得”隐形”。当所有人都支持同一个协议，协议本身就不再是竞争优势，而是基础设施——不可或缺但不引人注目，像TCP&#x2F;IP一样。Anthropic看清了这一点，把精力转向更高的层次：Skills（教代理怎么做事）和Code Execution（让代理更高效地做事）。</p>
 <p>Anthropic’s own narrative about these shifts deserves discount, though. Skills’ “progressive disclosure” is fundamentally reading files on demand. Code Execution’s 98.7% savings is a cherry-picked best case. These are solid engineering improvements — calling them “paradigm shifts” or “dimensional strikes” is marketing.</p>
 <p>不过，Anthropic自己对这些转变的叙述需要打折理解。Skills的”渐进式披露”本质上是按需读文件。Code Execution的98.7%节省率是精心挑选的最优场景。这些是扎实的工程改进——把它们叫”范式转移”或”降维打击”是营销话术。</p>
 <p>The issue that should get more attention is security. MCP adoption massively outpaced security hardening. Of 2,614 analyzed implementations, 82% have path traversal vulnerabilities. Real data leaks have already happened (Asana, Supabase). Supply chain attacks have already hit the ecosystem (ClawHub). Before agent systems get more autonomy, this gap needs closing — and that urgency gets lost in the excitement about what agents can do.</p>
@@ -357,28 +357,28 @@
 <hr>
 <p><strong>Sources:</strong></p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/news/model-context-protocol">Anthropic: Model Context Protocol Launch</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation">Anthropic: Donating MCP and Establishing AAIF</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/code-execution-with-mcp">Anthropic Engineering: Code Execution with MCP</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Anthropic Engineering: Equipping Agents with Agent Skills</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/building-c-compiler">Anthropic Engineering: Building a C Compiler</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/news/claude-opus-4-6">Anthropic: Introducing Claude Opus 4.6</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.cloudflare.com/code-mode-mcp/">Cloudflare: Code Mode — Give Agents an Entire API in 1,000 Tokens</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/">MCP Blog: One Year of MCP</a></li>
-<li><a target="_blank" rel="noopener" href="http://blog.modelcontextprotocol.io/posts/2025-12-09-mcp-joins-agentic-ai-foundation/">MCP Blog: MCP Joins the Agentic AI Foundation</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation">Linux Foundation: AAIF Announcement</a></li>
-<li><a target="_blank" rel="noopener" href="https://techcrunch.com/2025/03/26/openai-adopts-rival-anthropics-standard-for-connecting-ai-models-to-data/">TechCrunch: OpenAI Adopts MCP</a></li>
-<li><a target="_blank" rel="noopener" href="https://techcrunch.com/2025/04/09/google-says-itll-embrace-anthropics-standard-for-connecting-ai-models-to-data/">TechCrunch: Google Embraces MCP</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.salesforce.com/news/press-releases/2025/06/23/agentforce-3-announcement/">Salesforce: Agentforce 3</a></li>
-<li><a target="_blank" rel="noopener" href="https://webmachinelearning.github.io/webmcp/">W3C WebMCP Spec Draft</a></li>
-<li><a target="_blank" rel="noopener" href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/">Google Developers: A2A Protocol</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.securityweek.com/anthropic-mcp-server-flaws-lead-to-code-execution-data-exposure/">SecurityWeek: MCP Server Flaws</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.infosecurity-magazine.com/news/prompt-injection-bugs-anthropic/">Infosecurity Magazine: Prompt Injection in MCP Git Server</a></li>
-<li><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/docs/learn/architecture">MCP Architecture Overview</a></li>
-<li><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/community/sdk-tiers">MCP SDK Tiers</a></li>
-<li><a target="_blank" rel="noopener" href="https://composio.dev/blog/mcp-vulnerabilities-every-developer-should-know">Composio: MCP Vulnerabilities</a></li>
-<li><a target="_blank" rel="noopener" href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/">Check Point Research: CVE-2025-59536</a></li>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.blog/2026/03/03/no-need-for-ctrl-c-when-you-have-mcp">Stack Overflow: MCP Co-Creator Interview</a></li>
+<li><a href="https://www.anthropic.com/news/model-context-protocol">Anthropic: Model Context Protocol Launch</a></li>
+<li><a href="https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation">Anthropic: Donating MCP and Establishing AAIF</a></li>
+<li><a href="https://www.anthropic.com/engineering/code-execution-with-mcp">Anthropic Engineering: Code Execution with MCP</a></li>
+<li><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Anthropic Engineering: Equipping Agents with Agent Skills</a></li>
+<li><a href="https://www.anthropic.com/engineering/building-c-compiler">Anthropic Engineering: Building a C Compiler</a></li>
+<li><a href="https://www.anthropic.com/news/claude-opus-4-6">Anthropic: Introducing Claude Opus 4.6</a></li>
+<li><a href="https://blog.cloudflare.com/code-mode-mcp/">Cloudflare: Code Mode — Give Agents an Entire API in 1,000 Tokens</a></li>
+<li><a href="https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/">MCP Blog: One Year of MCP</a></li>
+<li><a href="http://blog.modelcontextprotocol.io/posts/2025-12-09-mcp-joins-agentic-ai-foundation/">MCP Blog: MCP Joins the Agentic AI Foundation</a></li>
+<li><a href="https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation">Linux Foundation: AAIF Announcement</a></li>
+<li><a href="https://techcrunch.com/2025/03/26/openai-adopts-rival-anthropics-standard-for-connecting-ai-models-to-data/">TechCrunch: OpenAI Adopts MCP</a></li>
+<li><a href="https://techcrunch.com/2025/04/09/google-says-itll-embrace-anthropics-standard-for-connecting-ai-models-to-data/">TechCrunch: Google Embraces MCP</a></li>
+<li><a href="https://www.salesforce.com/news/press-releases/2025/06/23/agentforce-3-announcement/">Salesforce: Agentforce 3</a></li>
+<li><a href="https://webmachinelearning.github.io/webmcp/">W3C WebMCP Spec Draft</a></li>
+<li><a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/">Google Developers: A2A Protocol</a></li>
+<li><a href="https://www.securityweek.com/anthropic-mcp-server-flaws-lead-to-code-execution-data-exposure/">SecurityWeek: MCP Server Flaws</a></li>
+<li><a href="https://www.infosecurity-magazine.com/news/prompt-injection-bugs-anthropic/">Infosecurity Magazine: Prompt Injection in MCP Git Server</a></li>
+<li><a href="https://modelcontextprotocol.io/docs/learn/architecture">MCP Architecture Overview</a></li>
+<li><a href="https://modelcontextprotocol.io/community/sdk-tiers">MCP SDK Tiers</a></li>
+<li><a href="https://composio.dev/blog/mcp-vulnerabilities-every-developer-should-know">Composio: MCP Vulnerabilities</a></li>
+<li><a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/">Check Point Research: CVE-2025-59536</a></li>
+<li><a href="https://stackoverflow.blog/2026/03/03/no-need-for-ctrl-c-when-you-have-mcp">Stack Overflow: MCP Co-Creator Interview</a></li>
 </ul>
 
     </div>

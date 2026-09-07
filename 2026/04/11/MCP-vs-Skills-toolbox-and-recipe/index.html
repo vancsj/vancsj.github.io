@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -33,8 +33,8 @@
 <meta property="article:modified_time" content="2026-04-11T04:00:00.000Z">
 <meta property="article:author" content="vancsj">
 <meta property="article:tag" content="AI">
-<meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Skills">
 <meta name="twitter:card" content="summary">
 
@@ -214,7 +214,7 @@
 <ul>
 <li><p>✅ Perplexity CTO abandoned MCP (Ask 2026, March 2026)</p>
 </li>
-<li><p>✅ 3 MCP servers = 72% of 200K token context (verified)</p>
+<li><p>✅ 3 MCP servers &#x3D; 72% of 200K token context (verified)</p>
 </li>
 <li><p>✅ MCP donated to Linux Foundation (real)</p>
 </li>
@@ -224,7 +224,7 @@
 </li>
 <li><p>✅ Perplexity CTO放弃了MCP（Ask 2026，2026年3月）</p>
 </li>
-<li><p>✅ 3个MCP服务器 = 200K token上下文的72%（已验证）</p>
+<li><p>✅ 3个MCP服务器 &#x3D; 200K token上下文的72%（已验证）</p>
 </li>
 <li><p>✅ MCP捐给了Linux基金会（真实）</p>
 </li>
@@ -264,7 +264,7 @@
 <li>Input schema total: ~64KB (token budget + transport buffer) | 输入模式总计：约64KB（token预算+传输缓冲）</li>
 </ul>
 <p>The design is intentional. <strong>MCP is an API spec, not documentation.</strong> The “how” belongs in prompts, context, or — as we’ll see — Skills.</p>
-<p>这是故意这么设计的。<strong>MCP 是 API 规范，不是文档。</strong>至于“怎么用”，要放在提示词、上下文里，或者——你等下会看到——交给 Skills。</p>
+<p>这是故意这么设计的。**MCP 是 API 规范，不是文档。**至于“怎么用”，要放在提示词、上下文里，或者——你等下会看到——交给 Skills。</p>
 <hr>
 <h2 id="What-Skills-Actually-Give-You-Skills实际上给你什么"><a href="#What-Skills-Actually-Give-You-Skills实际上给你什么" class="headerlink" title="What Skills Actually Give You | Skills实际上给你什么"></a>What Skills Actually Give You | Skills实际上给你什么</h2><p>Skills are Claude Code’s way of packaging <strong>procedural knowledge</strong> — not just what tools exist, but how to use them. Here’s a real example from a GitHub skill:</p>
 <p>Skills 是 Claude Code 用来装“流程说明”的地方——不只是告诉你有哪些工具，还会把什么时候用、怎么走流程一并写进去。下面是一个 GitHub skill 的真实例子：</p>
@@ -275,7 +275,7 @@
 <ul>
 <li><strong>When</strong> to invoke (trigger conditions) | <strong>何时</strong>调用（触发条件）</li>
 <li><strong>How</strong> to execute (step-by-step procedure) | <strong>如何</strong>执行（具体的操作流程）</li>
-<li><strong>Why</strong> it matters (purpose/context) | <strong>为什么</strong>要这么做（背后的逻辑和初衷）</li>
+<li><strong>Why</strong> it matters (purpose&#x2F;context) | <strong>为什么</strong>要这么做（背后的逻辑和初衷）</li>
 </ul>
 <p>The key difference: <strong>Skills are recipes, MCP is a toolbox.</strong></p>
 <p>关键区别：<strong>Skills是菜谱，MCP是工具箱。</strong></p>
@@ -396,7 +396,7 @@
 <li><strong>Agent orchestration</strong> — intelligent tool routing | <strong>agent编排</strong>——让 agent 自己选路、自己分流</li>
 </ol>
 <p>Microsoft Research found that Anthropic used a tool testing agent to <strong>rewrite defective MCP prompts</strong>, improving task completion by <strong>40%</strong>. The issue isn’t MCP — it’s that many MCP server descriptions are poorly written.</p>
-<p>微软研究院发现，Anthropic 用了一个工具测试 agent 去<strong>重写有问题的 MCP 提示词</strong>，把任务完成效率**提升了40%**。问题不在 MCP 本身，而是很多 MCP server 的描述写得太差。</p>
+<p>微软研究院发现，Anthropic 用了一个工具测试 agent 去<strong>重写有问题的 MCP 提示词</strong>，把任务完成效率<strong>提升了40%</strong>。问题不在 MCP 本身，而是很多 MCP server 的描述写得太差。</p>
 <p>The fix isn’t abandoning MCP. It’s adding the procedural layer on top.</p>
 <p>解决方法不是放弃 MCP，而是得在上面把“流程”这层给补齐。</p>
 <hr>
@@ -422,7 +422,7 @@
 </li>
 <li><p>Chroma Research “Context Rot” paper (2026)</p>
 </li>
-<li><p>Microsoft/Google official MCP servers</p>
+<li><p>Microsoft&#x2F;Google official MCP servers</p>
 </li>
 <li><p>Pinterest production MCP deployment (InfoQ)</p>
 </li>
@@ -436,7 +436,7 @@
 </li>
 <li><p>Chroma Research”Context Rot”论文（2026）</p>
 </li>
-<li><p>Microsoft/Google官方MCP服务器</p>
+<li><p>Microsoft&#x2F;Google官方MCP服务器</p>
 </li>
 <li><p>Pinterest生产级MCP部署（InfoQ）</p>
 </li>
